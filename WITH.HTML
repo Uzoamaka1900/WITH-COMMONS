@@ -1,0 +1,2415 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WITH Archive – Women in Technology</title>
+  <style>
+    :root {
+  --bg: #f4f1eb;
+  --bg-soft: #ece7df;
+  --surface: #fffdfa;
+  --surface-soft: #f7f3ed;
+
+  --text: #1f2629;
+  --muted: #5f6b70;
+
+  --primary: #23404a;
+  --primary-dark: #162b33;
+  --primary-soft: #dde7e8;
+
+  --accent: #b88a52;
+  --accent-strong: #9a6f3d;
+  --accent-soft: #efe1d2;
+
+  --line: #d9d3ca;
+  --success: #2f6b57;
+
+  --shadow-sm: 0 6px 16px rgba(19, 28, 32, 0.08);
+  --shadow: 0 18px 42px rgba(19, 28, 32, 0.10);
+
+  --radius-sm: 12px;
+  --radius: 18px;
+  --radius-lg: 24px;
+  --max: 1240px;
+}
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .hidden { display: none !important; }
+    .full-width { width: 100%; }
+    .block-gap { margin-bottom: 1rem; }
+    .centered-copy { text-align: center; }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 1rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      z-index: 999;
+    }
+
+    .skip-link:focus { left: 1rem; }
+
+    .site-logo,
+    .site-logo--nav,
+    .site-logo--footer,
+    .site-logo--hero {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+body {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+  color: var(--text);
+}
+
+.auth-screen {
+  background: linear-gradient(135deg, #ede7df 0%, #f7f3ee 100%);
+}
+
+.auth-brand {
+  background: linear-gradient(180deg, #1e3239 0%, #14252b 100%);
+  color: #f8f5f0;
+}
+
+.auth-brand::before {
+  background: rgba(184,138,82,0.12);
+}
+
+.auth-brand::after {
+  background: rgba(184,138,82,0.07);
+}
+
+.eyebrow {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.topbar {
+  background: #ebe5dd;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.navbar {
+  background: rgba(244,241,235,0.94);
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-copy {
+  background: linear-gradient(180deg, #fffdfa 0%, #f7f3ed 100%);
+}
+
+.hero-side {
+  background: #f0ebe4;
+  border-left: 1px solid var(--line);
+}
+
+.about-card-shell {
+  background:
+    radial-gradient(circle at top right, rgba(184,138,82,0.14), transparent 24%),
+    linear-gradient(180deg, #fffdfa 0%, #f7f3ed 100%);
+}
+
+.badge,
+.about-kicker,
+.hero-gallery-note,
+.chip,
+.pill {
+  background: var(--accent-soft);
+  color: #6d4d28;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-secondary:hover,
+.social-btn:hover,
+.hero-gallery-btn:hover,
+.slide-btn:hover {
+  background: #f8f5f0;
+}
+
+.hero-gallery-stage {
+  background: #ddd7cf;
+}
+
+.hero-gallery-overlay {
+  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.12) 48%, rgba(15,23,27,0.72) 100%);
+}
+
+.bar-track {
+  background: #e6e0d7;
+}
+
+.bar-fill {
+  background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+}
+
+.slide-media,
+.thumb {
+  background: linear-gradient(180deg, rgba(35,64,74,0.04), rgba(184,138,82,0.08)), #f2ede6;
+}
+
+.contribute-shell {
+  background: linear-gradient(135deg, #1f353d 0%, #35545d 100%);
+}
+
+    .auth-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-logo-mark {
+      width: 86px;
+      height: 86px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 0.45rem;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.16);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .auth-logo-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    .auth-logo-title small {
+      display: block;
+      opacity: 0.88;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-top: 0.15rem;
+    }
+
+    .auth-copy {
+      max-width: 560px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .badge,
+    .pill,
+    .chip,
+    .count {
+      letter-spacing: 0.03em;
+      font-weight: 800;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.84rem;
+      margin-bottom: 1rem;
+    }
+
+    h1, h2, h3, h4, p { margin-top: 0; }
+
+    h1, h2, h3, h4,
+    .brand,
+    .nav-links a,
+    .btn,
+    .social-btn,
+    label,
+    .stat-card strong,
+    .kpi strong,
+    .collection-card h3,
+    .story-card h3,
+    .feature-card h2,
+    .toolbar-title,
+    .bar-label,
+    .topbar a,
+    .hero-gallery-title,
+    .gallery-card-title {
+      font-weight: 800;
+    }
+
+    .auth-copy h1,
+    .hero-copy h1 {
+      font-size: clamp(2.4rem, 4vw, 4.2rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      margin-bottom: 1rem;
+      max-width: 11ch;
+      font-weight: 900;
+    }
+
+    .auth-copy p {
+      font-size: 1.02rem;
+      color: rgba(255,250,246,0.9);
+      max-width: 60ch;
+    }
+
+    .auth-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-metric {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      padding: 1rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .auth-metric strong {
+      display: block;
+      font-size: 1.4rem;
+      margin-bottom: 0.2rem;
+      font-weight: 900;
+    }
+
+    .auth-metric span {
+      font-size: 0.92rem;
+      color: rgba(255,250,246,0.84);
+      font-weight: 600;
+    }
+
+    .auth-panel {
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+    }
+
+    .login-card {
+      width: min(500px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 2rem;
+    }
+
+    .login-card h2 {
+      font-size: 2rem;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.55rem;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .login-card > p,
+    .login-note,
+    .consent,
+    .section-head p,
+    .feature-card p,
+    .mini p,
+    .story-card p,
+    .collection-card p,
+    .dashboard-card p,
+    .contribute-card p,
+    footer p,
+    footer a,
+    .stat-card span,
+    .kpi span,
+    .gallery-card-copy,
+    .hero-gallery-meta {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .login-logo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .login-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      padding: 0.28rem;
+    }
+
+    .auth-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn,
+    .social-btn,
+    .slide-btn,
+    .hero-gallery-btn {
+      min-height: 48px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      font-size: 0.96rem;
+    }
+
+    .btn:hover,
+    .social-btn:hover,
+    .slide-btn:hover,
+    .hero-gallery-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:focus-visible,
+    .social-btn:focus-visible,
+    .field:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    .nav-links a:focus-visible,
+    .collection-card:focus-visible,
+    .story-card:focus-visible,
+    .slide-btn:focus-visible,
+    .hero-gallery-btn:focus-visible,
+    .hero-gallery-dot:focus-visible,
+    .slide-dot:focus-visible {
+      outline: 3px solid rgba(201,154,46,0.22);
+      outline-offset: 2px;
+    }
+
+    .social-btn {
+      background: #fff;
+      border-color: var(--line);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.85rem 1rem;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      font-weight: 700;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .field-wrap { margin-bottom: 0.95rem; }
+
+    label {
+      display: block;
+      font-size: 0.92rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .field,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 15px;
+      border: 1px solid var(--line);
+      background: #fffefe;
+      padding: 0.9rem 1rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .field::placeholder,
+    textarea::placeholder {
+      color: #8c8c8c;
+      font-weight: 500;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      padding: 0.9rem 1.15rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: #000;
+      filter: none;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      border-color: var(--line);
+      color: var(--text);
+      padding: 0.9rem 1.15rem;
+    }
+
+    .btn-secondary:hover {
+      border-color: #d9d4ca;
+      background: #fcfbf9;
+    }
+
+    .consent {
+      display: flex;
+      gap: 0.65rem;
+      margin: 1rem 0 1.2rem;
+      align-items: flex-start;
+      font-size: 0.92rem;
+    }
+
+    .consent input {
+      margin-top: 0.25rem;
+      accent-color: var(--accent-strong);
+    }
+
+    .app-shell { min-height: 100vh; }
+
+    .topbar {
+      background: #f3f1eb;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .topbar .inner,
+    .navbar .inner,
+    .hero-grid,
+    .stats-grid,
+    .collection-grid,
+    .feature-grid,
+    .footer-grid,
+    .story-grid,
+    .contribute-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .topbar .inner {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      padding: 0.7rem 0;
+    }
+
+    .topbar-links,
+    .topbar-actions,
+    .nav-links,
+    .nav-actions,
+    .hero-actions,
+    .toolbar,
+    .collection-head,
+    .analytics-top,
+    .dashboard-grid {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+
+    .topbar a,
+    .nav-links a {
+      font-size: 0.95rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #f8f3e6;
+      border: 1px solid #eadfc3;
+      color: #66501c;
+      padding: 0.4rem 0.72rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(248,247,244,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .navbar .inner {
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1rem;
+    }
+
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      flex-shrink: 0;
+      padding: 0.3rem;
+    }
+
+    .brand-meta strong {
+      display: block;
+      line-height: 1.1;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .brand-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 0.18rem;
+      font-weight: 600;
+    }
+
+    .nav-links { justify-content: center; }
+    .nav-links a { color: #4d4d4d; }
+    .nav-links a:hover { color: var(--primary-dark); }
+
+    main section { padding: 1.6rem 0; }
+    .hero { padding-top: 1.1rem; }
+
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-grid {
+      grid-template-columns: 1.08fr 0.92fr;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-side {
+      padding: 2rem;
+    }
+
+    .hero-copy {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
+    }
+
+    .lede {
+      color: var(--muted);
+      max-width: 62ch;
+      font-size: 1.02rem;
+      margin-bottom: 1.15rem;
+      font-weight: 500;
+    }
+
+    .hero-actions { margin-bottom: 0.95rem; }
+
+    .search-panel,
+    .dashboard-card,
+    .collection-card,
+    .story-card,
+    .feature-card,
+    .contribute-card,
+    .chart-card,
+    .live-activity-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-panel {
+      padding: 1.25rem;
+      margin-bottom: 0.95rem;
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(160px, 0.9fr) minmax(150px, 0.9fr) auto;
+      gap: 0.75rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .stat-card {
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.55rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.15rem;
+      font-weight: 900;
+    }
+
+    .hero-side {
+      background: #f6f4ef;
+      border-left: 1px solid var(--line);
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .feature-card,
+    .mini,
+    .dashboard-card,
+    .chart-card,
+    .live-activity-card,
+    .contribute-card,
+    .collection-card,
+    .story-card {
+      padding: 1.15rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.38rem 0.72rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #5f4a14;
+      font-size: 0.78rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .feature-card h2,
+    .section-head h2 {
+      font-size: clamp(1.75rem, 2vw, 2.3rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.5rem;
+      font-weight: 900;
+    }
+
+    .feature-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .mini {
+      border-radius: 18px;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--line);
+    }
+
+    .mini strong {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      color: #8a6b1f;
+      margin-bottom: 0.45rem;
+    }
+
+    .about-section {
+      padding-top: 2rem;
+    }
+
+    .about-card-shell {
+      padding: 2.25rem;
+      text-align: center;
+      background:
+        radial-gradient(circle at top right, rgba(224,184,76,0.12), transparent 24%),
+        linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .about-logo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .about-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto;
+      border-radius: 22px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      padding: 0.45rem;
+    }
+
+    .about-kicker {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.85rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #5f4a14;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+    }
+
+    .about-title {
+      max-width: 18ch;
+      margin: 0 auto 1rem;
+      font-size: clamp(2rem, 3.6vw, 3.2rem);
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+    }
+
+    .about-lede {
+      max-width: 60ch;
+      margin: 0 auto;
+      font-size: 1.02rem;
+      color: var(--muted);
+    }
+
+    .hero-gallery-shell {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-gallery-head {
+      padding: 1rem 1rem 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .hero-gallery-brand {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    .hero-gallery-logo-wrap {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      padding: 0.28rem;
+      flex-shrink: 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-gallery-title {
+      margin: 0 0 0.15rem;
+      font-size: 1rem;
+      line-height: 1.15;
+    }
+
+    .hero-gallery-meta {
+      font-size: 0.86rem;
+      margin: 0;
+    }
+
+    .hero-gallery-note {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.45rem 0.72rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #5f4a14;
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .hero-gallery-stage {
+      position: relative;
+      min-height: 370px;
+      margin: 0 1rem;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #ece9e1;
+      border: 1px solid var(--line);
+    }
+
+    .hero-gallery-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.025);
+      transition: opacity 0.45s ease, transform 0.7s ease;
+      pointer-events: none;
+    }
+
+    .hero-gallery-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .hero-gallery-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-height: 370px;
+      background: #e8e5dd;
+    }
+
+    .hero-gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.12) 48%, rgba(0,0,0,0.74) 100%);
+    }
+
+    .hero-gallery-card {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 2;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid rgba(230,227,220,0.9);
+      border-radius: 18px;
+      padding: 1rem;
+      box-shadow: 0 16px 38px rgba(0,0,0,0.12);
+      max-width: 420px;
+    }
+
+    .gallery-card-title {
+      margin: 0 0 0.35rem;
+      font-size: 1.18rem;
+      line-height: 1.2;
+      color: var(--primary-dark);
+      letter-spacing: -0.03em;
+    }
+
+    .gallery-card-copy {
+      margin: 0;
+      font-size: 0.94rem;
+    }
+
+    .hero-gallery-footer {
+      padding: 0.9rem 1rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-gallery-dots {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-gallery-dot,
+    .slide-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 0;
+      cursor: pointer;
+      padding: 0;
+      background: #d7d2c8;
+      transition: width 0.18s ease, background 0.18s ease;
+    }
+
+    .hero-gallery-dot.active,
+    .slide-dot.active {
+      width: 28px;
+      background: var(--accent-strong);
+    }
+
+    .hero-gallery-actions,
+    .slideshow-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .hero-gallery-btn,
+    .slide-btn {
+      width: 40px;
+      height: 40px;
+      min-height: 40px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--primary-dark);
+      font-size: 1.2rem;
+      font-weight: 900;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-gallery-btn:hover,
+    .slide-btn:hover {
+      background: #fcfbf9;
+      border-color: #d9d4ca;
+    }
+
+    .analytics-top,
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .kpi {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0.95rem;
+    }
+
+    .kpi strong {
+      display: block;
+      color: var(--primary-dark);
+      font-size: 1.45rem;
+      margin-bottom: 0.2rem;
+      font-weight: 900;
+    }
+
+    .live-list {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 0.85rem;
+      max-height: 260px;
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+
+    .live-item {
+      padding: 0.8rem 0.9rem;
+      border-radius: 14px;
+      background: #fbfaf7;
+      border: 1px solid var(--line);
+    }
+
+    .live-item strong {
+      display: block;
+      margin-bottom: 0.12rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .live-item span {
+      font-size: 0.84rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .bar-group { display: grid; gap: 0.8rem; }
+    .bar-row { display: grid; gap: 0.35rem; }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: #4e4e4e;
+    }
+
+    .bar-track {
+      height: 12px;
+      background: #efece4;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+    }
+
+    .slideshow-card {
+      overflow: hidden;
+    }
+
+    .slideshow-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .slideshow-frame {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1rem;
+      align-items: stretch;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fcfbf9;
+      overflow: hidden;
+    }
+
+    .slide-media {
+      min-height: 240px;
+      background: linear-gradient(180deg, rgba(31,31,31,0.03), rgba(224,184,76,0.06)), #f4f1ea;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+      color: var(--primary-dark);
+      font-weight: 800;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .slide-media img {
+      width: 100%;
+      height: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      border-radius: 0;
+    }
+
+    .slide-content {
+      padding: 1.15rem;
+      display: grid;
+      align-content: center;
+    }
+
+    .slide-content h4 {
+      margin: 0 0 0.45rem;
+      font-size: 1.2rem;
+      line-height: 1.2;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .slide-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      margin-top: 0.9rem;
+    }
+
+    .toolbar {
+      justify-content: space-between;
+      margin-bottom: 0.9rem;
+    }
+
+    .toolbar-title {
+      font-size: 1.05rem;
+      color: var(--primary-dark);
+      font-weight: 800;
+    }
+
+    .collection-grid,
+    .story-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .collection-card,
+    .story-card {
+      min-height: 100%;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .collection-card:hover,
+    .story-card:hover,
+    .feature-card:hover,
+    .dashboard-card:hover,
+    .chart-card:hover,
+    .live-activity-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    }
+
+    .collection-card.real-time {
+      border-color: var(--line);
+      background: #ffffff;
+    }
+
+    .collection-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .collection-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: #f8f3e6;
+      border: 1px solid #eadfc3;
+      font-size: 1rem;
+    }
+
+    .count {
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .thumb {
+      min-height: 160px;
+      border-radius: 16px;
+      margin-bottom: 0.9rem;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(31,31,31,0.03), rgba(224,184,76,0.06)), #f7f4ee;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.92rem;
+      text-align: center;
+      padding: 0.8rem;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-height: 160px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.8rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: #f8f3e6;
+      border: 1px solid #eadfc3;
+      color: #5f4a14;
+      font-size: 0.78rem;
+    }
+
+    .story-card h3,
+    .collection-card h3 {
+      margin-bottom: 0.45rem;
+      font-size: 1.08rem;
+      line-height: 1.25;
+    }
+
+    .contribute-shell {
+      background: linear-gradient(135deg, #232323 0%, #3a3a3a 100%);
+      border-radius: 28px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .contribute-grid {
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: start;
+    }
+
+    .contribute-copy,
+    .contribute-card {
+      padding: 1.25rem;
+    }
+
+    .contribute-copy {
+      color: #fffdf8;
+    }
+
+    .contribute-copy p,
+    .contribute-copy li {
+      color: rgba(255,250,246,0.9);
+      font-weight: 500;
+    }
+
+    .contribute-kicker {
+      color: #f0d18a;
+    }
+
+    .contribute-title {
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.7rem;
+      font-weight: 900;
+    }
+
+    .footer {
+      padding: 2rem 0 3rem;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      border-top: 1px solid var(--line);
+      padding-top: 1.3rem;
+    }
+
+    .footer-links a {
+      display: block;
+      margin-bottom: 0.55rem;
+      font-weight: 600;
+    }
+
+    .footer-links a:hover { color: var(--primary-dark); }
+
+    .footer-brand {
+      margin-bottom: 0.8rem;
+    }
+
+    @media (max-width: 1120px) {
+      .auth-screen,
+      .hero-grid,
+      .contribute-grid,
+      .analytics-top,
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 920px) {
+      .navbar .inner,
+      .topbar .inner,
+      .stats-grid,
+      .collection-grid,
+      .story-grid,
+      .footer-grid,
+      .auth-metrics {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .search-grid,
+      .slideshow-frame {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container { width: min(var(--max), calc(100% - 1rem)); }
+
+      .auth-brand,
+      .hero-copy,
+      .hero-side,
+      .login-card,
+      .dashboard-card,
+      .chart-card,
+      .live-activity-card,
+      .collection-card,
+      .story-card,
+      .contribute-copy,
+      .contribute-card,
+      .feature-card,
+      .mini {
+        padding: 1rem;
+      }
+
+      .search-grid,
+      .stats-grid,
+      .collection-grid,
+      .story-grid,
+      .footer-grid,
+      .feature-grid,
+      .auth-metrics,
+      .auth-methods,
+      .kpi-grid,
+      .slideshow-frame {
+        grid-template-columns: 1fr;
+      }
+
+      .navbar .inner { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .field-row { grid-template-columns: 1fr; }
+
+      .section-head,
+      .slideshow-head,
+      .hero-gallery-head,
+      .hero-gallery-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .auth-copy h1,
+      .hero-copy h1 {
+        max-width: none;
+      }
+
+      .hero-gallery-stage,
+      .hero-gallery-image {
+        min-height: 320px;
+      }
+
+      .about-card-shell {
+        padding: 1.25rem;
+      }
+
+      .about-logo {
+        width: 68px;
+        height: 68px;
+      }
+
+      .about-title {
+        max-width: none;
+        font-size: clamp(1.7rem, 8vw, 2.4rem);
+      }
+
+      .about-lede {
+        font-size: 0.98rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <section class="auth-screen hidden" id="authScreen" aria-label="Sign in page">
+    <div class="auth-brand">
+      <div class="auth-logo">
+        <div class="auth-logo-mark">
+          <img class="site-logo" src="./asserts/logo.png" alt="WITH logo" />
+        </div>
+        <div class="auth-logo-title">
+          WITH Archive
+          <small>Women in Technology</small>
+        </div>
+      </div>
+
+      <div class="auth-copy">
+        <span class="eyebrow">Clean sign-in · calm interface · search-first archive</span>
+        <h1>Sign in to explore, save, and contribute.</h1>
+        <p>
+          The interface centers the actions that matter most: finding items, browsing collections,
+          and contributing materials without visual clutter.
+        </p>
+
+        <div class="auth-metrics" aria-label="Archive metrics preview">
+          <div class="auth-metric"><strong>12.4k</strong><span>records and stories</span></div>
+          <div class="auth-metric"><strong>1.2k</strong><span>members and contributors</span></div>
+          <div class="auth-metric"><strong>54</strong><span>themes and pathways</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-panel">
+      <div class="login-card">
+        <div class="login-logo-wrap">
+          <div class="brand-mark login-logo">
+            <img class="site-logo" src="./asserts/logo.png" alt="WITH logo" />
+          </div>
+        </div>
+
+        <h2>Welcome back</h2>
+        <p class="centered-copy">Use your email, Google account, or Microsoft account to enter the archive.</p>
+
+        <div class="auth-methods">
+          <button class="social-btn" id="googleLogin" type="button">Google</button>
+          <button class="social-btn" id="microsoftLogin" type="button">Microsoft</button>
+        </div>
+
+        <div class="divider">or continue with email</div>
+
+        <form id="loginForm">
+          <div class="field-wrap">
+            <label for="email">Email address</label>
+            <input class="field" id="email" name="email" type="email" placeholder="name@institution.edu" required />
+          </div>
+
+          <div class="field-wrap">
+            <label for="password">Password</label>
+            <div class="field-row">
+              <input class="field" id="password" name="password" type="password" placeholder="Enter your password" required />
+              <button class="btn btn-secondary" type="button" id="magicLinkBtn">Magic link</button>
+            </div>
+          </div>
+
+          <label class="consent">
+            <input id="analyticsConsent" type="checkbox" checked />
+            <span>I agree to anonymous analytics for search, collection activity, and contribution flow improvement.</span>
+          </label>
+
+          <button class="btn btn-primary full-width" type="submit">Sign in to WITH Archive</button>
+        </form>
+
+        <p class="login-note centered-copy">
+          Demo mode: connect this to Firebase Auth, Supabase Auth, Auth0, or institutional SSO for production.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="app-shell" id="appShell">
+    <div class="topbar">
+      <div class="container inner">
+        <div class="topbar-links">
+          <a href="#about">About WITH</a>
+          <a href="#collections">Collections</a>
+          <a href="#stories">Stories</a>
+          <a href="#contribute">Contribute</a>
+        </div>
+        <div class="topbar-actions">
+          <span class="pill">Signed in as <span id="userEmailInline">member@witharchive.org</span></span>
+          <button class="btn btn-secondary" id="logoutBtn" type="button">Log out</button>
+        </div>
+      </div>
+    </div>
+
+    <header class="navbar">
+      <div class="container inner">
+        <a class="brand" href="#" aria-label="WITH Archive home">
+          <span class="brand-mark">
+            <img class="site-logo--nav" src="./asserts/logo.png" alt="WITH logo" />
+          </span>
+          <span class="brand-meta">
+            <strong>WITH Archive</strong>
+            <span>Women in Technology</span>
+          </span>
+        </a>
+
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#about">About WITH</a>
+          <a href="#discover">Discover</a>
+          <a href="#collections">Collections</a>
+          <a href="#stories">Stories</a>
+          <a href="#contribute">Contribute</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a class="btn btn-secondary" href="#collections">Browse archive</a>
+          <a class="btn btn-primary" href="#contribute">Upload an item</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section id="about" class="about-section">
+        <div class="container">
+          <div class="hero-card about-card-shell">
+            <div class="about-logo-wrap">
+              <div class="brand-mark about-logo">
+                <img src="./asserts/logo.png" alt="WITH logo" />
+              </div>
+            </div>
+
+            <span class="section-kicker about-kicker">About WITH</span>
+
+            <h1 class="about-title">A brief narration of WITH</h1>
+
+            <p class="lede about-lede">
+              WITH (Women in Technology) is a growing archive dedicated to preserving
+              the histories, experiences, and contributions of women in technological
+              spaces. It brings together oral histories, photographs, documents, and
+              institutional memory into a searchable, living collection.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="hero" id="discover">
+        <div class="container">
+          <div class="hero-card">
+            <div class="hero-grid">
+              <div class="hero-copy">
+                <span class="section-kicker">Search first · less noise · faster decisions</span>
+                <h1>Make women in technology history easier to browse and trust.</h1>
+                <p class="lede">
+                  Start with search, move into a featured collection, then browse a clean set of archive cards.
+                  Secondary information stays out of the way.
+                </p>
+
+                <div class="hero-actions">
+                  <a class="btn btn-primary" href="#collections">Start with collections</a>
+                  <a class="btn btn-secondary" href="#stories">Read stories</a>
+                </div>
+
+                <div class="search-panel" role="search">
+                  <div class="search-grid">
+                    <input class="field" id="archiveSearch" type="search" placeholder="Search names, institutions, events, oral histories, photographs..." aria-label="Search archive" />
+                    <select id="formatFilter" aria-label="Filter by format">
+                      <option>All formats</option>
+                      <option>Photographs</option>
+                      <option>Oral histories</option>
+                      <option>Documents</option>
+                      <option>Programs</option>
+                    </select>
+                    <select id="decadeFilter" aria-label="Filter by decade">
+                      <option>All decades</option>
+                      <option>1950s</option>
+                      <option>1960s</option>
+                      <option>1970s</option>
+                      <option>1980s</option>
+                    </select>
+                    <button class="btn btn-primary" id="searchBtn" type="button">Search</button>
+                  </div>
+                </div>
+
+                <div class="stats-grid" aria-label="Archive metrics">
+                  <div class="stat-card"><strong id="totalRecordsStat">12,480</strong><span>records and stories</span></div>
+                  <div class="stat-card"><strong id="totalContributorsStat">1,236</strong><span>contributors and members</span></div>
+                  <div class="stat-card"><strong id="updatedCollectionsStat">3</strong><span>active collections</span></div>
+                  <div class="stat-card"><strong id="metadataStat">92%</strong><span>metadata completion rate</span></div>
+                </div>
+              </div>
+
+              <aside class="hero-side" aria-label="Featured collection preview">
+                <div class="hero-gallery-shell">
+                  <div class="hero-gallery-head">
+                    <div class="hero-gallery-brand">
+                      <div class="hero-gallery-logo-wrap">
+                        <img class="site-logo--hero" src="./asserts/logo.png" alt="WITH logo" />
+                      </div>
+                      <div>
+                        <h3 class="hero-gallery-title">WITH Events</h3>
+                        <p class="hero-gallery-meta">Rolling display of collection images, without visual noise.</p>
+                      </div>
+                    </div>
+                    <span class="hero-gallery-note">Events</span>
+                  </div>
+
+                  <div class="hero-gallery-stage" id="heroGalleryStage" aria-live="polite"></div>
+
+                  <div class="hero-gallery-footer">
+                    <div class="hero-gallery-dots" id="heroGalleryDots" aria-label="Hero gallery navigation"></div>
+                    <div class="hero-gallery-actions">
+                      <button class="hero-gallery-btn" id="heroPrevBtn" type="button" aria-label="Previous hero image">‹</button>
+                      <button class="hero-gallery-btn" id="heroNextBtn" type="button" aria-label="Next hero image">›</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="feature-grid">
+                  <div class="mini">
+                    <strong>Past</strong>
+                    <p>Only the key actions stay visible.</p>
+                  </div>
+                  <div class="mini">
+                    <strong>Current</strong>
+                    <p>Important event cards can refresh without stealing attention.</p>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="collections">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-kicker">Collections</span>
+              <h2>Material Archives of Events</h2>
+            </div>
+            <p>
+              A visual preview leads into a simple grid of collections. Images help users orient quickly
+              without reading too much.
+            </p>
+          </div>
+
+          <div class="analytics-top block-gap">
+            <article class="dashboard-card slideshow-card">
+              <div class="slideshow-head">
+                <div>
+                  <h3>Collection highlights</h3>
+                  <p>Preview selected materials from past and present events in a simple rotating gallery.</p>
+                </div>
+                <div class="slideshow-controls" aria-label="Slideshow controls">
+                  <button class="slide-btn" id="prevSlide" type="button" aria-label="Previous slide">‹</button>
+                  <button class="slide-btn" id="nextSlide" type="button" aria-label="Next slide">›</button>
+                </div>
+              </div>
+
+              <div class="slideshow-frame" id="collectionSlideshow" aria-live="polite">
+                <div class="slide-media" id="slideMedia"></div>
+                <div class="slide-content">
+                  <span class="badge" id="slideBadge">Featured collection</span>
+                  <h4 id="slideTitle">WITH 50th Anniversary</h4>
+                  <p id="slideText">A rotating preview of anniversary photographs, oral histories, and collection materials.</p>
+                  <div class="meta-row" id="slideTags"></div>
+                </div>
+              </div>
+
+              <div class="slide-dots" id="slideDots" aria-label="Slide navigation"></div>
+            </article>
+
+            <article class="dashboard-card">
+              <h3>Live engagement snapshot</h3>
+              <p>Simple usage signals help the archive team see what is being used.</p>
+              <div class="kpi-grid">
+                <div class="kpi"><strong id="visitCount">0</strong><span>Visits</span></div>
+                <div class="kpi"><strong id="searchCount">0</strong><span>Searches</span></div>
+                <div class="kpi"><strong id="collectionCount">0</strong><span>Collection opens</span></div>
+                <div class="kpi"><strong id="contributionCount">0</strong><span>Contribution starts</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="toolbar">
+            <div class="collection-head">
+              <span class="toolbar-title">Browse collections</span>
+              <span class="pill">Live</span>
+            </div>
+            <a class="btn btn-secondary" href="#contribute">Contribute an item</a>
+          </div>
+
+          <div class="collection-grid" id="collectionGrid"></div>
+        </div>
+      </section>
+
+      <section id="stories">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-kicker">Stories</span>
+              <h2>Story-led entry points for first-time visitors</h2>
+            </div>
+            <p>
+              Narrative pathways support public users and students who do not want to begin with metadata alone.
+            </p>
+          </div>
+
+          <div class="story-grid">
+            <article class="story-card">
+              <h3>How women sustained technical communities over time</h3>
+              <p>Follow mentorship, conferences, institutions, and changing professional networks.</p>
+            </article>
+            <article class="story-card">
+              <h3>Anniversary photographs as institutional memory</h3>
+              <p>See how celebration, recognition, and leadership were visually staged and remembered.</p>
+            </article>
+            <article class="story-card">
+              <h3>Listening to oral histories with context</h3>
+              <p>Pair recordings with transcripts, tags, and related documents for teaching and citation use.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="contribute">
+        <div class="container">
+          <div class="contribute-shell">
+            <div class="contribute-grid">
+              <div class="contribute-copy">
+                <span class="section-kicker contribute-kicker">Contribution flow</span>
+                <h2 class="contribute-title">Contributing should feel warm, clear, and low-risk.</h2>
+                <p>
+                  The form stays short, the labels are easy to scan, and the pathway is straightforward for first-time contributors.
+                </p>
+                <ul>
+                  <li>Upload a photograph, document, publication, or oral history</li>
+                  <li>Add a title, date, people, and institution</li>
+                  <li>Choose visibility and review settings</li>
+                  <li>Invite future annotation from community members</li>
+                </ul>
+              </div>
+
+              <form class="contribute-card" id="contributeForm">
+                <h3>Share an item</h3>
+                <p>Starting this form increments the contribution analytics counter.</p>
+
+                <div class="field-wrap">
+                  <label for="itemTitle">Item title</label>
+                  <input class="field" id="itemTitle" type="text" placeholder="Example: WITH annual meeting photograph" />
+                </div>
+
+                <div class="field-wrap">
+                  <label for="itemType">Item type</label>
+                  <select id="itemType">
+                    <option>Photograph</option>
+                    <option>Oral history</option>
+                    <option>Document</option>
+                    <option>Publication</option>
+                  </select>
+                </div>
+
+                <div class="field-wrap">
+                  <label for="itemDate">Date or decade</label>
+                  <input class="field" id="itemDate" type="text" placeholder="1978 or late 1970s" />
+                </div>
+
+                <div class="field-wrap">
+                  <label for="itemStory">Short description</label>
+                  <textarea id="itemStory" rows="5" placeholder="Tell us what this item is, who is involved, and why it matters."></textarea>
+                </div>
+
+                <button class="btn btn-primary" type="submit">Submit for review</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="analytics">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="section-kicker">Analytics</span>
+              <h2>Usage insights</h2>
+            </div>
+            <p>
+              Kept lower on the page so the archive remains user-focused, while administrators still get a clear overview.
+            </p>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="chart-card">
+              <h3>Most used pathways</h3>
+              <div class="bar-group">
+                <div class="bar-row">
+                  <div class="bar-label"><span>Homepage discovery</span><span id="visitsLabel">0</span></div>
+                  <div class="bar-track"><div class="bar-fill" id="visitsBar" style="width: 0%"></div></div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label"><span>Archive search</span><span id="searchesLabel">0</span></div>
+                  <div class="bar-track"><div class="bar-fill" id="searchesBar" style="width: 0%"></div></div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label"><span>Collections</span><span id="collectionsLabel">0</span></div>
+                  <div class="bar-track"><div class="bar-fill" id="collectionsBar" style="width: 0%"></div></div>
+                </div>
+                <div class="bar-row">
+                  <div class="bar-label"><span>Contribution flow</span><span id="contributionsLabel">0</span></div>
+                  <div class="bar-track"><div class="bar-fill" id="contributionsBar" style="width: 0%"></div></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="live-activity-card">
+              <h3>Live activity</h3>
+              <p>Recent archive actions appear here as they happen in demo mode.</p>
+              <div class="live-list" id="activityFeed"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-grid">
+        <div>
+          <div class="brand footer-brand">
+            <span class="brand-mark">
+              <img class="site-logo--footer" src="./asserts/logo.png" alt="WITH logo" />
+            </span>
+            <span class="brand-meta">
+              <strong>WITH Archive</strong>
+              <span>Women in Technology</span>
+            </span>
+          </div>
+          <p>Designed by....</p>
+          <p>Creative Commons License to be decided</p>
+        </div>
+
+        <div class="footer-links">
+          <strong>Discover</strong>
+          <a href="#collections">Collections</a>
+          <a href="#stories">Stories</a>
+          <a href="#analytics">Analytics</a>
+        </div>
+
+        <div class="footer-links">
+          <strong>Contribute</strong>
+          <a href="#contribute">Upload an item</a>
+          <a href="#">Community guidelines</a>
+          <a href="#">Member access</a>
+        </div>
+
+        <div class="footer-links">
+          <strong>Support</strong>
+          <a href="#">Accessibility</a>
+          <a href="#">Contact</a>
+          <a href="#">Credits</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const authScreen = document.getElementById('authScreen');
+    const appShell = document.getElementById('appShell');
+    const loginForm = document.getElementById('loginForm');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const magicLinkBtn = document.getElementById('magicLinkBtn');
+    const googleLogin = document.getElementById('googleLogin');
+    const microsoftLogin = document.getElementById('microsoftLogin');
+    const analyticsConsent = document.getElementById('analyticsConsent');
+    const userEmailInline = document.getElementById('userEmailInline');
+    const searchBtn = document.getElementById('searchBtn');
+    const archiveSearch = document.getElementById('archiveSearch');
+    const formatFilter = document.getElementById('formatFilter');
+    const decadeFilter = document.getElementById('decadeFilter');
+    const contributeForm = document.getElementById('contributeForm');
+    const collectionGrid = document.getElementById('collectionGrid');
+    const activityFeed = document.getElementById('activityFeed');
+
+    const slideMedia = document.getElementById('slideMedia');
+    const slideBadge = document.getElementById('slideBadge');
+    const slideTitle = document.getElementById('slideTitle');
+    const slideText = document.getElementById('slideText');
+    const slideTags = document.getElementById('slideTags');
+    const slideDots = document.getElementById('slideDots');
+    const prevSlide = document.getElementById('prevSlide');
+    const nextSlide = document.getElementById('nextSlide');
+
+    const heroGalleryStage = document.getElementById('heroGalleryStage');
+    const heroGalleryDots = document.getElementById('heroGalleryDots');
+    const heroPrevBtn = document.getElementById('heroPrevBtn');
+    const heroNextBtn = document.getElementById('heroNextBtn');
+
+    const STORAGE_KEYS = {
+      session: 'withArchiveSession',
+      analytics: 'withArchiveAnalytics',
+      collections: 'withArchiveCollections',
+      activity: 'withArchiveActivity'
+    };
+
+    const defaultAnalytics = {
+      visits: 0,
+      searches: 0,
+      collectionOpens: 0,
+      contributionStarts: 0
+    };
+
+    const logoImage = "./asserts/logo.png";
+
+    let currentSlide = 0;
+    let currentHeroSlide = 0;
+    let slideTimer = null;
+    let heroTimer = null;
+
+    const collectionSlides = [
+      {
+        badge: 'Featured collection',
+        title: 'WITH 50th Anniversary',
+        text: 'Anniversary photographs documenting 50 years of women in tech.',
+        image: logoImage,
+        tags: ['Anniversary', 'Photographs', 'Programs']
+      },
+      {
+        badge: 'Oral history',
+        title: 'Anecdotes and Oral Histories',
+        text: 'Interviews and transcripts that connect memory, work, and community.',
+        image: logoImage,
+        tags: ['Interview', 'Transcript', 'Memory']
+      },
+      {
+        badge: 'Image set',
+        title: 'Anniversary Images',
+        text: 'Portraits and milestone visuals from key moments in the archive.',
+        image: logoImage,
+        tags: ['Images', 'Captions', 'Milestones']
+      }
+    ];
+
+    const heroCollectionSlides = [
+      {
+        badge: 'Featured collection',
+        title: 'WITH 50th Anniversary',
+        text: 'A calm, rolling display for anniversary materials, photographs, and commemorative archive highlights.',
+        image: logoImage
+      },
+      {
+        badge: 'Oral history',
+        title: 'Anecdotes and Oral Histories',
+        text: 'Memory, voice, and community experience stay visible in a cleaner image-led entry point.',
+        image: logoImage
+      },
+      {
+        badge: 'Image collection',
+        title: 'Anniversary Images',
+        text: 'The right-side hero becomes a quiet visual guide into the archive instead of a static content block.',
+        image: logoImage
+      }
+    ];
+
+    const defaultCollections = [
+      {
+        id: 1,
+        icon: '🎙️',
+        title: 'Anecdotes and Oral Histories',
+        description: 'Interviews, transcripts, member recollections, and teaching-ready excerpts.',
+        items: 142,
+        contributors: 27,
+        updated: 'Just now',
+        tags: ['Interview', 'Transcript'],
+        image: logoImage
+      },
+      {
+        id: 2,
+        icon: '🖼️',
+        title: 'Anniversary Images',
+        description: 'Milestone events, commemorative portraits, and visual records of changing membership.',
+        items: 86,
+        contributors: 14,
+        updated: '4 min ago',
+        tags: ['Images', 'Milestones'],
+        image: logoImage
+      },
+      {
+        id: 3,
+        icon: '⭐',
+        title: 'WITH 50th Anniversary',
+        description: 'A curated path into anniversary programs, speeches, photographs, and retrospective essays.',
+        items: 109,
+        contributors: 19,
+        updated: '9 min ago',
+        tags: ['Programs', 'Featured'],
+        image: logoImage
+      }
+    ];
+
+    function getStored(key, fallback) {
+      try {
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveStored(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function getAnalytics() {
+      return getStored(STORAGE_KEYS.analytics, { ...defaultAnalytics });
+    }
+
+    function getCollections() {
+      const stored = getStored(STORAGE_KEYS.collections, null);
+      if (stored && Array.isArray(stored) && stored.length) return stored;
+      saveStored(STORAGE_KEYS.collections, defaultCollections);
+      return [...defaultCollections];
+    }
+
+    function getActivity() {
+      return getStored(STORAGE_KEYS.activity, []);
+    }
+
+    function saveActivity(activity) {
+      saveStored(STORAGE_KEYS.activity, activity.slice(0, 10));
+    }
+
+    function addActivity(title, meta) {
+      const activity = getActivity();
+      activity.unshift({
+        title,
+        meta,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      saveActivity(activity);
+      renderActivity();
+    }
+
+    function renderActivity() {
+      const activity = getActivity();
+      if (!activity.length) {
+        activityFeed.innerHTML = '<div class="live-item"><strong>No activity yet</strong><span>New visits, searches, and updates will appear here.</span></div>';
+        return;
+      }
+      activityFeed.innerHTML = activity.map(item => `
+        <div class="live-item">
+          <strong>${item.title}</strong>
+          <span>${item.meta} · ${item.time}</span>
+        </div>
+      `).join('');
+    }
+
+    function updateAnalytics(type) {
+      if (!analyticsConsent?.checked) return;
+      const analytics = getAnalytics();
+      if (analytics[type] !== undefined) analytics[type] += 1;
+      saveStored(STORAGE_KEYS.analytics, analytics);
+      renderAnalytics();
+    }
+
+    function renderAnalytics() {
+      const analytics = getAnalytics();
+      const max = Math.max(
+        analytics.visits,
+        analytics.searches,
+        analytics.collectionOpens,
+        analytics.contributionStarts,
+        1
+      );
+
+      document.getElementById('visitCount').textContent = analytics.visits;
+      document.getElementById('searchCount').textContent = analytics.searches;
+      document.getElementById('collectionCount').textContent = analytics.collectionOpens;
+      document.getElementById('contributionCount').textContent = analytics.contributionStarts;
+
+      document.getElementById('visitsLabel').textContent = analytics.visits;
+      document.getElementById('searchesLabel').textContent = analytics.searches;
+      document.getElementById('collectionsLabel').textContent = analytics.collectionOpens;
+      document.getElementById('contributionsLabel').textContent = analytics.contributionStarts;
+
+      document.getElementById('visitsBar').style.width = `${(analytics.visits / max) * 100}%`;
+      document.getElementById('searchesBar').style.width = `${(analytics.searches / max) * 100}%`;
+      document.getElementById('collectionsBar').style.width = `${(analytics.collectionOpens / max) * 100}%`;
+      document.getElementById('contributionsBar').style.width = `${(analytics.contributionStarts / max) * 100}%`;
+    }
+
+    function renderSlides() {
+      const slide = collectionSlides[currentSlide];
+      if (!slideMedia) return;
+
+      slideBadge.textContent = slide.badge;
+      slideTitle.textContent = slide.title;
+      slideText.textContent = slide.text;
+      slideMedia.innerHTML = `<img src="${slide.image}" alt="${slide.title}" />`;
+      slideTags.innerHTML = slide.tags.map(tag => `<span class="chip">${tag}</span>`).join('');
+
+      slideDots.innerHTML = collectionSlides.map((_, index) => `
+        <button
+          class="slide-dot ${index === currentSlide ? 'active' : ''}"
+          type="button"
+          aria-label="Go to slide ${index + 1}"
+          data-slide-index="${index}">
+        </button>
+      `).join('');
+
+      document.querySelectorAll('[data-slide-index]').forEach(dot => {
+        dot.addEventListener('click', () => {
+          currentSlide = Number(dot.dataset.slideIndex);
+          renderSlides();
+          restartSlideTimer();
+        });
+      });
+    }
+
+    function nextSlideItem() {
+      currentSlide = (currentSlide + 1) % collectionSlides.length;
+      renderSlides();
+    }
+
+    function prevSlideItem() {
+      currentSlide = (currentSlide - 1 + collectionSlides.length) % collectionSlides.length;
+      renderSlides();
+    }
+
+    function restartSlideTimer() {
+      clearInterval(slideTimer);
+      slideTimer = setInterval(nextSlideItem, 5000);
+    }
+
+    function renderHeroGallery() {
+      if (!heroGalleryStage) return;
+
+      heroGalleryStage.innerHTML = heroCollectionSlides.map((slide, index) => `
+        <article class="hero-gallery-slide ${index === currentHeroSlide ? 'active' : ''}" aria-hidden="${index === currentHeroSlide ? 'false' : 'true'}">
+          <img class="hero-gallery-image" src="${slide.image}" alt="${slide.title}" />
+          <div class="hero-gallery-overlay"></div>
+          <div class="hero-gallery-card">
+            <span class="badge">${slide.badge}</span>
+            <h4 class="gallery-card-title">${slide.title}</h4>
+            <p class="gallery-card-copy">${slide.text}</p>
+          </div>
+        </article>
+      `).join('');
+
+      heroGalleryDots.innerHTML = heroCollectionSlides.map((slide, index) => `
+        <button
+          class="hero-gallery-dot ${index === currentHeroSlide ? 'active' : ''}"
+          type="button"
+          aria-label="Show ${slide.title}"
+          data-hero-slide="${index}">
+        </button>
+      `).join('');
+
+      document.querySelectorAll('[data-hero-slide]').forEach(dot => {
+        dot.addEventListener('click', () => {
+          currentHeroSlide = Number(dot.dataset.heroSlide);
+          renderHeroGallery();
+          restartHeroTimer();
+        });
+      });
+    }
+
+    function nextHeroSlide() {
+      currentHeroSlide = (currentHeroSlide + 1) % heroCollectionSlides.length;
+      renderHeroGallery();
+    }
+
+    function prevHeroSlide() {
+      currentHeroSlide = (currentHeroSlide - 1 + heroCollectionSlides.length) % heroCollectionSlides.length;
+      renderHeroGallery();
+    }
+
+    function restartHeroTimer() {
+      clearInterval(heroTimer);
+      heroTimer = setInterval(nextHeroSlide, 4500);
+    }
+
+    function renderCollections() {
+      const collections = getCollections();
+      collectionGrid.innerHTML = collections.map(collection => `
+        <article class="collection-card real-time" tabindex="0" data-collection-id="${collection.id}">
+          <div class="collection-top">
+            <div class="collection-icon">${collection.icon}</div>
+            <span class="count">${collection.items} items</span>
+          </div>
+          <div class="thumb">
+            <img src="${collection.image}" alt="${collection.title}" />
+          </div>
+          <h3>${collection.title}</h3>
+          <p>${collection.description}</p>
+          <div class="meta-row">
+            ${collection.tags.map(tag => `<span class="chip">${tag}</span>`).join('')}
+          </div>
+        </article>
+      `).join('');
+
+      document.querySelectorAll('[data-collection-id]').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = Number(card.dataset.collectionId);
+          const current = getCollections().find(item => item.id === id);
+          updateAnalytics('collectionOpens');
+          addActivity('Collection opened', current.title);
+          alert(`${current.title} opened. Connect this card to a real collection page or modal.`);
+        });
+      });
+
+      const totalRecords = collections.reduce((sum, item) => sum + item.items, 0);
+      const totalContributors = collections.reduce((sum, item) => sum + item.contributors, 0);
+
+      document.getElementById('totalRecordsStat').textContent = totalRecords.toLocaleString();
+      document.getElementById('totalContributorsStat').textContent = totalContributors.toLocaleString();
+      document.getElementById('updatedCollectionsStat').textContent = collections.length;
+    }
+
+    function randomUpdateCollections() {
+      const collections = getCollections().map((collection) => {
+        const shouldUpdate = Math.random() > 0.45;
+        if (!shouldUpdate) return collection;
+
+        const itemIncrease = Math.floor(Math.random() * 3);
+        const contributorIncrease = Math.random() > 0.7 ? 1 : 0;
+        const updateMinutes = Math.floor(Math.random() * 5) + 1;
+
+        return {
+          ...collection,
+          items: collection.items + itemIncrease,
+          contributors: collection.contributors + contributorIncrease,
+          updated: itemIncrease || contributorIncrease ? 'Just now' : `${updateMinutes} min ago`
+        };
+      });
+
+      saveStored(STORAGE_KEYS.collections, collections);
+      renderCollections();
+      addActivity('Collections refreshed', 'Live archive data updated');
+    }
+
+    function setSession(email) {
+      saveStored(STORAGE_KEYS.session, { email });
+      userEmailInline.textContent = email;
+      authScreen.classList.add('hidden');
+      appShell.classList.remove('hidden');
+      updateAnalytics('visits');
+      addActivity('Signed in', email);
+    }
+
+    function clearSession() {
+      localStorage.removeItem(STORAGE_KEYS.session);
+      authScreen.classList.remove('hidden');
+      appShell.classList.add('hidden');
+    }
+
+    function restoreSession() {
+      const session = getStored(STORAGE_KEYS.session, null);
+      if (session?.email) {
+        userEmailInline.textContent = session.email;
+        authScreen.classList.add('hidden');
+        appShell.classList.remove('hidden');
+      }
+    }
+
+    loginForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      if (!email) return;
+      setSession(email);
+    });
+
+    magicLinkBtn?.addEventListener('click', () => {
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        alert('Enter your email first so the magic link can be sent.');
+        return;
+      }
+      addActivity('Magic link requested', email);
+      alert(`Demo mode: a magic link would be sent to ${email}.`);
+    });
+
+    googleLogin?.addEventListener('click', () => setSession('google.member@witharchive.org'));
+    microsoftLogin?.addEventListener('click', () => setSession('microsoft.member@witharchive.org'));
+    logoutBtn?.addEventListener('click', clearSession);
+
+    searchBtn?.addEventListener('click', () => {
+      const query = archiveSearch.value.trim() || 'empty search';
+      updateAnalytics('searches');
+      addActivity('Search performed', `${query} · ${formatFilter.value} · ${decadeFilter.value}`);
+      alert(`Search logged for: ${query}\nFormat: ${formatFilter.value}\nDecade: ${decadeFilter.value}`);
+    });
+
+    archiveSearch?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        searchBtn.click();
+      }
+    });
+
+    let contributionTracked = false;
+    ['focusin', 'click'].forEach((eventName) => {
+      contributeForm?.addEventListener(eventName, () => {
+        if (!contributionTracked) {
+          contributionTracked = true;
+          updateAnalytics('contributionStarts');
+          addActivity('Contribution started', 'User entered submission form');
+        }
+      }, { once: true });
+    });
+
+    contributeForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const collections = getCollections();
+      collections[0].items += 1;
+      collections[0].updated = 'Just now';
+      saveStored(STORAGE_KEYS.collections, collections);
+      renderCollections();
+      addActivity('Item submitted', 'Added to Anecdotes and Oral Histories');
+      alert('Demo mode: item submitted for review. Connect this form to your backend or CMS workflow.');
+      contributeForm.reset();
+      contributionTracked = false;
+    });
+
+    prevSlide?.addEventListener('click', () => {
+      prevSlideItem();
+      restartSlideTimer();
+    });
+
+    nextSlide?.addEventListener('click', () => {
+      nextSlideItem();
+      restartSlideTimer();
+    });
+
+    heroPrevBtn?.addEventListener('click', () => {
+      prevHeroSlide();
+      restartHeroTimer();
+    });
+
+    heroNextBtn?.addEventListener('click', () => {
+      nextHeroSlide();
+      restartHeroTimer();
+    });
+
+    restoreSession();
+    renderAnalytics();
+    renderCollections();
+    renderActivity();
+    renderSlides();
+    renderHeroGallery();
+    restartSlideTimer();
+    restartHeroTimer();
+    setInterval(randomUpdateCollections, 8000);
+  </script>
+</body>
+</html>

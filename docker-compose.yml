@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: with_archive_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: with_archive
+      POSTGRES_USER: with_user
+      POSTGRES_PASSWORD: with_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - with_archive_db_data:/var/lib/postgresql/data
+      - ./database/schemas:/docker-entrypoint-initdb.d/01-schema
+      - ./database/seeders:/docker-entrypoint-initdb.d/02-seeders
+
+  server:
+    image: node:20
+    container_name: with_archive_server
+    working_dir: /app/server
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgresql://with_user:with_password@db:5432/with_archive
+      JWT_SECRET: change-me
+      APP_URL: http://localhost:4000
+      CLIENT_URL: http://localhost:3000
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+
+volumes:
+  with_archive_db_data:
