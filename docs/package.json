@@ -1,6 +1,6 @@
 
 {
-  "name": "with@50-commons",
+  "name": "with-commons",
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
