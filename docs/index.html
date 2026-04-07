@@ -6,70 +6,243 @@
   <title>WITH Commons</title>
 
   <style>
+    :root {
+      --bg: #f5f2ec;
+      --card: #ffffff;
+      --text: #1f1f1f;
+      --muted: #6b6b6b;
+      --line: #ddd6cc;
+      --primary: #6f1d3a;
+      --primary-dark: #59152e;
+      --soft: #efe8de;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      background: #f5f2ec;
+      background: var(--bg);
       margin: 0;
-      padding: 40px;
+      min-height: 100vh;
+      color: var(--text);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .intro {
+      background: linear-gradient(180deg, #7b2343 0%, #59152e 100%);
+      color: white;
+      padding: 56px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .intro-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .intro h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.02;
+    }
+
+    .intro p {
+      margin: 0 0 22px;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.7;
+      max-width: 52ch;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .intro-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .intro-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .intro-card span {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .auth-panel {
+      padding: 40px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .container {
+      width: 100%;
       max-width: 500px;
-      margin: auto;
-      background: white;
+      background: var(--card);
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
     }
 
     h2 {
       margin-top: 0;
+      margin-bottom: 8px;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    .subtext {
+      margin: 0 0 22px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .section-title {
+      margin: 22px 0 10px;
+      color: var(--primary);
+      font-size: 1.05rem;
     }
 
     input {
       width: 100%;
-      padding: 12px;
+      padding: 13px 14px;
       margin: 8px 0;
       box-sizing: border-box;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: 2px solid rgba(111, 29, 58, 0.16);
+      border-color: var(--primary);
     }
 
     button {
       width: 100%;
       padding: 12px;
-      background: #6f1d3a;
+      background: var(--primary);
       color: white;
       border: none;
+      border-radius: 10px;
       cursor: pointer;
-      margin-top: 6px;
+      margin-top: 8px;
+      font-weight: 700;
+      font-size: 0.96rem;
     }
 
     button:hover {
-      background: #59152e;
+      background: var(--primary-dark);
     }
 
     #message {
       margin-top: 14px;
-      color: #6f1d3a;
+      color: var(--primary);
       font-weight: bold;
+      min-height: 22px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 22px 0 10px;
+    }
+
+    @media (max-width: 920px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .intro {
+        padding: 34px 24px;
+      }
+
+      .auth-panel {
+        padding: 24px 16px 40px;
+      }
+
+      .intro-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>WITH@50 Commons Login</h2>
+  <div class="page">
+    <section class="intro">
+      <span class="intro-badge">WITH Commons · Women in Technology Archive</span>
+      <h1>Sign in to enter the archive.</h1>
+      <p>
+        This login page now leads directly into your styled home page after a successful sign-in.
+        Users move naturally from access to browsing collections, stories, contributions, and the dashboard.
+      </p>
 
-    <h3>Register</h3>
-    <input id="regName" type="text" placeholder="Name" />
-    <input id="regEmail" type="email" placeholder="Email" />
-    <input id="regPassword" type="password" placeholder="Password" />
-    <button onclick="register()">Register</button>
+      <div class="intro-grid">
+        <div class="intro-card">
+          <strong>Browse</strong>
+          <span>Move into collections, archive pathways, and featured materials.</span>
+        </div>
+        <div class="intro-card">
+          <strong>Read</strong>
+          <span>Explore stories, oral histories, and institutional memory.</span>
+        </div>
+        <div class="intro-card">
+          <strong>Contribute</strong>
+          <span>Share documents, images, and community knowledge.</span>
+        </div>
+      </div>
+    </section>
 
-    <h3>Login</h3>
-    <input id="logEmail" type="email" placeholder="Email" />
-    <input id="logPassword" type="password" placeholder="Password" />
-    <button onclick="login()">Login</button>
+    <section class="auth-panel">
+      <div class="container">
+        <h2>WITH@50 Commons</h2>
+        <p class="subtext">Register or log in to continue to the archive home page.</p>
 
-    <div id="message"></div>
+        <h3 class="section-title">Register</h3>
+        <input id="regName" type="text" placeholder="Name" />
+        <input id="regEmail" type="email" placeholder="Email" />
+        <input id="regPassword" type="password" placeholder="Password" />
+        <button onclick="register()">Register</button>
+
+        <div class="divider"></div>
+
+        <h3 class="section-title">Login</h3>
+        <input id="logEmail" type="email" placeholder="Email" />
+        <input id="logPassword" type="password" placeholder="Password" />
+        <button onclick="login()">Login</button>
+
+        <div id="message"></div>
+      </div>
+    </section>
   </div>
 
   <script>
@@ -133,7 +306,11 @@
 
         localStorage.setItem("with_token", data.token);
         localStorage.setItem("with_user", JSON.stringify(data.user));
-        message.innerText = "Login successful!";
+        message.innerText = "Login successful! Redirecting...";
+
+        setTimeout(() => {
+          window.location.href = "homepage.html";
+        }, 700);
       } catch (err) {
         message.innerText = err.message;
       }
