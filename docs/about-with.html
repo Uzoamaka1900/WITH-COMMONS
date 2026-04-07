@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About WITH – Women in Technological History</title>
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --bg-soft: #ece7df;
+      --surface: #fffdfa;
+      --surface-soft: #f7f3ed;
+      --text: #1f2629;
+      --muted: #5f6b70;
+      --primary: #23404a;
+      --primary-dark: #162b33;
+      --accent: #b88a52;
+      --accent-strong: #9a6f3d;
+      --accent-soft: #efe1d2;
+      --line: #d9d3ca;
+      --shadow-sm: 0 6px 16px rgba(19, 28, 32, 0.08);
+      --shadow: 0 18px 42px rgba(19, 28, 32, 0.10);
+      --radius-sm: 12px;
+      --radius: 18px;
+      --radius-lg: 24px;
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      background: #ebe5dd;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .topbar .inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.7rem 0;
+    }
+
+    .topbar-links,
+    .topbar-actions,
+    .nav-links,
+    .nav-actions,
+    .hero-actions,
+    .card-links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #f8f3e6;
+      border: 1px solid #eadfc3;
+      color: #66501c;
+      padding: 0.4rem 0.72rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(244,241,235,0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .navbar .inner {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .brand-mark {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      padding: 0.3rem;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .brand-meta strong {
+      display: block;
+      line-height: 1.1;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .brand-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 0.18rem;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      justify-content: center;
+    }
+
+    .nav-links a {
+      color: #4d4d4d;
+      font-weight: 700;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-dark);
+    }
+
+    .btn {
+      min-height: 46px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      font-size: 0.96rem;
+      font-weight: 800;
+      padding: 0.9rem 1.15rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #fcfbf9;
+    }
+
+    main section {
+      padding: 1.6rem 0;
+    }
+
+    .hero-card,
+    .info-card,
+    .feature-card,
+    .contact-card,
+    .grant-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-card {
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-side {
+      padding: 2rem;
+    }
+
+    .hero-copy {
+      background: linear-gradient(180deg, #fffdfa 0%, #f7f3ed 100%);
+    }
+
+    .hero-side {
+      background: #f0ebe4;
+      border-left: 1px solid var(--line);
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .section-kicker,
+    .badge {
+      letter-spacing: 0.03em;
+      font-weight: 800;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      color: #8a6b1f;
+      margin-bottom: 0.45rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.38rem 0.72rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #5f4a14;
+      font-size: 0.78rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-copy h1,
+    .section-head h2,
+    .feature-card h3,
+    .contact-card h3,
+    .grant-card h3 {
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.3rem, 4vw, 4rem);
+      line-height: 0.98;
+      margin: 0 0 1rem;
+      max-width: 12ch;
+    }
+
+    .lede,
+    .section-head p,
+    .feature-card p,
+    .contact-card p,
+    .grant-card p,
+    .mini p {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .lede {
+      max-width: 64ch;
+      font-size: 1.02rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .hero-actions {
+      margin-bottom: 0.95rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-card {
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.45rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.15rem;
+      font-weight: 900;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .mini {
+      border-radius: 18px;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--line);
+      padding: 1rem;
+    }
+
+    .mini strong {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-grid,
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card,
+    .feature-card,
+    .contact-card,
+    .grant-card {
+      padding: 1.25rem;
+    }
+
+    .feature-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .contact-links {
+      display: grid;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .contact-link:hover {
+      text-decoration: underline;
+    }
+
+    .grant-card {
+      background: linear-gradient(180deg, #fffdfa 0%, #f7f3ed 100%);
+    }
+
+    .footer {
+      padding: 2rem 0 3rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 1rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1.3rem;
+    }
+
+    .footer-links a {
+      display: block;
+      margin-bottom: 0.55rem;
+      font-weight: 600;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-dark);
+    }
+
+    @media (max-width: 1120px) {
+      .hero-grid,
+      .info-grid,
+      .contact-grid,
+      .feature-grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 920px) {
+      .navbar .inner,
+      .topbar .inner,
+      .footer-grid,
+      .feature-grid,
+      .hero-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container { width: min(var(--max), calc(100% - 1rem)); }
+
+      .hero-copy,
+      .hero-side,
+      .info-card,
+      .feature-card,
+      .contact-card,
+      .grant-card {
+        padding: 1rem;
+      }
+
+      .footer-grid,
+      .feature-grid,
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .navbar .inner {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-copy h1 {
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container inner">
+      <div class="topbar-links">
+        <a href="#overview">Overview</a>
+        <a href="#purpose">Purpose</a>
+        <a href="#anniversary">50th Anniversary</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="topbar-actions">
+        <span class="pill">WITH · Special Interest Group within SHOT</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <div class="container inner">
+      <a class="brand" href="homepage.html" aria-label="WITH home">
+        <span class="brand-mark">
+          <img class="site-logo" src="./asserts/logo.png" alt="WITH logo" />
+        </span>
+        <span class="brand-meta">
+          <strong>WITH</strong>
+          <span>Women in Technological History</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#overview">About</a>
+        <a href="#purpose">Purpose</a>
+        <a href="#anniversary">Anniversary Call</a>
+        <a href="#scope">Global Scope</a>
+        <a href="#grant">Conference Grant</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="homepage.html">Back Home</a>
+        <a class="btn btn-primary" href="#contact">Contact WITH</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="overview">
+    <section>
+      <div class="container">
+        <div class="hero-card">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <span class="section-kicker">About WITH</span>
+              <h1>Women in Technological History.</h1>
+              <p class="lede">
+                WITH is a Special Interest Group within SHOT whose membership includes both men and women interested in gender issues. It serves both as a support network for women working within the profession and as an activist community that promotes gender analysis within the history of technology.
+              </p>
+
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="#anniversary">View 50th anniversary call</a>
+                <a class="btn btn-secondary" href="#grant">Conference grant</a>
+              </div>
+
+              <div class="hero-stats">
+                <div class="stat-card">
+                  <strong>SHOT</strong>
+                  <span>Special Interest Group within the Society for the History of Technology</span>
+                </div>
+                <div class="stat-card">
+                  <strong>Support</strong>
+                  <span>Encouraging and energizing women working within the profession</span>
+                </div>
+                <div class="stat-card">
+                  <strong>Advocacy</strong>
+                  <span>Promoting gender analysis in the history of technology</span>
+                </div>
+              </div>
+            </div>
+
+            <aside class="hero-side">
+              <div class="badge">Founding vision</div>
+              <p class="lede" style="margin-bottom:0;">
+                As founding member and former SHOT President Daryl Hafter wrote, WITH’s goal is to nurture “the subject and the people.”
+              </p>
+
+              <div class="feature-grid">
+                <div class="mini">
+                  <strong>Open membership</strong>
+                  <p>Membership in WITH is open to all members of SHOT.</p>
+                </div>
+                <div class="mini">
+                  <strong>Gender analysis</strong>
+                  <p>WITH continues to foster scholarship that treats gender as a vital analytical category.</p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="purpose">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Purpose</span>
+            <h2>The two-fold mission of WITH</h2>
+          </div>
+          <p>
+            WITH was formed to support people in the profession and to strengthen the field intellectually through gender analysis.
+          </p>
+        </div>
+
+        <div class="feature-grid-3">
+          <article class="feature-card">
+            <h3>Support group</h3>
+            <p>
+              WITH serves as a support group that encourages and energizes women working within the profession.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>Activist group</h3>
+            <p>
+              WITH also functions as an activist group seeking to foster and promote gender analysis within the history of technology.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>Intellectual community</h3>
+            <p>
+              The organization brings together scholars who are interested in gender issues across different regions, traditions, and methodological approaches.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="anniversary">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">50th Anniversary</span>
+            <h2>Call for submissions</h2>
+          </div>
+          <p>
+            WITH invites submissions for a proposed special section or supplemental issue of <em>Technology &amp; Culture</em>.
+          </p>
+        </div>
+
+        <div class="info-grid">
+          <article class="info-card">
+            <h3>What the issue explores</h3>
+            <p>
+              The issue is dedicated to exploring the roles of women and the analytical category of gender in the history of technology.
+            </p>
+          </article>
+
+          <article class="info-card" id="scope">
+            <h3>Geographic scope</h3>
+            <p>
+              Contributions that move beyond established geographic centers of scholarship are especially encouraged, including work on the Global South, Eastern Europe, Asia, Africa, Latin America, and transnational or comparative perspectives.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Why this matters</span>
+            <h2>Broadening the field</h2>
+          </div>
+          <p>
+            The anniversary call makes clear that WITH is committed not only to women in the profession, but also to reshaping where and how the history of technology is studied.
+          </p>
+        </div>
+
+        <div class="feature-grid-3">
+          <article class="feature-card">
+            <h3>Beyond U.S. and Western Europe</h3>
+            <p>
+              The call particularly welcomes scholarship addressing contexts beyond the better-established centers of the field.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>Global and comparative perspectives</h3>
+            <p>
+              Comparative, transnational, and globally connected histories are explicitly welcomed.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <h3>Expanding the archive of scholarship</h3>
+            <p>
+              This anniversary milestone is also an invitation to rethink the field’s geographies, subjects, and categories of analysis.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Contact</span>
+            <h2>Get in touch with WITH</h2>
+          </div>
+          <p>
+            To find out more about WITH, or to request details about the anniversary submission process, use the contact links below.
+          </p>
+        </div>
+
+        <div class="contact-grid">
+          <article class="contact-card">
+            <h3>WITH contacts</h3>
+            <p>For more about WITH, please contact the following organizers:</p>
+            <div class="contact-links">
+              <a class="contact-link" href="mailto:Corinna%20Schlombs">Corinna Schlombs</a>
+              <a class="contact-link" href="mailto:Bethany%20Johnson">Bethany Johnson</a>
+              <a class="contact-link" href="mailto:Tijana%20Rupcic">Tijana Rupcic</a>
+            </div>
+          </article>
+
+          <article class="contact-card">
+            <h3>Abstracts and anniversary details</h3>
+            <p>For more details and abstracts, use the contact below:</p>
+            <div class="contact-links">
+              <a class="contact-link" href="mailto:bethanyjohnson@charotte.edu">bethanyjohnson@charotte.edu</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="grant">
+      <div class="container">
+        <article class="grant-card">
+          <span class="section-kicker">Conference Grant</span>
+          <h3>WITH Conference Grant</h3>
+          <p>
+            Please find information concerning the WITH Conference Grant here.
+          </p>
+          <div class="hero-actions" style="margin-top:1rem;">
+            <a class="btn btn-primary" href="#">View grant information</a>
+            <a class="btn btn-secondary" href="#contact">Ask a question</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:0.8rem;">
+          <span class="brand-mark">
+            <img class="site-logo" src="./asserts/logo.png" alt="WITH logo" />
+          </span>
+          <span class="brand-meta">
+            <strong>WITH</strong>
+            <span>Women in Technological History</span>
+          </span>
+        </div>
+        <p>Special Interest Group within SHOT.</p>
+      </div>
+
+      <div class="footer-links">
+        <strong>Navigate</strong>
+        <a href="#overview">About</a>
+        <a href="#purpose">Purpose</a>
+        <a href="#anniversary">Anniversary</a>
+      </div>
+
+      <div class="footer-links">
+        <strong>Opportunities</strong>
+        <a href="#scope">Global scope</a>
+        <a href="#grant">Conference grant</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <div class="footer-links">
+        <strong>Back</strong>
+        <a href="homepage.html">Homepage</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="index.html">Login</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
