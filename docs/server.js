@@ -18,6 +18,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 8080;
 const MONGODB_URI = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
+const ADMIN_KEY = process.env.ADMIN_KEY;
 
 if (!MONGODB_URI) {
   console.error('Missing MONGODB_URI environment variable');
@@ -59,6 +60,20 @@ function createToken(user) {
     JWT_SECRET,
     { expiresIn: '7d' }
   );
+}
+
+function requireAdmin(req, res, next) {
+  const adminKey = req.headers['x-admin-key'];
+
+  if (!ADMIN_KEY) {
+    return res.status(500).json({ message: 'ADMIN_KEY is not configured.' });
+  }
+
+  if (!adminKey || adminKey !== ADMIN_KEY) {
+    return res.status(403).json({ message: 'Forbidden.' });
+  }
+
+  next();
 }
 
 // ROUTES
@@ -179,13 +194,16 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-app.get('/api/auth/users', async (req, res) => {
+app.get('/api/auth/users', requireAdmin, async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
       return res.status(503).json({ message: 'Database is not connected yet.' });
     }
 
-    const users = await User.find().select('name email createdAt').sort({ createdAt: -1 });
+    const users = await User.find()
+      .select('name email createdAt')
+      .sort({ createdAt: -1 });
+
     return res.json(users);
   } catch (error) {
     console.error('Fetch users error:', error);
@@ -195,18 +213,53 @@ app.get('/api/auth/users', async (req, res) => {
   }
 });
 
-app.get('/api/auth/logins', async (req, res) => {
+app.get('/api/auth/logins', requireAdmin, async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
       return res.status(503).json({ message: 'Database is not connected yet.' });
     }
 
-    const logins = await LoginEvent.find().sort({ createdAt: -1 }).limit(100);
+    const logins = await LoginEvent.find()
+      .select('email ipAddress userAgent createdAt')
+      .sort({ createdAt: -1 })
+      .limit(100);
+
     return res.json(logins);
   } catch (error) {
     console.error('Fetch logins error:', error);
     return res.status(500).json({
       message: error.message || 'Could not fetch login events.'
+    });
+  }
+});
+
+app.get('/api/admin/stats', requireAdmin, async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ message: 'Database is not connected yet.' });
+    }
+
+    const totalUsers = await User.countDocuments();
+    const totalLogins = await LoginEvent.countDocuments();
+
+    const latestUser = await User.findOne()
+      .sort({ createdAt: -1 })
+      .select('createdAt');
+
+    const latestLogin = await LoginEvent.findOne()
+      .sort({ createdAt: -1 })
+      .select('createdAt');
+
+    return res.json({
+      totalUsers,
+      totalLogins,
+      latestUser: latestUser?.createdAt || null,
+      latestLogin: latestLogin?.createdAt || null
+    });
+  } catch (error) {
+    console.error('Stats error:', error);
+    return res.status(500).json({
+      message: error.message || 'Could not fetch stats.'
     });
   }
 });
