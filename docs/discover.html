@@ -628,7 +628,8 @@
         <a href="#stories">Stories</a>
       </div>
       <div class="topbar-actions">
-        <span class="pill">WITH Commons · Discover</span>
+        <span class="pill">Signed in as <span id="userEmailInline">member@witharchive.org</span></span>
+        <button class="btn btn-secondary" id="logoutBtn" type="button">Log out</button>
       </div>
     </div>
   </div>
@@ -1036,9 +1037,85 @@
   </footer>
 
   <script>
+    const AUTH_STORAGE_KEYS = {
+      token: "with_token",
+      user: "with_user"
+    };
+
+    function clearAuthState() {
+      localStorage.removeItem(AUTH_STORAGE_KEYS.user);
+      localStorage.removeItem(AUTH_STORAGE_KEYS.token);
+    }
+
+    function parseStoredUser() {
+      try {
+        return JSON.parse(localStorage.getItem(AUTH_STORAGE_KEYS.user) || "null");
+      } catch {
+        return null;
+      }
+    }
+
+    function parseJwtPayload(token) {
+      try {
+        const payload = token.split('.')[1];
+        if (!payload) return null;
+        const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
+        const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
+        return JSON.parse(atob(padded));
+      } catch {
+        return null;
+      }
+    }
+
+    function redirectToLogin(reason) {
+      clearAuthState();
+      const next = encodeURIComponent(window.location.pathname.split('/').pop() || 'discover.html');
+      const suffix = reason ? `?reason=${encodeURIComponent(reason)}&next=${next}` : `?next=${next}`;
+      window.location.replace(`index.html${suffix}`);
+    }
+
+    function requireAuth() {
+      const token = localStorage.getItem(AUTH_STORAGE_KEYS.token);
+      const storedUser = parseStoredUser();
+
+      if (!token || !storedUser?.email) {
+        redirectToLogin('missing-session');
+        return null;
+      }
+
+      const payload = parseJwtPayload(token);
+      if (!payload?.exp) {
+        redirectToLogin('invalid-session');
+        return null;
+      }
+
+      const now = Math.floor(Date.now() / 1000);
+      if (payload.exp <= now) {
+        redirectToLogin('session-expired');
+        return null;
+      }
+
+      return { token, storedUser, payload };
+    }
+
+    const session = requireAuth();
+    if (!session) {
+      throw new Error('Authentication required');
+    }
+
+    const userEmailInline = document.getElementById('userEmailInline');
+    const logoutBtn = document.getElementById('logoutBtn');
     const searchInput = document.getElementById('discoverSearch');
     const chips = document.querySelectorAll('.chip');
     const searchableItems = document.querySelectorAll('.searchable');
+
+    userEmailInline.textContent = session.storedUser.email;
+
+    logoutBtn?.addEventListener('click', () => {
+      clearAuthState();
+      localStorage.removeItem('with_admin_key');
+      window.location.href = 'index.html';
+    });
 
     let activeFilter = 'all';
 
