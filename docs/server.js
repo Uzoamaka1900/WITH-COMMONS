@@ -29,30 +29,22 @@ if (!JWT_SECRET) {
   process.exit(1);
 }
 
-// MODELS
-const userSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    passwordHash: { type: String, required: true }
-  },
-  { timestamps: true }
-);
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  passwordHash: { type: String, required: true }
+}, { timestamps: true });
 
-const loginEventSchema = new mongoose.Schema(
-  {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    email: { type: String, required: true, lowercase: true, trim: true },
-    ipAddress: { type: String, default: '' },
-    userAgent: { type: String, default: '' }
-  },
-  { timestamps: true }
-);
+const loginEventSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  email: { type: String, required: true, lowercase: true, trim: true },
+  ipAddress: { type: String, default: '' },
+  userAgent: { type: String, default: '' }
+}, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 const LoginEvent = mongoose.model('LoginEvent', loginEventSchema);
 
-// HELPERS
 function createToken(user) {
   return jwt.sign(
     { userId: user._id, email: user.email },
@@ -61,9 +53,12 @@ function createToken(user) {
   );
 }
 
-// ROUTES
 app.get('/', (req, res) => {
   res.json({ message: 'WITH Commons backend is running' });
+});
+
+app.get('/health', (req, res) => {
+  res.json({ ok: true });
 });
 
 app.post('/api/auth/register', async (req, res) => {
@@ -75,8 +70,8 @@ app.post('/api/auth/register', async (req, res) => {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
-
     const existingUser = await User.findOne({ email: normalizedEmail });
+
     if (existingUser) {
       return res.status(409).json({ message: 'An account with this email already exists.' });
     }
@@ -122,13 +117,14 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
-
     const user = await User.findOne({ email: normalizedEmail });
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.passwordHash);
+
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
@@ -157,35 +153,14 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-app.get('/api/auth/users', async (req, res) => {
-  try {
-    const users = await User.find().select('name email createdAt').sort({ createdAt: -1 });
-    return res.json(users);
-  } catch (error) {
-    console.error('Fetch users error:', error);
-    return res.status(500).json({ message: 'Could not fetch users.' });
-  }
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
-app.get('/api/auth/logins', async (req, res) => {
-  try {
-    const logins = await LoginEvent.find().sort({ createdAt: -1 }).limit(100);
-    return res.json(logins);
-  } catch (error) {
-    console.error('Fetch logins error:', error);
-    return res.status(500).json({ message: 'Could not fetch login events.' });
-  }
-});
-
-// START
 mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('MongoDB connected');
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
   })
   .catch((error) => {
     console.error('Database connection error:', error.message);
-    process.exit(1);
   });
