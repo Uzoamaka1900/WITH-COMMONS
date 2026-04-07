@@ -264,6 +264,48 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
   }
 });
 
+app.get('/api/admin/charts', requireAdmin, async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ message: 'Database is not connected yet.' });
+    }
+
+    const registrationsByDay = await User.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    const loginsByDay = await LoginEvent.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    return res.json({
+      registrationsByDay,
+      loginsByDay
+    });
+  } catch (error) {
+    console.error('Charts error:', error);
+    return res.status(500).json({
+      message: error.message || 'Could not fetch chart data.'
+    });
+  }
+});
+
 // START SERVER FIRST
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
