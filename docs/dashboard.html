@@ -235,13 +235,18 @@
           <h1>WITH Commons Dashboard</h1>
           <div class="small">Registered users, recent login events, and summary stats</div>
         </div>
-        <div class="toolbar">
-          <input id="searchInput" class="search" type="text" placeholder="Search name or email" />
-          <button class="btn-secondary" id="refreshBtn">Refresh</button>
-          <button class="btn-secondary" id="exportBtn">Export users CSV</button>
-          <button class="btn-primary" id="logoutBtn">Lock</button>
-        </div>
-      </div>
+      <div class="toolbar">
+  <input id="searchInput" class="search" type="text" placeholder="Search name or email" />
+
+  <!-- NEW: Contribute button -->
+  <a href="contribute.html" class="btn-primary">
+    + New Contribution
+  </a>
+
+  <button class="btn-secondary" id="refreshBtn">Refresh</button>
+  <button class="btn-secondary" id="exportBtn">Export users CSV</button>
+  <button class="btn-primary" id="logoutBtn">Lock</button>
+</div>
 
       <div class="stats">
         <div class="card">
