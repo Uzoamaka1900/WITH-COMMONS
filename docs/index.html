@@ -72,8 +72,77 @@ button:hover {
 </div>
 
 <script>
-const API = "http://localhost:5000";
+const API_BASE = 'https://with-commons-production.up.railway.app/api';
 
+const registerForm = document.getElementById('registerForm');
+const loginForm = document.getElementById('loginForm');
+const authMessage = document.getElementById('authMessage');
+
+registerForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  authMessage.textContent = 'Creating account...';
+
+  const formData = new FormData(registerForm);
+  const payload = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    password: formData.get('password')
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || 'Registration failed');
+    }
+
+    localStorage.setItem('with_token', data.token);
+    localStorage.setItem('with_user', JSON.stringify(data.user));
+    authMessage.textContent = `Account created for ${data.user.email}`;
+    registerForm.reset();
+  } catch (error) {
+    authMessage.textContent = error.message;
+  }
+});
+
+loginForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  authMessage.textContent = 'Signing in...';
+
+  const formData = new FormData(loginForm);
+  const payload = {
+    email: formData.get('email'),
+    password: formData.get('password')
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || 'Login failed');
+    }
+
+    localStorage.setItem('with_token', data.token);
+    localStorage.setItem('with_user', JSON.stringify(data.user));
+    authMessage.textContent = `Signed in as ${data.user.email}`;
+    loginForm.reset();
+  } catch (error) {
+    authMessage.textContent = error.message;
+  }
+});
+</script>
 async function register() {
   const name = regName.value;
   const email = regEmail.value;
