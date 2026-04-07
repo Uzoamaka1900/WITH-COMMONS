@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WITH Dashboard</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 30px;
+      background: #f5f2ec;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+    }
+    th {
+      background: #6f1d3a;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Registered Users</h2>
+
+<table id="usersTable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+const API = "https://with-commons-production.up.railway.app/api";
+
+async function loadUsers() {
+  const res = await fetch(API + "/auth/users");
+  const users = await res.json();
+
+  const tbody = document.querySelector("#usersTable tbody");
+  tbody.innerHTML = "";
+
+  users.forEach(user => {
+    const row = `
+      <tr>
+        <td>${user.name}</td>
+        <td>${user.email}</td>
+        <td>${new Date(user.createdAt).toLocaleString()}</td>
+      </tr>
+    `;
+    tbody.innerHTML += row;
+  });
+}
+
+loadUsers();
+</script>
+
+</body>
+</html>
