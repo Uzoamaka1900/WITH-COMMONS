@@ -1,27 +1,182 @@
-<form id="contributeForm">
-  <input type="text" placeholder="Title" required />
-  <textarea placeholder="Description" required></textarea>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contribute – WITH Archive</title>
 
-  <select required>
-    <option value="">Select type</option>
-    <option>Story</option>
-    <option>Media</option>
-    <option>Record</option>
-  </select>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #f8f7f4;
+      color: #1f1f1f;
+    }
 
-  <input type="file" />
-  <input type="text" placeholder="Tags (comma separated)" />
+    /* NAV */
+    .main-nav {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      background: white;
+      border-bottom: 1px solid #eee;
+    }
 
-  <button type="submit">Submit Contribution</button>
-</form>
+    .main-nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+    }
 
+    .main-nav a.active {
+      background: #7a1f2b;
+      color: white;
+    }
+
+    .main-nav a:hover {
+      background: #efe7da;
+    }
+
+    /* PAGE */
+    .container {
+      max-width: 700px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: #6b6b6b;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      background: #7a1f2b;
+      color: white;
+      border: none;
+      padding: 0.9rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    button:hover {
+      background: #5e1821;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav class="main-nav">
+  <a href="homepage.html">Home</a>
+  <a href="discover.html">Discover</a>
+  <a href="collections.html">Collections</a>
+  <a href="stories.html">Stories</a>
+  <a href="contribute.html" class="active">Contribute</a>
+  <a href="dashboard.html">Dashboard</a>
+</nav>
+
+<!-- CONTENT -->
+<div class="container">
+  <h1>Contribute to WITH</h1>
+  <p class="subtitle">
+    Share stories, media, and archival records to help build the WITH@50 collective archive.
+  </p>
+
+  <form id="contributeForm">
+
+    <div>
+      <label>Title</label>
+      <input type="text" id="title" required />
+    </div>
+
+    <div>
+      <label>Description</label>
+      <textarea id="description" required></textarea>
+    </div>
+
+    <div>
+      <label>Type</label>
+      <select id="type" required>
+        <option value="">Select type</option>
+        <option value="Story">Story</option>
+        <option value="Media">Media</option>
+        <option value="Record">Record</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Upload File (optional)</label>
+      <input type="file" id="file" />
+    </div>
+
+    <div>
+      <label>Tags</label>
+      <input type="text" id="tags" placeholder="e.g. gender, archive, oral history" />
+    </div>
+
+    <button type="submit">Submit Contribution</button>
+
+  </form>
+</div>
+
+<!-- SCRIPT -->
 <script>
-document.getElementById("contributeForm").addEventListener("submit", (e) => {
+document.getElementById("contributeForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
-  // later: send to backend
-  alert("Submission received!");
+  const contribution = {
+    title: document.getElementById("title").value,
+    description: document.getElementById("description").value,
+    type: document.getElementById("type").value,
+    tags: document.getElementById("tags").value,
+    date: new Date().toISOString()
+  };
 
+  // Save to local storage (acts like temporary backend)
+  let submissions = JSON.parse(localStorage.getItem("with_submissions")) || [];
+  submissions.push(contribution);
+  localStorage.setItem("with_submissions", JSON.stringify(submissions));
+
+  // Redirect to dashboard
   window.location.href = "dashboard.html?submission=success";
 });
 </script>
+
+</body>
+</html>
