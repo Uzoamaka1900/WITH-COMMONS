@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collections – WITH Commons</title>
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --bg-soft: #ece7df;
+      --surface: #fffdfa;
+      --surface-soft: #f7f3ed;
+      --text: #1f2629;
+      --muted: #5f6b70;
+      --primary: #23404a;
+      --primary-dark: #162b33;
+      --primary-soft: #dde7e8;
+      --accent: #b88a52;
+      --accent-strong: #9a6f3d;
+      --accent-soft: #efe1d2;
+      --line: #d9d3ca;
+      --shadow-sm: 0 6px 16px rgba(19, 28, 32, 0.08);
+      --shadow: 0 18px 42px rgba(19, 28, 32, 0.10);
+      --radius-sm: 12px;
+      --radius: 18px;
+      --radius-lg: 24px;
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .site-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .hidden-until-auth {
+      visibility: hidden;
+    }
+
+    .topbar {
+      background: #ebe5dd;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .topbar .inner,
+    .navbar .inner {
+      display: grid;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .topbar .inner {
+      grid-template-columns: 1fr auto;
+      padding: 0.7rem 0;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(244,241,235,0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .navbar .inner {
+      grid-template-columns: auto 1fr auto;
+      padding: 1rem 0;
+    }
+
+    .topbar-links,
+    .topbar-actions,
+    .nav-links,
+    .nav-actions,
+    .hero-actions,
+    .filter-row,
+    .chip-row,
+    .meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+
+    .pill,
+    .count-pill,
+    .section-chip,
+    .type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 999px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .pill {
+      background: #f8f3e6;
+      border: 1px solid #eadfc3;
+      color: #66501c;
+      padding: 0.4rem 0.72rem;
+      font-size: 0.8rem;
+    }
+
+    .count-pill {
+      padding: 0.35rem 0.7rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .section-chip,
+    .type-badge {
+      background: var(--accent-soft);
+      color: #5f4a14;
+      border: 1px solid #eadfc3;
+      padding: 0.35rem 0.68rem;
+      font-size: 0.78rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      padding: 0.3rem;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .brand-meta strong {
+      display: block;
+      line-height: 1.1;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .brand-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 0.18rem;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      justify-content: center;
+    }
+
+    .nav-links a,
+    .topbar-links a {
+      font-weight: 700;
+      color: #4d4d4d;
+    }
+
+    .nav-links a:hover,
+    .topbar-links a:hover,
+    .footer-links a:hover {
+      color: var(--primary-dark);
+    }
+
+    .btn,
+    .filter-btn {
+      min-height: 44px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      font-size: 0.94rem;
+      font-weight: 800;
+      padding: 0.82rem 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+    }
+
+    .btn:hover,
+    .filter-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary,
+    .filter-btn {
+      background: #fff;
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    main section {
+      padding: 1.5rem 0;
+    }
+
+    .hero-card,
+    .toolbar-card,
+    .collection-card,
+    .feature-card,
+    .footer-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-card {
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.06fr 0.94fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-side,
+    .toolbar-card,
+    .collection-card,
+    .feature-card {
+      padding: 1.35rem;
+    }
+
+    .hero-copy {
+      background: linear-gradient(180deg, #fffdfa 0%, #f7f3ed 100%);
+      padding: 2rem;
+    }
+
+    .hero-side {
+      background: #f0ebe4;
+      border-left: 1px solid var(--line);
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+      padding: 2rem;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      letter-spacing: 0.03em;
+      font-weight: 800;
+      color: #8a6b1f;
+      margin-bottom: 0.45rem;
+    }
+
+    .hero-copy h1,
+    .section-head h2,
+    .collection-card h3,
+    .feature-card h3 {
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.3rem, 4vw, 4rem);
+      line-height: 0.98;
+      margin: 0 0 1rem;
+      max-width: 10ch;
+    }
+
+    .lede,
+    .section-head p,
+    .collection-card p,
+    .feature-card p,
+    .sidebar-note,
+    .feature-list li {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .lede {
+      max-width: 62ch;
+      font-size: 1.03rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .stats-grid,
+    .collection-grid,
+    .feature-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 1rem;
+    }
+
+    .stat-card {
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.45rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.15rem;
+      font-weight: 900;
+    }
+
+    .sidebar-note {
+      padding: 1rem;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .sidebar-note strong {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: var(--primary-dark);
+      font-size: 1rem;
+    }
+
+    .toolbar-card {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .toolbar-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .search-shell {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 0.85rem;
+    }
+
+    .search-input,
+    .sort-select {
+      min-height: 52px;
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0.9rem 1rem;
+      color: var(--text);
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+
+    .collection-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .collection-card {
+      min-height: 100%;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .collection-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    }
+
+    .card-thumb {
+      min-height: 180px;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 0.95rem;
+      background: linear-gradient(180deg, rgba(35,64,74,0.05), rgba(184,138,82,0.1)), #f3eee7;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      padding: 1rem;
+      font-weight: 800;
+    }
+
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      min-height: 180px;
+      object-fit: cover;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: start;
+      margin-bottom: 0.55rem;
+    }
+
+    .card-top h3 {
+      margin: 0;
+      font-size: 1.18rem;
+      line-height: 1.15;
+      color: var(--primary-dark);
+    }
+
+    .meta-row {
+      margin-top: 0.9rem;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 1rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .card-link:hover {
+      text-decoration: underline;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 1.4rem;
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.8);
+      color: var(--muted);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .feature-card ul {
+      margin: 0.8rem 0 0;
+      padding-left: 1rem;
+    }
+
+    .footer {
+      padding: 2rem 0 3rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 1rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1.3rem;
+    }
+
+    .footer-links a {
+      display: block;
+      margin-bottom: 0.55rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1120px) {
+      .hero-grid,
+      .collection-grid,
+      .feature-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 920px) {
+      .navbar .inner,
+      .topbar .inner,
+      .footer-grid,
+      .stats-grid,
+      .search-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .search-shell {
+        display: grid;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container { width: min(var(--max), calc(100% - 1rem)); }
+
+      .hero-copy,
+      .hero-side,
+      .toolbar-card,
+      .collection-card,
+      .feature-card {
+        padding: 1rem;
+      }
+
+      .collection-grid,
+      .feature-grid,
+      .stats-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .navbar .inner { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+
+      .section-head,
+      .toolbar-top,
+      .topbar .inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .topbar .inner {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-actions,
+      .nav-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body class="hidden-until-auth">
+  <div class="topbar">
+    <div class="container inner">
+      <div class="topbar-links">
+        <a href="#overview">Overview</a>
+        <a href="#browse">Browse</a>
+        <a href="#featured">Featured</a>
+        <a href="#pathways">Pathways</a>
+      </div>
+      <div class="topbar-actions">
+        <span class="pill">Signed in as <span id="userEmailInline">member@witharchive.org</span></span>
+        <button class="btn btn-secondary" id="logoutBtn" type="button">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <div class="container inner">
+      <a class="brand" href="homepage.html" aria-label="WITH Archive home">
+        <span class="brand-mark">
+          <img class="site-logo" src="./asserts/logo.png" alt="WITH logo" />
+        </span>
+        <span class="brand-meta">
+          <strong>WITH Archive</strong>
+          <span>Women in Technology</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="homepage.html">Home</a>
+        <a href="discover.html">Discover</a>
+        <a href="collections.html">Collections</a>
+        <a href="about-with.html">About WITH</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="discover.html">Back to Discover</a>
+        <a class="btn btn-primary" href="#browse">Browse collections</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="overview">
+    <section>
+      <div class="container">
+        <div class="hero-card">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <span class="section-kicker">Collections</span>
+              <h1>Browse the archive by theme, format, and story.</h1>
+              <p class="lede">
+                This collections page gives users a clean path into the WITH archive through curated entry points. Start with featured themes, filter by type, then move into specific clusters of images, newsletters, oral histories, conference materials, and anniversary records.
+              </p>
+
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="#browse">Start browsing</a>
+                <a class="btn btn-secondary" href="discover.html">Return to discover</a>
+              </div>
+
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <strong>9</strong>
+                  <span>Curated collection groups</span>
+                </div>
+                <div class="stat-card">
+                  <strong>4</strong>
+                  <span>Primary discovery filters</span>
+                </div>
+                <div class="stat-card">
+                  <strong>WITH@50</strong>
+                  <span>Anchor theme across anniversary materials</span>
+                </div>
+              </div>
+            </div>
+
+            <aside class="hero-side">
+              <div class="sidebar-note">
+                <strong>How to use this page</strong>
+                <p class="sidebar-note">
+                  Search by keyword, choose a filter, or sort by title. This page is built to feel navigable first, dense second.
+                </p>
+              </div>
+
+              <div class="sidebar-note">
+                <strong>Best entry point</strong>
+                <p class="sidebar-note">
+                  New visitors should start with anniversary materials, newsletters, and institutional histories before moving into deeper archive clusters.
+                </p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="browse">
+      <div class="container">
+        <div class="toolbar-card">
+          <div class="toolbar-top">
+            <div>
+              <span class="section-kicker">Browse</span>
+              <h2 style="margin:0;">Find a collection</h2>
+            </div>
+            <span class="count-pill"><span id="visibleCount">9</span> collections visible</span>
+          </div>
+
+          <div class="search-shell">
+            <input
+              id="searchInput"
+              class="search-input"
+              type="search"
+              placeholder="Search collections by title, subject, or keyword"
+              aria-label="Search collections"
+            />
+            <select id="sortSelect" class="sort-select" aria-label="Sort collections">
+              <option value="default">Sort: Curated order</option>
+              <option value="title-asc">Sort: Title A–Z</option>
+              <option value="title-desc">Sort: Title Z–A</option>
+            </select>
+          </div>
+
+          <div class="filter-row" aria-label="Collection filters">
+            <button class="filter-btn active" data-filter="all" type="button">All</button>
+            <button class="filter-btn" data-filter="anniversary" type="button">Anniversary</button>
+            <button class="filter-btn" data-filter="records" type="button">Records</button>
+            <button class="filter-btn" data-filter="stories" type="button">Stories</button>
+            <button class="filter-btn" data-filter="media" type="button">Media</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="featured">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Featured collections</span>
+            <h2>Curated pathways into the archive</h2>
+          </div>
+          <p>
+            These cards can later be connected to actual archive routes, category pages, or item lists.
+          </p>
+        </div>
+
+        <div id="collectionsGrid" class="collection-grid">
+          <article class="collection-card" data-category="anniversary records" data-title="WITH at 50" data-keywords="anniversary timeline celebration milestone technology culture">
+            <div class="card-thumb">WITH at 50<br />Milestones, calls, and commemorative records</div>
+            <div class="card-top">
+              <h3>WITH at 50</h3>
+              <span class="type-badge">Anniversary</span>
+            </div>
+            <p>
+              Anniversary highlights, commemorative texts, calls for submissions, and milestone records that frame the fiftieth year of WITH.
+            </p>
+            <div class="meta-row">
+              <span class="section-chip">Timeline</span>
+              <span class="section-chip">Celebration</span>
+              <span class="section-chip">Institutional memory</span>
+            </div>
+            <a class="card-link" href="about-with.html">Open collection →</a>
+          </article>
+
+          <article class="collection-card" data-category="records" data-title="Newsletters and Circulars" data-keywords="newsletter circular bulletin mailing list officers updates">
+            <div class="card-thumb">Newsletters<br />Bulletins, circulars, and member-facing updates</div>
+            <div class="card-top">
+              <h3>Newsletters and Circulars</h3>
+              <span class="type-badge">Records</span>
+            </div>
+            <p>
+              A navigable entry point for newsletters, announcements, membership notices, and recurring communications across years.
+            </p>
+            <div class="meta-row">
+              <span class="section-chip">Print culture</span>
+              <span class="section-chip">Member updates</span>
+            </div>
+            <a class="card-link" href="#">Open collection →</a>
+          </article>
+
+          <article class="collection-card" data-category="records stories" data-title="Leadership and Officers" data-keywords="leadership officers chairs governance administration committee reports">
+            <div class="card-thumb">Leadership Histories<br />Officers, governance, and committee memory</div>
+            <div class="card-top">
+              <h3>Leadership and Officers</h3>
+              <span class="type-badge">Stories</span>
+            </div>
+            <p>
+              Lists of officers, annual leadership records, and materials that document how WITH organized itself over time.
+            </p>
+            <div class="meta-row">
+              <span class="section-chip">Governance</span>
+              <span class="section-chip">Annual reports</span>
+            </div>
+            <a class="card-link" href="#">Open collection →</a>
+          </article>
+
+          <article class="collection-card" data-category="media" data-title="Images and Event Photography" data-keywords="photographs gallery events conferences portraits images visuals">
+            <div class="card-thumb">Image Gallery<br />Conference photographs and commemorative visuals</div>
+            <div class="card-top">
+              <h3>Images and Event Photography</h3>
+              <span class="type-badge">Media</span>
+            </div>
+            <p>
+              Photographs from conferences, meetings, and public-facing moments that make the archive feel visual and alive.
+            </p>
+            <div class="meta-row">
+              <span class="section-chip">Gallery</span>
+              <span class="section-chip">Events</span>
+              <span class="section-chip">Portraits</span>
+            </div>
+            <a class="card-link" href="#">Open collection →</a>
+          </article>
+
+          <article class="collection-card" data-category="stories" data-title="Oral Histories and Reflections" data-keywords="oral history reflection testimony memory voices interview">
+            <div class="card-thumb">Oral Histories<br />Reflections, testimony, and member memory</div>
+            <div class="card-top">
+              <h3>Oral Histories and Reflections</h3>
+              <span class="type-badge">Stories</span>
+            </div>
+            <p>
+              Interviews, recollections, and reflective pieces that foreground lived experience and memory within the profession.
+            </p>
+            <div class="meta-row">
+              <span class="section-chip">Voices</span>
+              <span class="section-chip">Memory</span>
+            </div>
+            <a class="card-link" href="#">Open collection →</a>
+          </article>
+
+          <article class="collection-card" data-category="records media" data-title="Conference Programs and Sessions" data-keywords="conference programs sessions panels schedules talks abstracts">
+            <div class="card-thumb">Conference Programs<br />Sessions, panels, and program architecture</div>
+            <div class="card-top">
+              <h3>Conference Programs and Sessions</h3>
+              <span class="type-badge">Records</span>
+            </div>
+            <p>
+              Conference schedules, session descriptions, and annual meeting traces that show how WITH convened scholarly conversation.
+            </p>
+            <div class="meta-row">
+              <span class="section-chip">Programs</span>
+              <span class="section-chip">Panels</span>
+            </div>
+            <a class="card-link" href="#">Open collection →</a>
+          </article>
+
+          <article class="collection-card" data-category="anniversary media" data-title="Posters, Flyers, and Calls" data-keywords="poster flyer call announcement graphic outreach notice">
+            <div class="card-thumb">Calls and Flyers<br />Promotional and outreach materials</div>
+            <div class="card-top">
+              <h3>Posters, Flyers, and Calls</h3>
+              <span class="type-badge">Anniversary</span>
+            </div>
+            <p>
+              Calls for papers, event flyers, and designed outreach pieces that make institutional communication visible as a collection.
+            </p>
+            <div class="meta-row">
+              <span class="section-chip">Outreach</span>
+              <span class="section-chip">Design</span>
+            </div>
+            <a class="card-link" href="#">Open collection →</a>
+          </article>
+
+          <article class="collection-card" data-category="records" data-title="Membership and Administrative Files" data-keywords="membership forms files administrative reports forms rosters">
+            <div class="card-thumb">Administrative Archive<br />Forms, rosters, and institutional files</div>
+            <div class="card-top">
+              <h3>Membership and Administrative Files</h3>
+              <span class="type-badge">Records</span>
+            </div>
+            <p>
+              Membership forms, administrative documents, and practical records that support the internal life of WITH.
+            </p>
+            <div class="meta-row">
+              <span class="section-chip">Forms</span>
+              <span class="section-chip">Rosters</span>
+            </div>
+            <a class="card-link" href="#">Open collection →</a>
+          </article>
+
+          <article class="collection-card" data-category="stories media" data-title="Exhibits and Public History" data-keywords="exhibit public history showcase digital display curation">
+            <div class="card-thumb">Exhibits and Public History<br />Curated showcases and public-facing interpretation</div>
+            <div class="card-top">
+              <h3>Exhibits and Public History</h3>
+              <span class="type-badge">Media</span>
+            </div>
+            <p>
+              Exhibition-style groupings that translate archival materials into accessible public narratives and visual journeys.
+            </p>
+            <div class="meta-row">
+              <span class="section-chip">Curation</span>
+              <span class="section-chip">Public history</span>
+            </div>
+            <a class="card-link" href="#">Open collection →</a>
+          </article>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+          No collections match your search and filter. Try a broader keyword or switch back to “All.”
+        </div>
+      </div>
+    </section>
+
+    <section id="pathways">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Pathways</span>
+            <h2>Suggested ways to navigate</h2>
+          </div>
+          <p>
+            These pathways help users move through the archive without getting lost in too many choices at once.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Start with institutional history</h3>
+            <p>
+              Begin with anniversary materials, officer lists, and newsletters to understand how WITH grew and organized itself.
+            </p>
+            <ul class="feature-list">
+              <li>WITH at 50</li>
+              <li>Leadership and Officers</li>
+              <li>Newsletters and Circulars</li>
+            </ul>
+          </article>
+
+          <article class="feature-card">
+            <h3>Start with people and voices</h3>
+            <p>
+              Move into oral histories, reflections, and image-based collections for a more personal and visual experience.
+            </p>
+            <ul class="feature-list">
+              <li>Oral Histories and Reflections</li>
+              <li>Images and Event Photography</li>
+              <li>Exhibits and Public History</li>
+            </ul>
+          </article>
+
+          <article class="feature-card">
+            <h3>Start with scholarly activity</h3>
+            <p>
+              Use conference programs, calls, and public-facing materials to trace intellectual exchange and field formation.
+            </p>
+            <ul class="feature-list">
+              <li>Conference Programs and Sessions</li>
+              <li>Posters, Flyers, and Calls</li>
+              <li>Membership and Administrative Files</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:0.8rem;">
+          <span class="brand-mark">
+            <img class="site-logo" src="./asserts/logo.png" alt="WITH logo" />
+          </span>
+          <span class="brand-meta">
+            <strong>WITH Archive</strong>
+            <span>Women in Technology</span>
+          </span>
+        </div>
+        <p style="color:var(--muted);">A navigable archive interface for women in technological history.</p>
+      </div>
+
+      <div class="footer-links">
+        <strong>Explore</strong>
+        <a href="homepage.html">Home</a>
+        <a href="discover.html">Discover</a>
+        <a href="collections.html">Collections</a>
+      </div>
+
+      <div class="footer-links">
+        <strong>Context</strong>
+        <a href="about-with.html">About WITH</a>
+        <a href="#featured">Featured</a>
+        <a href="#pathways">Pathways</a>
+      </div>
+
+      <div class="footer-links">
+        <strong>Account</strong>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="index.html">Login</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const TOKEN_KEY = "with_token";
+    const USER_KEY = "with_user";
+
+    function parseJwt(token) {
+      try {
+        const base64 = token.split(".")[1];
+        const json = atob(base64.replace(/-/g, "+").replace(/_/g, "/"));
+        return JSON.parse(json);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function isTokenExpired(token) {
+      const payload = parseJwt(token);
+      if (!payload || !payload.exp) return true;
+      return Date.now() >= payload.exp * 1000;
+    }
+
+    function clearSession() {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      localStorage.removeItem("with_admin_key");
+    }
+
+    function redirectToLogin() {
+      window.location.href = "index.html?session=expired";
+    }
+
+    function hydrateUser() {
+      const token = localStorage.getItem(TOKEN_KEY);
+      const userRaw = localStorage.getItem(USER_KEY);
+
+      if (!token || !userRaw || isTokenExpired(token)) {
+        clearSession();
+        redirectToLogin();
+        return false;
+      }
+
+      try {
+        const user = JSON.parse(userRaw);
+        const emailNode = document.getElementById("userEmailInline");
+        if (emailNode) {
+          emailNode.textContent = user.email || "member@witharchive.org";
+        }
+      } catch (error) {
+        clearSession();
+        redirectToLogin();
+        return false;
+      }
+
+      document.body.classList.remove("hidden-until-auth");
+      return true;
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      clearSession();
+      window.location.href = "index.html";
+    });
+
+    const grid = document.getElementById("collectionsGrid");
+    const cards = Array.from(grid.querySelectorAll(".collection-card"));
+    const emptyState = document.getElementById("emptyState");
+    const visibleCount = document.getElementById("visibleCount");
+    const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
+    const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
+
+    let currentFilter = "all";
+
+    function getFilteredCards() {
+      const query = searchInput.value.trim().toLowerCase();
+
+      return cards.filter(card => {
+        const category = card.dataset.category.toLowerCase();
+        const title = card.dataset.title.toLowerCase();
+        const keywords = card.dataset.keywords.toLowerCase();
+
+        const matchesFilter = currentFilter === "all" || category.includes(currentFilter);
+        const matchesQuery =
+          !query ||
+          title.includes(query) ||
+          keywords.includes(query) ||
+          category.includes(query);
+
+        return matchesFilter && matchesQuery;
+      });
+    }
+
+    function sortCards(items) {
+      const mode = sortSelect.value;
+      if (mode === "title-asc") {
+        return [...items].sort((a, b) => a.dataset.title.localeCompare(b.dataset.title));
+      }
+      if (mode === "title-desc") {
+        return [...items].sort((a, b) => b.dataset.title.localeCompare(a.dataset.title));
+      }
+      return items;
+    }
+
+    function renderCollections() {
+      const filtered = getFilteredCards();
+      const sorted = sortCards(filtered);
+
+      cards.forEach(card => {
+        card.style.display = "none";
+      });
+
+      sorted.forEach(card => {
+        card.style.display = "";
+        grid.appendChild(card);
+      });
+
+      visibleCount.textContent = sorted.length;
+      emptyState.style.display = sorted.length ? "none" : "block";
+    }
+
+    filterButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        currentFilter = button.dataset.filter;
+        renderCollections();
+      });
+    });
+
+    searchInput.addEventListener("input", renderCollections);
+    sortSelect.addEventListener("change", renderCollections);
+
+    if (hydrateUser()) {
+      renderCollections();
+    }
+  </script>
+</body>
+</html>
