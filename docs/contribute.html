@@ -2,181 +2,542 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contribute – WITH Archive</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contribute – WITH Commons</title>
   <style>
+    :root {
+      --bg: #f4f1eb;
+      --bg-soft: #ece7df;
+      --surface: #fffdfa;
+      --text: #1f2629;
+      --muted: #5f6b70;
+      --primary: #23404a;
+      --primary-dark: #162b33;
+      --accent: #b88a52;
+      --accent-soft: #efe1d2;
+      --line: #d9d3ca;
+      --shadow-sm: 0 6px 16px rgba(19, 28, 32, 0.08);
+      --shadow: 0 18px 42px rgba(19, 28, 32, 0.10);
+      --radius: 18px;
+      --max: 1100px;
+    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: system-ui, sans-serif;
-      background: #f8f7f4;
-      color: #1f1f1f;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg), var(--bg-soft));
+      color: var(--text);
+      line-height: 1.6;
     }
-
-    /* NAV */
-    .main-nav {
-      display: flex;
-      gap: 1rem;
-      padding: 1rem 2rem;
-      background: white;
-      border-bottom: 1px solid #eee;
-    }
-
-    .main-nav a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 600;
-      padding: 0.4rem 0.8rem;
-      border-radius: 999px;
-    }
-
-    .main-nav a.active {
-      background: #7a1f2b;
-      color: white;
-    }
-
-    .main-nav a:hover {
-      background: #efe7da;
-    }
-
-    /* PAGE */
+    a { color: inherit; text-decoration: none; }
     .container {
-      max-width: 700px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
     }
-
-    h1 {
-      margin-bottom: 0.5rem;
-    }
-
-    .subtitle {
-      color: #6b6b6b;
-      margin-bottom: 2rem;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    label {
-      font-weight: 600;
+    .hidden-until-auth { visibility: hidden; }
+    .topbar {
+      background: #ebe5dd;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
       font-size: 0.9rem;
     }
-
-    input, textarea, select {
+    .topbar .inner, .navbar .inner {
+      display: grid;
+      align-items: center;
+      gap: 1rem;
+    }
+    .topbar .inner {
+      grid-template-columns: 1fr auto;
+      padding: 0.7rem 0;
+    }
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(244,241,235,0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .navbar .inner {
+      grid-template-columns: auto 1fr auto;
+      padding: 1rem 0;
+    }
+    .topbar-links, .topbar-actions, .nav-links, .nav-actions, .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #f8f3e6;
+      border: 1px solid #eadfc3;
+      color: #66501c;
+      padding: 0.4rem 0.72rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      padding: 0.3rem;
+    }
+    .site-logo {
       width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 0.95rem;
+      height: 100%;
+      object-fit: contain;
     }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
+    .brand-meta strong {
+      display: block;
+      line-height: 1.1;
+      font-size: 1rem;
+      font-weight: 900;
     }
-
-    button {
-      background: #7a1f2b;
-      color: white;
-      border: none;
-      padding: 0.9rem;
-      border-radius: 8px;
-      font-weight: bold;
+    .brand-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 0.18rem;
+      font-weight: 600;
+    }
+    .nav-links { justify-content: center; }
+    .nav-links a {
+      color: #4d4d4d;
+      font-weight: 700;
+    }
+    .nav-links a:hover { color: var(--primary-dark); }
+    .btn {
+      min-height: 46px;
+      border-radius: 999px;
+      border: 1px solid transparent;
       cursor: pointer;
+      font-size: 0.96rem;
+      font-weight: 800;
+      padding: 0.9rem 1.15rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary {
+      background: #fff;
+      border-color: var(--line);
+      color: var(--text);
+    }
+    section { padding: 1.6rem 0; }
+    .hero-card, .form-card, .info-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+    .hero-card {
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .hero-grid, .content-grid {
+      display: grid;
+      gap: 1rem;
+    }
+    .hero-grid { grid-template-columns: 1.05fr 0.95fr; }
+    .content-grid { grid-template-columns: 1.2fr 0.8fr; }
+    .hero-copy, .hero-side, .form-card, .info-card { padding: 1.5rem; }
+    .hero-copy {
+      background: linear-gradient(180deg, #fffdfa 0%, #f7f3ed 100%);
+      padding: 2rem;
+    }
+    .hero-side {
+      background: #f0ebe4;
+      border-left: 1px solid var(--line);
+    }
+    .section-kicker {
+      display: inline-block;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      color: #8a6b1f;
+      margin-bottom: 0.45rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    h1, h2, h3 { margin: 0 0 0.75rem; }
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.7rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+    }
+    .lede, .info-card p, .info-card li, .helper {
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
       margin-top: 1rem;
     }
-
-    button:hover {
-      background: #5e1821;
+    .stat {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem;
+    }
+    .stat strong {
+      display: block;
+      font-size: 1.35rem;
+      color: var(--primary-dark);
+      font-weight: 900;
+      margin-bottom: 0.15rem;
+    }
+    label {
+      display: block;
+      font-weight: 800;
+      margin-bottom: 0.35rem;
+    }
+    .field-wrap { margin-bottom: 1rem; }
+    input[type="text"], input[type="email"], input[type="file"], select, textarea {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 15px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0.9rem 1rem;
+      color: var(--text);
+      font: inherit;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+    .status {
+      margin-top: 0.8rem;
+      font-weight: 700;
+      color: #1f6b4f;
+    }
+    ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1rem;
+    }
+    @media (max-width: 1000px) {
+      .hero-grid, .content-grid, .stats { grid-template-columns: 1fr; }
+      .hero-side {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+    @media (max-width: 720px) {
+      .navbar .inner, .topbar .inner { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
     }
   </style>
 </head>
-
-<body>
-
-<!-- NAV -->
-<nav class="main-nav">
-  <a href="homepage.html">Home</a>
-  <a href="discover.html">Discover</a>
-  <a href="collections.html">Collections</a>
-  <a href="stories.html">Stories</a>
-  <a href="contribute.html" class="active">Contribute</a>
-  <a href="dashboard.html">Dashboard</a>
-</nav>
-
-<!-- CONTENT -->
-<div class="container">
-  <h1>Contribute to WITH</h1>
-  <p class="subtitle">
-    Share stories, media, and archival records to help build the WITH@50 collective archive.
-  </p>
-
-  <form id="contributeForm">
-
-    <div>
-      <label>Title</label>
-      <input type="text" id="title" required />
+<body class="hidden-until-auth">
+  <div class="topbar">
+    <div class="container inner">
+      <div class="topbar-links">
+        <a href="homepage.html">Home</a>
+        <a href="collections.html">Collections</a>
+        <a href="stories.html">Stories</a>
+      </div>
+      <div class="topbar-actions">
+        <span class="pill">Signed in as <span id="userEmailInline">member@witharchive.org</span></span>
+        <button class="btn btn-secondary" id="logoutBtn" type="button">Log out</button>
+      </div>
     </div>
+  </div>
 
-    <div>
-      <label>Description</label>
-      <textarea id="description" required></textarea>
+  <header class="navbar">
+    <div class="container inner">
+      <a class="brand" href="homepage.html">
+        <span class="brand-mark">
+          <img class="site-logo" src="./asserts/logo.png" alt="WITH logo" />
+        </span>
+        <span class="brand-meta">
+          <strong>WITH Archive</strong>
+          <span>Women in Technology</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="homepage.html">Home</a>
+        <a href="discover.html">Discover</a>
+        <a href="collections.html">Collections</a>
+        <a href="stories.html">Stories</a>
+        <a href="contribute.html">Contribute</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="dashboard.html">Back to Dashboard</a>
+        <a class="btn btn-primary" href="#formSection">Start contribution</a>
+      </div>
     </div>
+  </header>
 
-    <div>
-      <label>Type</label>
-      <select id="type" required>
-        <option value="">Select type</option>
-        <option value="Story">Story</option>
-        <option value="Media">Media</option>
-        <option value="Record">Record</option>
-      </select>
-    </div>
+  <main>
+    <section>
+      <div class="container">
+        <div class="hero-card">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <span class="section-kicker">Contribute</span>
+              <h1>Submit a story, media item, or archival record.</h1>
+              <p class="lede">
+                Use this page to prepare a contribution for the WITH Commons workflow. Submissions are saved locally for now and appear in the dashboard’s contributions table for review.
+              </p>
 
-    <div>
-      <label>Upload File (optional)</label>
-      <input type="file" id="file" />
-    </div>
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="#formSection">Open form</a>
+                <a class="btn btn-secondary" href="dashboard.html">Review dashboard</a>
+              </div>
 
-    <div>
-      <label>Tags</label>
-      <input type="text" id="tags" placeholder="e.g. gender, archive, oral history" />
-    </div>
+              <div class="stats">
+                <div class="stat">
+                  <strong>Story</strong>
+                  <span class="helper">Narrative writing, reflections, oral histories</span>
+                </div>
+                <div class="stat">
+                  <strong>Media</strong>
+                  <span class="helper">Images, posters, scans, event visuals</span>
+                </div>
+                <div class="stat">
+                  <strong>Record</strong>
+                  <span class="helper">Newsletters, files, administrative documents</span>
+                </div>
+              </div>
+            </div>
 
-    <button type="submit">Submit Contribution</button>
+            <aside class="hero-side">
+              <h3>What happens next</h3>
+              <ul>
+                <li>Your submission is stored in the browser for dashboard review.</li>
+                <li>The dashboard shows each contribution as Pending by default.</li>
+                <li>Admins can approve, reject, or delete entries from the table.</li>
+              </ul>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  </form>
-</div>
+    <section id="formSection">
+      <div class="container content-grid">
+        <article class="form-card">
+          <span class="section-kicker">Submission form</span>
+          <h2>Add a contribution</h2>
 
-<!-- SCRIPT -->
-<script>
-document.getElementById("contributeForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+          <form id="contributeForm">
+            <div class="field-wrap">
+              <label for="title">Title</label>
+              <input id="title" type="text" placeholder="Contribution title" required />
+            </div>
 
-  const contribution = {
-    title: document.getElementById("title").value,
-    description: document.getElementById("description").value,
-    type: document.getElementById("type").value,
-    tags: document.getElementById("tags").value,
-    date: new Date().toISOString()
-  };
+            <div class="field-wrap">
+              <label for="description">Description</label>
+              <textarea id="description" placeholder="Describe the item, story, or context" required></textarea>
+            </div>
 
-  // Save to local storage (acts like temporary backend)
-  let submissions = JSON.parse(localStorage.getItem("with_submissions")) || [];
-  submissions.push(contribution);
-  localStorage.setItem("with_submissions", JSON.stringify(submissions));
+            <div class="field-wrap">
+              <label for="type">Type</label>
+              <select id="type" required>
+                <option value="">Select type</option>
+                <option value="Story">Story</option>
+                <option value="Media">Media</option>
+                <option value="Record">Record</option>
+              </select>
+            </div>
 
-  // Redirect to dashboard
-  window.location.href = "dashboard.html?submission=success";
-});
-</script>
+            <div class="field-wrap">
+              <label for="collection">Collection</label>
+              <select id="collection" required>
+                <option value="">Select collection</option>
+                <option value="WITH at 50">WITH at 50</option>
+                <option value="Newsletters and Circulars">Newsletters and Circulars</option>
+                <option value="Leadership and Officers">Leadership and Officers</option>
+                <option value="Images and Event Photography">Images and Event Photography</option>
+                <option value="Oral Histories and Reflections">Oral Histories and Reflections</option>
+                <option value="Conference Programs and Sessions">Conference Programs and Sessions</option>
+              </select>
+            </div>
 
+            <div class="field-wrap">
+              <label for="tags">Tags</label>
+              <input id="tags" type="text" placeholder="Comma separated tags" />
+            </div>
+
+            <div class="field-wrap">
+              <label for="contributorName">Contributor name</label>
+              <input id="contributorName" type="text" placeholder="Your name" required />
+            </div>
+
+            <div class="field-wrap">
+              <label for="contributorEmail">Contributor email</label>
+              <input id="contributorEmail" type="email" placeholder="your@email.com" required />
+            </div>
+
+            <div class="field-wrap">
+              <label for="fileUpload">File upload</label>
+              <input id="fileUpload" type="file" />
+            </div>
+
+            <button class="btn btn-primary" type="submit">Submit contribution</button>
+            <div id="formStatus" class="status"></div>
+          </form>
+        </article>
+
+        <aside class="info-card">
+          <span class="section-kicker">Notes</span>
+          <h3>Submission guidance</h3>
+          <p>
+            This version is wired to the dashboard table using local storage so you can test the review flow immediately.
+          </p>
+          <ul>
+            <li>Use clear, descriptive titles.</li>
+            <li>Add tags for easier filtering later.</li>
+            <li>Choose the closest collection grouping.</li>
+            <li>File upload is captured as filename only in this prototype.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const TOKEN_KEY = "with_token";
+    const USER_KEY = "with_user";
+    const CONTRIBUTIONS_STORAGE_KEY = "with_contributions";
+
+    function parseJwt(token) {
+      try {
+        const base64 = token.split(".")[1];
+        const json = atob(base64.replace(/-/g, "+").replace(/_/g, "/"));
+        return JSON.parse(json);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function isTokenExpired(token) {
+      const payload = parseJwt(token);
+      if (!payload || !payload.exp) return true;
+      return Date.now() >= payload.exp * 1000;
+    }
+
+    function clearSession() {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      localStorage.removeItem("with_admin_key");
+    }
+
+    function redirectToLogin() {
+      window.location.href = "index.html?session=expired";
+    }
+
+    function hydrateUser() {
+      const token = localStorage.getItem(TOKEN_KEY);
+      const userRaw = localStorage.getItem(USER_KEY);
+      if (!token || !userRaw || isTokenExpired(token)) {
+        clearSession();
+        redirectToLogin();
+        return false;
+      }
+      try {
+        const user = JSON.parse(userRaw);
+        const emailNode = document.getElementById("userEmailInline");
+        if (emailNode) {
+          emailNode.textContent = user.email || "member@witharchive.org";
+        }
+        const contributorEmail = document.getElementById("contributorEmail");
+        if (contributorEmail && !contributorEmail.value) {
+          contributorEmail.value = user.email || "";
+        }
+        const contributorName = document.getElementById("contributorName");
+        if (contributorName && !contributorName.value) {
+          contributorName.value = user.name || "";
+        }
+      } catch (error) {
+        clearSession();
+        redirectToLogin();
+        return false;
+      }
+      document.body.classList.remove("hidden-until-auth");
+      return true;
+    }
+
+    function getStoredContributions() {
+      try {
+        const raw = localStorage.getItem(CONTRIBUTIONS_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveContribution(item) {
+      const existing = getStoredContributions();
+      existing.unshift(item);
+      localStorage.setItem(CONTRIBUTIONS_STORAGE_KEY, JSON.stringify(existing));
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      clearSession();
+      window.location.href = "index.html";
+    });
+
+    document.getElementById("contributeForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const type = document.getElementById("type").value;
+      const collection = document.getElementById("collection").value;
+      const tags = document.getElementById("tags").value.split(",").map(tag => tag.trim()).filter(Boolean);
+      const contributorName = document.getElementById("contributorName").value.trim();
+      const contributorEmail = document.getElementById("contributorEmail").value.trim();
+      const fileInput = document.getElementById("fileUpload");
+      const filename = fileInput.files[0] ? fileInput.files[0].name : "";
+
+      const contribution = {
+        id: `contrib_${Date.now()}`,
+        title,
+        description,
+        type,
+        collection,
+        tags,
+        contributorName,
+        contributorEmail,
+        filename,
+        status: "Pending",
+        createdAt: new Date().toISOString()
+      };
+
+      saveContribution(contribution);
+      document.getElementById("formStatus").textContent = "Contribution saved and sent to the dashboard.";
+      setTimeout(() => {
+        window.location.href = "dashboard.html?submission=success";
+      }, 500);
+    });
+
+    hydrateUser();
+  </script>
 </body>
 </html>
