@@ -10,6 +10,11 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
+if (!MONGODB_URI) {
+  console.error('MONGODB_URI is missing');
+  process.exit(1);
+}
+
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => {
@@ -31,8 +36,10 @@ const LoginLog = mongoose.model('LoginLog', new mongoose.Schema({
 app.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
     const hash = await bcrypt.hash(password, 10);
     await User.create({ name, email, password: hash });
+
     res.json({ message: 'User registered and email saved' });
   } catch (error) {
     console.error(error);
@@ -64,13 +71,23 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/users', async (req, res) => {
-  const users = await User.find().sort({ _id: -1 });
-  res.json(users);
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Could not fetch users' });
+  }
 });
 
 app.get('/logins', async (req, res) => {
-  const logs = await LoginLog.find().sort({ date: -1 });
-  res.json(logs);
+  try {
+    const logs = await LoginLog.find().sort({ date: -1 });
+    res.json(logs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Could not fetch logins' });
+  }
 });
 
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
