@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WITH Commons Home</title>
+  <style>
+    :root {
+      --bg: #f5f2ec;
+      --card: #ffffff;
+      --text: #1f1f1f;
+      --muted: #6b6b6b;
+      --line: #ddd6cc;
+      --primary: #6f1d3a;
+      --primary-dark: #59152e;
+      --soft: #efe8de;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: white;
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+    }
+
+    .topbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.9rem;
+      color: var(--primary);
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .user-chip {
+      background: var(--soft);
+      color: var(--primary);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid #e2d8c9;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: white;
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #faf8f4;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 20px 50px;
+    }
+
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: var(--soft);
+      color: var(--primary);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .hero h2 {
+      margin: 0 0 10px;
+      font-size: 2.3rem;
+      line-height: 1.08;
+    }
+
+    .hero p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: #faf7f2;
+      border: 1px solid #ebe3d8;
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.4rem;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero-panel {
+      background: #faf7f2;
+      border: 1px solid #ebe3d8;
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-panel h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .hero-panel p {
+      margin-bottom: 14px;
+    }
+
+    .sections {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .card-links {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-links a {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .card-links a:hover {
+      text-decoration: underline;
+    }
+
+    .feature-panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+
+    .feature-panel h2 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .mini-card {
+      background: #faf7f2;
+      border: 1px solid #ebe3d8;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+
+    .footer-note {
+      color: var(--muted);
+      text-align: center;
+      margin-top: 26px;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .sections,
+      .feature-grid,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .brand h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <h1>WITH Commons</h1>
+        <p>Women in Technology Archive</p>
+      </div>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#collections">Collections</a>
+        <a href="#stories">Stories</a>
+        <a href="#contribute">Contribute</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="user-chip" id="userChip">Signed in</div>
+        <button class="btn btn-secondary" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="home">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Welcome to WITH Commons</span>
+          <h2>The archive home page after login</h2>
+          <p>
+            This page is now the natural next step after sign-in. It gives users a cleaner landing experience,
+            easy navigation into the archive, and a more polished visual fit with your current login page.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#collections">Browse collections</a>
+            <a class="btn btn-secondary" href="dashboard.html">Open dashboard</a>
+          </div>
+
+          <div class="stats">
+            <div class="stat-card">
+              <strong>Collections</strong>
+              <span>Archive pathways and curated materials</span>
+            </div>
+            <div class="stat-card">
+              <strong>Stories</strong>
+              <span>Narrative entry points for public users</span>
+            </div>
+            <div class="stat-card">
+              <strong>Contribute</strong>
+              <span>Share documents, images, and memories</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-panel">
+          <h3>Quick actions</h3>
+          <p>Move directly into the parts of the site users are most likely to need after signing in.</p>
+          <div class="card-links">
+            <a href="dashboard.html">Go to admin dashboard</a>
+            <a href="#collections">View collection highlights</a>
+            <a href="#stories">Read featured stories</a>
+            <a href="#contribute">Submit an item</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="sections" id="collections">
+      <article class="card">
+        <h3>Collections</h3>
+        <p>
+          Browse thematic collections, anniversary materials, oral histories, photographs,
+          and documents in a more structured archive flow.
+        </p>
+        <div class="card-links">
+          <a href="#">Anecdotes and Oral Histories</a>
+          <a href="#">Anniversary Images</a>
+          <a href="#">WITH 50th Anniversary</a>
+        </div>
+      </article>
+
+      <article class="card" id="stories">
+        <h3>Stories</h3>
+        <p>
+          Story-led entry points help new users understand the archive through themes,
+          memory, mentorship, institutions, and visual history.
+        </p>
+        <div class="card-links">
+          <a href="#">Mentorship and networks</a>
+          <a href="#">Institutional memory</a>
+          <a href="#">Oral history pathways</a>
+        </div>
+      </article>
+
+      <article class="card" id="contribute">
+        <h3>Contribute</h3>
+        <p>
+          Share an item, add context, and help build a richer archive of women in technology.
+          This keeps the site active and community-centered.
+        </p>
+        <div class="card-links">
+          <a href="#">Upload a document</a>
+          <a href="#">Share a photograph</a>
+          <a href="#">Submit an oral history</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="feature-panel">
+      <h2>Why this page works better after login</h2>
+      <div class="feature-grid">
+        <div class="mini-card">
+          <strong>Clear next step</strong>
+          <span>Users land on a real archive home page instead of staying on the login form.</span>
+        </div>
+        <div class="mini-card">
+          <strong>Consistent style</strong>
+          <span>The cream background, burgundy buttons, and soft cards now align with `index.html`.</span>
+        </div>
+        <div class="mini-card">
+          <strong>Better navigation</strong>
+          <span>Top navigation and quick links make it easier to move into the dashboard or archive sections.</span>
+        </div>
+        <div class="mini-card">
+          <strong>Scalable structure</strong>
+          <span>This page can grow into your main member-facing archive home page over time.</span>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      WITH Commons — Women in Technology Archive
+    </p>
+  </main>
+
+  <script>
+    const storedUser = JSON.parse(localStorage.getItem("with_user") || "null");
+    const userChip = document.getElementById("userChip");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (storedUser?.email) {
+      userChip.textContent = storedUser.email;
+    } else {
+      userChip.textContent = "Guest";
+    }
+
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("with_user");
+      localStorage.removeItem("with_token");
+      localStorage.removeItem("with_admin_key");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
