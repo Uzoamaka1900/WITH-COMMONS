@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WITH Commons</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -103,6 +104,8 @@
           throw new Error(data.message || "Registration failed");
         }
 
+        localStorage.setItem("with_token", data.token);
+        localStorage.setItem("with_user", JSON.stringify(data.user));
         message.innerText = "Registered successfully!";
       } catch (err) {
         message.innerText = err.message;
@@ -128,8 +131,8 @@
           throw new Error(data.message || "Login failed");
         }
 
-        localStorage.setItem("with_user", JSON.stringify(data.user));
         localStorage.setItem("with_token", data.token);
+        localStorage.setItem("with_user", JSON.stringify(data.user));
         message.innerText = "Login successful!";
       } catch (err) {
         message.innerText = err.message;
