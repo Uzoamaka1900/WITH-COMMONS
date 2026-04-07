@@ -980,7 +980,7 @@
     <div class="topbar">
       <div class="container inner">
         <div class="topbar-links">
-          <a href="about-with.html">About WITH</a>
+          <a href="#about">About WITH</a>
           <a href="#collections">Collections</a>
           <a href="#stories">Stories</a>
           <a href="#contribute">Contribute</a>
@@ -1014,7 +1014,7 @@
         </nav>
 
         <div class="nav-actions">
-          <a class="btn btn-secondary" href="#collections">Browse archive</a>
+          <a class="btn btn-secondary" href="discover.html">Browse archive</a>
           <a class="btn btn-primary" href="#contribute">Upload an item</a>
         </div>
       </div>
@@ -1391,16 +1391,78 @@
     const heroPrevBtn = document.getElementById('heroPrevBtn');
     const heroNextBtn = document.getElementById('heroNextBtn');
 
-    const storedUser = JSON.parse(localStorage.getItem("with_user") || "null");
-    if (storedUser?.email) {
-      userEmailInline.textContent = storedUser.email;
-    } else {
-      userEmailInline.textContent = "member@witharchive.org";
+    
+    const AUTH_STORAGE_KEYS = {
+      token: "with_token",
+      user: "with_user"
+    };
+
+    function clearAuthState() {
+      localStorage.removeItem(AUTH_STORAGE_KEYS.user);
+      localStorage.removeItem(AUTH_STORAGE_KEYS.token);
     }
 
+    function parseStoredUser() {
+      try {
+        return JSON.parse(localStorage.getItem(AUTH_STORAGE_KEYS.user) || "null");
+      } catch {
+        return null;
+      }
+    }
+
+    function parseJwtPayload(token) {
+      try {
+        const payload = token.split('.')[1];
+        if (!payload) return null;
+        const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
+        const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
+        return JSON.parse(atob(padded));
+      } catch {
+        return null;
+      }
+    }
+
+    function redirectToLogin(reason) {
+      clearAuthState();
+      const next = encodeURIComponent(window.location.pathname.split('/').pop() || 'homepage.html');
+      const suffix = reason ? `?reason=${encodeURIComponent(reason)}&next=${next}` : `?next=${next}`;
+      window.location.replace(`index.html${suffix}`);
+    }
+
+    function requireAuth() {
+      const token = localStorage.getItem(AUTH_STORAGE_KEYS.token);
+      const storedUser = parseStoredUser();
+
+      if (!token || !storedUser?.email) {
+        redirectToLogin('missing-session');
+        return null;
+      }
+
+      const payload = parseJwtPayload(token);
+      if (!payload?.exp) {
+        redirectToLogin('invalid-session');
+        return null;
+      }
+
+      const now = Math.floor(Date.now() / 1000);
+      if (payload.exp <= now) {
+        redirectToLogin('session-expired');
+        return null;
+      }
+
+      return { token, storedUser, payload };
+    }
+
+    const session = requireAuth();
+    if (!session) {
+      throw new Error('Authentication required');
+    }
+
+    const storedUser = session.storedUser;
+    userEmailInline.textContent = storedUser.email;
+
     logoutBtn?.addEventListener("click", () => {
-      localStorage.removeItem("with_user");
-      localStorage.removeItem("with_token");
+      clearAuthState();
       localStorage.removeItem("with_admin_key");
       window.location.href = "index.html";
     });
