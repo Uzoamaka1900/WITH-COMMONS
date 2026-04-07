@@ -1,65 +1,140 @@
-<script>
-const API = "https://with-commons-production.up.railway.app/api";
-
-const regName = document.getElementById("regName");
-const regEmail = document.getElementById("regEmail");
-const regPassword = document.getElementById("regPassword");
-
-const logEmail = document.getElementById("logEmail");
-const logPassword = document.getElementById("logPassword");
-
-const message = document.getElementById("message");
-
-// REGISTER
-async function register() {
-  message.innerText = "Creating account...";
-
-  try {
-    const res = await fetch(API + "/auth/register", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({
-        name: regName.value,
-        email: regEmail.value,
-        password: regPassword.value
-      })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Registration failed");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WITH Commons</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f2ec;
+      margin: 0;
+      padding: 40px;
     }
 
-    message.innerText = "Registered successfully!";
-  } catch (err) {
-    message.innerText = err.message;
-  }
-}
-
-// LOGIN
-async function login() {
-  message.innerText = "Signing in...";
-
-  try {
-    const res = await fetch(API + "/auth/login", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({
-        email: logEmail.value,
-        password: logPassword.value
-      })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Login failed");
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
 
-    message.innerText = "Login successful!";
-  } catch (err) {
-    message.innerText = err.message;
-  }
-}
-</script>
+    h2 {
+      margin-top: 0;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #6f1d3a;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    button:hover {
+      background: #59152e;
+    }
+
+    #message {
+      margin-top: 14px;
+      color: #6f1d3a;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>WITH@50 Commons Login</h2>
+
+    <h3>Register</h3>
+    <input id="regName" type="text" placeholder="Name" />
+    <input id="regEmail" type="email" placeholder="Email" />
+    <input id="regPassword" type="password" placeholder="Password" />
+    <button onclick="register()">Register</button>
+
+    <h3>Login</h3>
+    <input id="logEmail" type="email" placeholder="Email" />
+    <input id="logPassword" type="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    const API = "https://with-commons-production.up.railway.app/api";
+
+    const regName = document.getElementById("regName");
+    const regEmail = document.getElementById("regEmail");
+    const regPassword = document.getElementById("regPassword");
+
+    const logEmail = document.getElementById("logEmail");
+    const logPassword = document.getElementById("logPassword");
+
+    const message = document.getElementById("message");
+
+    async function register() {
+      message.innerText = "Creating account...";
+
+      try {
+        const res = await fetch(API + "/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: regName.value,
+            email: regEmail.value,
+            password: regPassword.value
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || "Registration failed");
+        }
+
+        message.innerText = "Registered successfully!";
+      } catch (err) {
+        message.innerText = err.message;
+      }
+    }
+
+    async function login() {
+      message.innerText = "Signing in...";
+
+      try {
+        const res = await fetch(API + "/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: logEmail.value,
+            password: logPassword.value
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || "Login failed");
+        }
+
+        localStorage.setItem("with_user", JSON.stringify(data.user));
+        localStorage.setItem("with_token", data.token);
+        message.innerText = "Login successful!";
+      } catch (err) {
+        message.innerText = err.message;
+      }
+    }
+  </script>
+</body>
+</html>
