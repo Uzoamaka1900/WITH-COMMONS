@@ -1,67 +1,512 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>WITH Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WITH Commons Admin Dashboard</title>
   <style>
-    body {
-      font-family: Arial;
-      padding: 30px;
-      background: #f5f2ec;
+    :root {
+      --bg: #f5f2ec;
+      --card: #ffffff;
+      --text: #1f1f1f;
+      --muted: #6b6b6b;
+      --line: #ddd6cc;
+      --primary: #6f1d3a;
+      --primary-dark: #59152e;
+      --soft: #efe8de;
+      --success: #1f6b4f;
+      --danger: #8a1f3d;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --radius: 14px;
     }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .admin-gate,
+    .card,
+    .table-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .admin-gate {
+      max-width: 520px;
+      margin: 60px auto;
+      padding: 28px;
+    }
+
+    .admin-gate h2 {
+      margin-top: 0;
+    }
+
+    input, button {
+      font: inherit;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin: 8px 0 14px;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--soft);
+      color: var(--text);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .big {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 20px;
+    }
+
+    .table-card {
+      overflow: hidden;
+    }
+
+    .table-head {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .table-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       background: white;
     }
+
     th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
+      padding: 12px 14px;
+      border-bottom: 1px solid #eee7de;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
     }
+
     th {
-      background: #6f1d3a;
-      color: white;
+      background: #faf7f2;
+      color: var(--primary);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .status {
+      margin-top: 12px;
+      font-weight: 700;
+      color: var(--danger);
+    }
+
+    .ok {
+      color: var(--success);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .search {
+      max-width: 320px;
+      margin: 0;
+    }
+
+    .small {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .stats,
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
+  <div id="gate" class="admin-gate">
+    <h2>WITH Admin Access</h2>
+    <p class="muted">Enter your admin key to view registered users and login activity.</p>
+    <input id="adminKeyInput" type="password" placeholder="Admin key" />
+    <button class="btn-primary" id="unlockBtn">Unlock dashboard</button>
+    <div id="gateMessage" class="status"></div>
+  </div>
 
-<h2>Registered Users</h2>
+  <div id="dashboard" class="hidden">
+    <div class="wrap">
+      <div class="topbar">
+        <div>
+          <h1>WITH Commons Dashboard</h1>
+          <div class="small">Registered users, recent login events, and summary stats</div>
+        </div>
+        <div class="toolbar">
+          <input id="searchInput" class="search" type="text" placeholder="Search name or email" />
+          <button class="btn-secondary" id="refreshBtn">Refresh</button>
+          <button class="btn-secondary" id="exportBtn">Export users CSV</button>
+          <button class="btn-primary" id="logoutBtn">Lock</button>
+        </div>
+      </div>
 
-<table id="usersTable">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+      <div class="stats">
+        <div class="card">
+          <h3>Total users</h3>
+          <div class="big" id="totalUsers">0</div>
+        </div>
+        <div class="card">
+          <h3>Total logins</h3>
+          <div class="big" id="totalLogins">0</div>
+        </div>
+        <div class="card">
+          <h3>Latest user</h3>
+          <div class="big" id="latestUser">—</div>
+        </div>
+        <div class="card">
+          <h3>Latest login</h3>
+          <div class="big" id="latestLogin">—</div>
+        </div>
+      </div>
 
-<script>
-const API = "https://with-commons-production.up.railway.app/api";
+      <div class="grid">
+        <div class="table-card">
+          <div class="table-head">
+            <h2>Registered users</h2>
+            <span class="small" id="usersCountLabel">0 users</span>
+          </div>
+          <div class="table-wrap">
+            <table id="usersTable">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
 
-async function loadUsers() {
-  const res = await fetch(API + "/auth/users");
-  const users = await res.json();
+        <div class="table-card">
+          <div class="table-head">
+            <h2>Recent login activity</h2>
+            <span class="small">Latest 100 events</span>
+          </div>
+          <div class="table-wrap">
+            <table id="loginsTable">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>IP</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-  const tbody = document.querySelector("#usersTable tbody");
-  tbody.innerHTML = "";
+      <div id="dashboardMessage" class="status"></div>
+    </div>
+  </div>
 
-  users.forEach(user => {
-    const row = `
-      <tr>
-        <td>${user.name}</td>
-        <td>${user.email}</td>
-        <td>${new Date(user.createdAt).toLocaleString()}</td>
-      </tr>
-    `;
-    tbody.innerHTML += row;
-  });
-}
+  <script>
+    const API = "https://with-commons-production.up.railway.app/api";
+    const ADMIN_STORAGE_KEY = "with_admin_key";
 
-loadUsers();
-</script>
+    const gate = document.getElementById("gate");
+    const dashboard = document.getElementById("dashboard");
+    const gateMessage = document.getElementById("gateMessage");
+    const dashboardMessage = document.getElementById("dashboardMessage");
+    const adminKeyInput = document.getElementById("adminKeyInput");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const searchInput = document.getElementById("searchInput");
 
+    const totalUsers = document.getElementById("totalUsers");
+    const totalLogins = document.getElementById("totalLogins");
+    const latestUser = document.getElementById("latestUser");
+    const latestLogin = document.getElementById("latestLogin");
+    const usersCountLabel = document.getElementById("usersCountLabel");
+
+    const usersTableBody = document.querySelector("#usersTable tbody");
+    const loginsTableBody = document.querySelector("#loginsTable tbody");
+
+    let allUsers = [];
+    let allLogins = [];
+
+    function getAdminKey() {
+      return localStorage.getItem(ADMIN_STORAGE_KEY) || "";
+    }
+
+    function setAdminKey(key) {
+      localStorage.setItem(ADMIN_STORAGE_KEY, key);
+    }
+
+    function clearAdminKey() {
+      localStorage.removeItem(ADMIN_STORAGE_KEY);
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      return new Date(value).toLocaleString();
+    }
+
+    async function adminFetch(path) {
+      const key = getAdminKey();
+
+      const res = await fetch(path, {
+        headers: {
+          "x-admin-key": key
+        }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Request failed");
+      }
+
+      return data;
+    }
+
+    function renderUsers(users) {
+      usersCountLabel.textContent = `${users.length} user${users.length === 1 ? "" : "s"}`;
+
+      usersTableBody.innerHTML = users.map(user => `
+        <tr>
+          <td>${user.name || "—"}</td>
+          <td>${user.email || "—"}</td>
+          <td>${formatDate(user.createdAt)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderLogins(logins) {
+      loginsTableBody.innerHTML = logins.map(item => `
+        <tr>
+          <td>${item.email || "—"}</td>
+          <td>${item.ipAddress || "—"}</td>
+          <td>${formatDate(item.createdAt)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function filterUsers() {
+      const q = searchInput.value.trim().toLowerCase();
+
+      if (!q) {
+        renderUsers(allUsers);
+        return;
+      }
+
+      const filtered = allUsers.filter(user =>
+        (user.name || "").toLowerCase().includes(q) ||
+        (user.email || "").toLowerCase().includes(q)
+      );
+
+      renderUsers(filtered);
+    }
+
+    function exportUsersCSV() {
+      if (!allUsers.length) return;
+
+      const rows = [
+        ["Name", "Email", "Created"],
+        ...allUsers.map(user => [
+          user.name || "",
+          user.email || "",
+          formatDate(user.createdAt)
+        ])
+      ];
+
+      const csv = rows.map(row =>
+        row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(",")
+      ).join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "with-users.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    async function loadDashboard() {
+      dashboardMessage.textContent = "";
+
+      try {
+        const [stats, users, logins] = await Promise.all([
+          adminFetch("https://with-commons-production.up.railway.app/api/admin/stats"),
+          adminFetch("https://with-commons-production.up.railway.app/api/auth/users"),
+          adminFetch("https://with-commons-production.up.railway.app/api/auth/logins")
+        ]);
+
+        allUsers = users;
+        allLogins = logins;
+
+        totalUsers.textContent = stats.totalUsers ?? 0;
+        totalLogins.textContent = stats.totalLogins ?? 0;
+        latestUser.textContent = stats.latestUser ? formatDate(stats.latestUser) : "—";
+        latestLogin.textContent = stats.latestLogin ? formatDate(stats.latestLogin) : "—";
+
+        renderUsers(allUsers);
+        renderLogins(allLogins);
+
+        dashboardMessage.textContent = "Dashboard loaded successfully.";
+        dashboardMessage.classList.add("ok");
+      } catch (err) {
+        dashboardMessage.textContent = err.message;
+        dashboardMessage.classList.remove("ok");
+
+        if (err.message.toLowerCase().includes("forbidden")) {
+          clearAdminKey();
+          dashboard.classList.add("hidden");
+          gate.classList.remove("hidden");
+          gateMessage.textContent = "Admin key is invalid.";
+        }
+      }
+    }
+
+    unlockBtn.addEventListener("click", async () => {
+      const key = adminKeyInput.value.trim();
+
+      if (!key) {
+        gateMessage.textContent = "Enter the admin key.";
+        return;
+      }
+
+      setAdminKey(key);
+      gateMessage.textContent = "";
+
+      try {
+        await adminFetch("https://with-commons-production.up.railway.app/api/admin/stats");
+        gate.classList.add("hidden");
+        dashboard.classList.remove("hidden");
+        loadDashboard();
+      } catch (err) {
+        clearAdminKey();
+        gateMessage.textContent = err.message;
+      }
+    });
+
+    refreshBtn.addEventListener("click", loadDashboard);
+    exportBtn.addEventListener("click", exportUsersCSV);
+    logoutBtn.addEventListener("click", () => {
+      clearAdminKey();
+      dashboard.classList.add("hidden");
+      gate.classList.remove("hidden");
+      adminKeyInput.value = "";
+      gateMessage.textContent = "";
+    });
+    searchInput.addEventListener("input", filterUsers);
+
+    if (getAdminKey()) {
+      gate.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+      loadDashboard();
+    }
+  </script>
 </body>
 </html>
