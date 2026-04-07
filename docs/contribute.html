@@ -1,0 +1,27 @@
+<form id="contributeForm">
+  <input type="text" placeholder="Title" required />
+  <textarea placeholder="Description" required></textarea>
+
+  <select required>
+    <option value="">Select type</option>
+    <option>Story</option>
+    <option>Media</option>
+    <option>Record</option>
+  </select>
+
+  <input type="file" />
+  <input type="text" placeholder="Tags (comma separated)" />
+
+  <button type="submit">Submit Contribution</button>
+</form>
+
+<script>
+document.getElementById("contributeForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  // later: send to backend
+  alert("Submission received!");
+
+  window.location.href = "dashboard.html?submission=success";
+});
+</script>
