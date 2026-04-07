@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discover – WITH Commons</title>
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --bg-soft: #ece7df;
+      --surface: #fffdfa;
+      --surface-soft: #f7f3ed;
+      --text: #1f2629;
+      --muted: #5f6b70;
+      --primary: #23404a;
+      --primary-dark: #162b33;
+      --primary-soft: #dde7e8;
+      --accent: #b88a52;
+      --accent-strong: #9a6f3d;
+      --accent-soft: #efe1d2;
+      --line: #d9d3ca;
+      --shadow-sm: 0 6px 16px rgba(19, 28, 32, 0.08);
+      --shadow: 0 18px 42px rgba(19, 28, 32, 0.10);
+      --radius-sm: 12px;
+      --radius: 18px;
+      --radius-lg: 24px;
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button, input { font: inherit; }
+
+    .container {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .site-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .topbar {
+      background: #ebe5dd;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .topbar .inner,
+    .navbar .inner,
+    .section-head,
+    .toolbar,
+    .path-actions,
+    .cta-actions,
+    .footer-grid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .topbar .inner { padding: 0.7rem 0; }
+
+    .topbar-links,
+    .topbar-actions,
+    .nav-links,
+    .nav-actions,
+    .hero-actions,
+    .chip-row,
+    .quick-links,
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .pill,
+    .chip,
+    .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.42rem 0.74rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .pill {
+      background: #f8f3e6;
+      border: 1px solid #eadfc3;
+      color: #66501c;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .chip:hover,
+    .chip.active {
+      background: var(--accent-soft);
+      border-color: #eadfc3;
+      color: #5f4a14;
+    }
+
+    .mini-tag {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(244,241,235,0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .navbar .inner {
+      padding: 1rem 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      padding: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .brand-meta strong {
+      display: block;
+      line-height: 1.1;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .brand-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 0.18rem;
+      font-weight: 600;
+    }
+
+    .nav-links a {
+      color: #4d4d4d;
+      font-weight: 700;
+    }
+
+    .nav-links a:hover,
+    .footer-links a:hover {
+      color: var(--primary-dark);
+    }
+
+    .btn {
+      min-height: 46px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      font-size: 0.96rem;
+      font-weight: 800;
+      padding: 0.9rem 1.15rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    .btn-secondary {
+      background: #fff;
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover { background: #fcfbf9; }
+
+    main section { padding: 1.7rem 0; }
+
+    .hero-card,
+    .search-panel,
+    .nav-panel,
+    .path-card,
+    .collection-card,
+    .story-card,
+    .timeline-card,
+    .cta-shell {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-card {
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-side {
+      padding: 2rem;
+    }
+
+    .hero-copy {
+      background: linear-gradient(180deg, #fffdfa 0%, #f7f3ed 100%);
+    }
+
+    .hero-side {
+      background: #f0ebe4;
+      border-left: 1px solid var(--line);
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      color: #8a6b1f;
+      margin-bottom: 0.45rem;
+      letter-spacing: 0.04em;
+      font-weight: 800;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      line-height: 0.98;
+      margin-bottom: 1rem;
+      max-width: 11ch;
+      font-weight: 900;
+    }
+
+    .lede,
+    .section-head p,
+    .panel-copy,
+    .path-card p,
+    .collection-card p,
+    .story-card p,
+    .timeline-card p,
+    .result-meta,
+    .footnote {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .lede {
+      font-size: 1.02rem;
+      max-width: 62ch;
+      margin-bottom: 1.15rem;
+    }
+
+    .hero-actions { margin-bottom: 1rem; }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-card {
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.4rem;
+      color: var(--primary-dark);
+      font-weight: 900;
+      margin-bottom: 0.15rem;
+    }
+
+    .search-panel,
+    .nav-panel,
+    .timeline-card,
+    .cta-shell {
+      padding: 1.25rem;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      min-height: 56px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0.95rem 1rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .search-input:focus {
+      outline: 2px solid rgba(35,64,74,0.14);
+      border-color: var(--primary);
+    }
+
+    .search-results {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .result-item {
+      display: grid;
+      gap: 0.4rem;
+      padding: 0.95rem;
+      border-radius: 16px;
+      background: #fbfaf7;
+      border: 1px solid var(--line);
+    }
+
+    .result-item.hidden,
+    .path-card.hidden,
+    .collection-card.hidden,
+    .story-card.hidden {
+      display: none;
+    }
+
+    .result-meta {
+      font-size: 0.88rem;
+    }
+
+    .quick-links {
+      margin-top: 0.85rem;
+    }
+
+    .nav-grid,
+    .path-grid,
+    .collection-grid,
+    .story-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .nav-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .path-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .collection-grid,
+    .story-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .nav-tile,
+    .path-card,
+    .collection-card,
+    .story-card {
+      padding: 1.15rem;
+      min-height: 100%;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .nav-tile {
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffdfa 0%, #f7f3ed 100%);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-tile:hover,
+    .path-card:hover,
+    .collection-card:hover,
+    .story-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    }
+
+    .tile-icon,
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: #f8f3e6;
+      border: 1px solid #eadfc3;
+      margin-bottom: 0.9rem;
+      font-size: 1rem;
+      font-weight: 900;
+      color: #6a5221;
+    }
+
+    .section-head { margin-bottom: 1rem; align-items: end; }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: start;
+      margin-bottom: 0.9rem;
+    }
+
+    .count {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.32rem 0.64rem;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .thumb {
+      min-height: 170px;
+      border-radius: 16px;
+      margin-bottom: 0.9rem;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(35,64,74,0.05), rgba(184,138,82,0.09)), #f1ece5;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--muted);
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .timeline-list {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fbfaf7;
+    }
+
+    .timeline-year {
+      font-weight: 900;
+      color: var(--primary-dark);
+      font-size: 1.1rem;
+    }
+
+    .cta-shell {
+      background: linear-gradient(135deg, #1f353d 0%, #35545d 100%);
+      color: #fffdf8;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-shell p,
+    .cta-shell li { color: rgba(255,250,246,0.88); }
+
+    .cta-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .cta-copy,
+    .cta-card { padding: 1.25rem; }
+
+    .cta-card {
+      border-radius: 22px;
+      background: rgba(255,255,255,0.96);
+      color: var(--text);
+      border: 1px solid rgba(230,227,220,0.9);
+    }
+
+    .cta-list {
+      display: grid;
+      gap: 0.8rem;
+      padding-left: 1rem;
+      margin: 1rem 0 0;
+    }
+
+    .footer {
+      padding: 2rem 0 3rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 1rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1.3rem;
+      align-items: start;
+    }
+
+    .footer-links a {
+      display: block;
+      margin-bottom: 0.55rem;
+      font-weight: 600;
+    }
+
+    .muted-note {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1120px) {
+      .hero-grid,
+      .cta-grid,
+      .nav-grid,
+      .path-grid,
+      .collection-grid,
+      .story-grid,
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero-side {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid,
+      .cta-grid,
+      .nav-grid,
+      .path-grid,
+      .collection-grid,
+      .story-grid,
+      .footer-grid,
+      .stat-row {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container { width: min(var(--max), calc(100% - 1rem)); }
+
+      .hero-copy,
+      .hero-side,
+      .search-panel,
+      .nav-panel,
+      .path-card,
+      .collection-card,
+      .story-card,
+      .timeline-card,
+      .cta-copy,
+      .cta-card { padding: 1rem; }
+
+      .navbar .inner { flex-direction: column; align-items: flex-start; }
+      .nav-links { display: none; }
+      .section-head { flex-direction: column; align-items: flex-start; }
+      .hero-copy h1 { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container inner">
+      <div class="topbar-links">
+        <a href="#search">Search</a>
+        <a href="#pathways">Pathways</a>
+        <a href="#collections">Collections</a>
+        <a href="#stories">Stories</a>
+      </div>
+      <div class="topbar-actions">
+        <span class="pill">WITH Commons · Discover</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <div class="container inner">
+      <a class="brand" href="homepage.html" aria-label="WITH home">
+        <span class="brand-mark">
+          <img class="site-logo" src="./asserts/logo.png" alt="WITH logo" />
+        </span>
+        <span class="brand-meta">
+          <strong>WITH Archive</strong>
+          <span>Women in Technology</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="homepage.html">Home</a>
+        <a href="about-with.html">About WITH</a>
+        <a href="#search">Search</a>
+        <a href="#collections">Collections</a>
+        <a href="#stories">Stories</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="index.html">Log in</a>
+        <a class="btn btn-primary" href="#collections">Browse archive</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="overview">
+      <div class="container">
+        <div class="hero-card">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <span class="section-kicker">Discover</span>
+              <h1>Find an entry point that matches how you want to explore.</h1>
+              <p class="lede">
+                This page turns discovery into a clear pathway: search first, browse by theme, move into curated collections, and then follow story-led routes for first-time visitors, students, and researchers.
+              </p>
+
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="#search">Start with search</a>
+                <a class="btn btn-secondary" href="#pathways">Browse pathways</a>
+              </div>
+
+              <div class="stat-row" aria-label="Discovery metrics">
+                <div class="stat-card">
+                  <strong>4</strong>
+                  <span>entry routes for different users</span>
+                </div>
+                <div class="stat-card">
+                  <strong>6</strong>
+                  <span>featured discovery themes</span>
+                </div>
+                <div class="stat-card">
+                  <strong>3</strong>
+                  <span>collection-led highlights</span>
+                </div>
+              </div>
+            </div>
+
+            <aside class="hero-side" aria-label="Quick discover guide">
+              <div class="nav-panel">
+                <span class="section-kicker">How to use this page</span>
+                <div class="quick-links">
+                  <span class="mini-tag">Search by keyword</span>
+                  <span class="mini-tag">Browse themes</span>
+                  <span class="mini-tag">Read stories</span>
+                  <span class="mini-tag">Jump to collections</span>
+                </div>
+                <p class="panel-copy">
+                  The structure follows the existing WITH Commons pattern of collections, stories, contributions, and clear navigation, but gives “Discover” its own dedicated landing page and flow.
+                </p>
+              </div>
+
+              <div class="nav-panel">
+                <span class="section-kicker">Best starting points</span>
+                <div class="quick-links">
+                  <a class="btn btn-secondary" href="#collections">Anniversary images</a>
+                  <a class="btn btn-secondary" href="#stories">Oral histories</a>
+                  <a class="btn btn-secondary" href="#timeline">Institutional timeline</a>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="search">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Search</span>
+            <h2>Search before you scroll</h2>
+          </div>
+          <p>Fast keyword filtering reduces noise and helps visitors reach the right collection or story quickly.</p>
+        </div>
+
+        <div class="search-panel">
+          <div class="search-box">
+            <input id="discoverSearch" class="search-input" type="text" placeholder="Search collections, pathways, and stories…" aria-label="Search discover content" />
+          </div>
+
+          <div class="chip-row" aria-label="Suggested filters">
+            <button class="chip active" data-filter="all" type="button">All</button>
+            <button class="chip" data-filter="images" type="button">Images</button>
+            <button class="chip" data-filter="oral-history" type="button">Oral history</button>
+            <button class="chip" data-filter="events" type="button">Events</button>
+            <button class="chip" data-filter="teaching" type="button">Teaching</button>
+            <button class="chip" data-filter="leadership" type="button">Leadership</button>
+          </div>
+
+          <div class="search-results" id="searchResults">
+            <a class="result-item searchable" data-tags="events images anniversary celebration" href="#collections">
+              <strong>WITH Events Collection</strong>
+              <span class="result-meta">Best for anniversary images, conference moments, and public-facing institutional memory.</span>
+            </a>
+            <a class="result-item searchable" data-tags="oral-history interviews transcripts stories" href="#stories">
+              <strong>Oral History Story Path</strong>
+              <span class="result-meta">Best for audio, transcripts, teaching use, and contextual reading.</span>
+            </a>
+            <a class="result-item searchable" data-tags="leadership governance committees networks" href="#pathways">
+              <strong>Leadership and Networks Pathway</strong>
+              <span class="result-meta">Best for users tracing officers, committees, and institutional continuity.</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="jump">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Navigate</span>
+            <h2>Choose a discovery route</h2>
+          </div>
+          <p>Each route is designed for a different kind of visitor rather than forcing everyone through the same archive logic.</p>
+        </div>
+
+        <div class="nav-grid">
+          <a class="nav-tile" href="#collections">
+            <div class="tile-icon">01</div>
+            <h3>Browse collections</h3>
+            <p class="panel-copy">Start with grouped materials such as anniversary photographs, newsletters, and event records.</p>
+          </a>
+          <a class="nav-tile" href="#stories">
+            <div class="tile-icon">02</div>
+            <h3>Read stories</h3>
+            <p class="panel-copy">Enter through narrative themes for first-time users, students, and public audiences.</p>
+          </a>
+          <a class="nav-tile" href="#timeline">
+            <div class="tile-icon">03</div>
+            <h3>Follow a timeline</h3>
+            <p class="panel-copy">Trace continuity, change, and milestone moments across WITH’s institutional history.</p>
+          </a>
+          <a class="nav-tile" href="#contribute">
+            <div class="tile-icon">04</div>
+            <h3>Contribute materials</h3>
+            <p class="panel-copy">Move from discovery to participation by adding images, documents, or memories for review.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="pathways">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Pathways</span>
+            <h2>Curated ways into the archive</h2>
+          </div>
+          <p>These cards turn abstract metadata into legible research and public history routes.</p>
+        </div>
+
+        <div class="path-grid">
+          <article class="path-card searchable" data-tags="leadership governance committees leadership">
+            <div class="card-head">
+              <div class="card-icon">L</div>
+              <span class="count">Leadership</span>
+            </div>
+            <h3>Leadership, committees, and governance</h3>
+            <p>Follow officers, committee structures, strategic priorities, and the institutional labor behind WITH.</p>
+            <div class="path-actions">
+              <a class="btn btn-secondary" href="#collections">See related records</a>
+            </div>
+          </article>
+
+          <article class="path-card searchable" data-tags="events images conferences anniversary celebration">
+            <div class="card-head">
+              <div class="card-icon">E</div>
+              <span class="count">Events</span>
+            </div>
+            <h3>Anniversary, meetings, and conference life</h3>
+            <p>Use visual and event-based materials to understand celebration, public recognition, and community formation.</p>
+            <div class="path-actions">
+              <a class="btn btn-secondary" href="#collections">Open event collections</a>
+            </div>
+          </article>
+
+          <article class="path-card searchable" data-tags="oral-history teaching interviews transcripts">
+            <div class="card-head">
+              <div class="card-icon">O</div>
+              <span class="count">Teaching</span>
+            </div>
+            <h3>Oral histories and teaching pathways</h3>
+            <p>Pair recordings, transcripts, and contextual notes so users can cite and teach with confidence.</p>
+            <div class="path-actions">
+              <a class="btn btn-secondary" href="#stories">Go to stories</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="collections">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Collections</span>
+            <h2>Featured collections</h2>
+          </div>
+          <p>Clean collection cards preserve the browsing style already used on the homepage while giving Discover its own focus.</p>
+        </div>
+
+        <div class="collection-grid">
+          <article class="collection-card searchable" data-tags="images events anniversary photographs celebration">
+            <div class="card-head">
+              <div class="card-icon">A</div>
+              <span class="count">148 items</span>
+            </div>
+            <div class="thumb">Anniversary photographs, award moments, and event snapshots</div>
+            <h3>Anniversary Images</h3>
+            <p>A visual route into institutional memory, public celebration, and community recognition.</p>
+          </article>
+
+          <article class="collection-card searchable" data-tags="newsletter documents leadership reports">
+            <div class="card-head">
+              <div class="card-icon">N</div>
+              <span class="count">62 items</span>
+            </div>
+            <div class="thumb">Newsletters, calls, circulars, and internal communication traces</div>
+            <h3>Newsletters and Reports</h3>
+            <p>Best for tracing priorities, language, membership, and the shifting intellectual life of WITH.</p>
+          </article>
+
+          <article class="collection-card searchable" data-tags="oral-history interviews teaching audio transcripts">
+            <div class="card-head">
+              <div class="card-icon">T</div>
+              <span class="count">31 items</span>
+            </div>
+            <div class="thumb">Audio, transcript excerpts, and story-led teaching materials</div>
+            <h3>Oral Histories and Testimony</h3>
+            <p>Best for listening to memory, voice, institutional belonging, and cross-generational reflection.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="stories">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Stories</span>
+            <h2>Story-led entry points</h2>
+          </div>
+          <p>These narrative routes help visitors who do not want to begin with metadata alone.</p>
+        </div>
+
+        <div class="story-grid">
+          <article class="story-card searchable" data-tags="networks mentorship leadership community">
+            <h3>How women sustained technical communities over time</h3>
+            <p>Follow mentorship, conference participation, institutions, and shifting support networks.</p>
+          </article>
+
+          <article class="story-card searchable" data-tags="images events anniversary visual culture">
+            <h3>Anniversary photographs as institutional memory</h3>
+            <p>See how celebration, recognition, and leadership were staged, archived, and remembered.</p>
+          </article>
+
+          <article class="story-card searchable" data-tags="oral-history teaching transcripts audio">
+            <h3>Listening to oral histories with context</h3>
+            <p>Pair recordings with transcripts, tags, and related materials for teaching, public use, and citation.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="timeline">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Timeline</span>
+            <h2>Follow change over time</h2>
+          </div>
+          <p>A temporal route complements the thematic browsing structure and supports historical interpretation.</p>
+        </div>
+
+        <article class="timeline-card">
+          <div class="timeline-list">
+            <div class="timeline-item">
+              <div class="timeline-year">1970s–1980s</div>
+              <div>
+                <h3>Formation and consolidation</h3>
+                <p>Track early organizing, support structures, and the emergence of gender analysis as a visible institutional concern.</p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-year">1990s–2000s</div>
+              <div>
+                <h3>Networks, newsletters, and public visibility</h3>
+                <p>See how communication formats, officer lists, and event materials expanded the archive of community life.</p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-year">WITH@50</div>
+              <div>
+                <h3>Anniversary reflection and future-facing curation</h3>
+                <p>Move from commemoration to new submissions, broader geographies, and a more globally oriented history of technology.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contribute">
+      <div class="container">
+        <div class="cta-shell">
+          <div class="cta-grid">
+            <div class="cta-copy">
+              <span class="section-kicker" style="color:#f0d18a;">Contribute</span>
+              <h2>Turn discovery into participation.</h2>
+              <p>
+                Visitors should be able to move from browsing into contribution without losing context. This section gives Discover a clear ending point and keeps the archive community-facing.
+              </p>
+              <div class="cta-actions">
+                <a class="btn btn-primary" href="homepage.html#contribute">Upload an item</a>
+                <a class="btn btn-secondary" href="about-with.html">Learn about WITH</a>
+              </div>
+            </div>
+
+            <div class="cta-card">
+              <h3>What users can contribute</h3>
+              <ul class="cta-list">
+                <li>Event photographs and anniversary images</li>
+                <li>Newsletters, calls, and committee records</li>
+                <li>Oral history leads, transcripts, and contextual notes</li>
+                <li>Teaching materials linked to women in technology history</li>
+              </ul>
+              <p class="muted-note" style="margin-top:1rem;">
+                Recommended next step: connect this page to real collection detail pages once your archive records are finalized.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:0.8rem;">
+          <span class="brand-mark">
+            <img class="site-logo" src="./asserts/logo.png" alt="WITH logo" />
+          </span>
+          <span class="brand-meta">
+            <strong>WITH Archive</strong>
+            <span>Women in Technology</span>
+          </span>
+        </div>
+        <p class="footnote">A dedicated discovery page for WITH Commons.</p>
+      </div>
+
+      <div class="footer-links">
+        <strong>Explore</strong>
+        <a href="#search">Search</a>
+        <a href="#pathways">Pathways</a>
+        <a href="#collections">Collections</a>
+      </div>
+
+      <div class="footer-links">
+        <strong>Read</strong>
+        <a href="#stories">Stories</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#contribute">Contribute</a>
+      </div>
+
+      <div class="footer-links">
+        <strong>Site</strong>
+        <a href="homepage.html">Homepage</a>
+        <a href="about-with.html">About</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="index.html">Login</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('discoverSearch');
+    const chips = document.querySelectorAll('.chip');
+    const searchableItems = document.querySelectorAll('.searchable');
+
+    let activeFilter = 'all';
+
+    function applyDiscoverFilters() {
+      const term = (searchInput.value || '').toLowerCase().trim();
+
+      searchableItems.forEach((item) => {
+        const text = item.textContent.toLowerCase();
+        const tags = (item.dataset.tags || '').toLowerCase();
+        const matchesText = !term || text.includes(term) || tags.includes(term);
+        const matchesFilter = activeFilter === 'all' || tags.includes(activeFilter);
+        item.classList.toggle('hidden', !(matchesText && matchesFilter));
+      });
+    }
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((c) => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeFilter = chip.dataset.filter;
+        applyDiscoverFilters();
+      });
+    });
+
+    searchInput.addEventListener('input', applyDiscoverFilters);
+    applyDiscoverFilters();
+  </script>
+</body>
+</html>
