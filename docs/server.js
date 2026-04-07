@@ -7,7 +7,12 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://uzoamaka1900.github.io'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
