@@ -20,19 +20,24 @@
       --shadow: 0 10px 30px rgba(0,0,0,0.08);
       --radius: 14px;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
     }
+
     a { color: inherit; text-decoration: none; }
+
     .wrap {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 32px 20px 60px;
     }
+
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -41,22 +46,31 @@
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
+
     h1, h2 { margin: 0; }
     h1 { font-size: 2rem; }
+
     .muted { color: var(--muted); }
-    .admin-gate, .card, .table-card {
+
+    .admin-gate,
+    .card,
+    .table-card {
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
+
     .admin-gate {
       max-width: 520px;
       margin: 60px auto;
       padding: 28px;
     }
+
     .admin-gate h2 { margin-top: 0; }
+
     input, button, select { font: inherit; }
+
     input {
       width: 100%;
       padding: 12px 14px;
@@ -65,6 +79,7 @@
       margin: 8px 0 14px;
       background: white;
     }
+
     button, .action-link {
       border: none;
       border-radius: 10px;
@@ -75,49 +90,63 @@
       align-items: center;
       justify-content: center;
     }
+
     .btn-primary {
       background: var(--primary);
       color: white;
     }
+
     .btn-primary:hover { background: var(--primary-dark); }
-    .btn-secondary, .action-link.secondary {
+
+    .btn-secondary,
+    .action-link.secondary {
       background: var(--soft);
       color: var(--text);
     }
+
     .action-link.primary {
       background: var(--primary);
       color: white;
     }
+
     .toolbar {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       align-items: center;
     }
+
     .stats {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 16px;
       margin-bottom: 24px;
     }
+
     .card { padding: 18px; }
+
     .card h3 {
       margin: 0 0 8px;
       font-size: 0.95rem;
       color: var(--muted);
     }
+
     .big {
       font-size: 1.8rem;
       font-weight: 800;
       color: var(--primary);
     }
+
     .grid {
       display: grid;
-      grid-template-columns: 1.15fr 1fr;
+      grid-template-columns: 1.1fr 0.9fr;
       gap: 20px;
     }
+
     .grid + .grid { margin-top: 20px; }
+
     .table-card { overflow: hidden; }
+
     .table-head {
       padding: 16px 18px;
       border-bottom: 1px solid var(--line);
@@ -127,13 +156,17 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .table-head h2 { font-size: 1.1rem; }
+
     .table-wrap { overflow: auto; }
+
     table {
       width: 100%;
       border-collapse: collapse;
       background: white;
     }
+
     th, td {
       padding: 12px 14px;
       border-bottom: 1px solid #eee7de;
@@ -141,6 +174,7 @@
       vertical-align: top;
       font-size: 0.95rem;
     }
+
     th {
       background: #faf7f2;
       color: var(--primary);
@@ -148,22 +182,27 @@
       top: 0;
       z-index: 1;
     }
+
     .status {
       margin-top: 12px;
       font-weight: 700;
       color: var(--danger);
     }
+
     .ok { color: var(--success); }
     .warning { color: var(--warning); }
     .hidden { display: none; }
+
     .search {
-      max-width: 320px;
+      max-width: 360px;
       margin: 0;
     }
+
     .small {
       font-size: 0.9rem;
       color: var(--muted);
     }
+
     .tag {
       display: inline-flex;
       align-items: center;
@@ -177,11 +216,13 @@
       border: 1px solid #eadfc3;
       margin: 2px 4px 2px 0;
     }
+
     .submission-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
+
     .mini-btn {
       border: 1px solid var(--line);
       background: white;
@@ -191,19 +232,26 @@
       font-weight: 700;
       cursor: pointer;
     }
+
     .mini-btn.approve {
       color: var(--success);
       border-color: #cfe3d9;
       background: #f3faf6;
     }
+
     .mini-btn.reject {
       color: var(--danger);
       border-color: #ecd0d8;
       background: #fdf4f7;
     }
+
     .mini-btn.delete { color: var(--muted); }
-    @media (max-width: 1000px) {
-      .stats, .grid { grid-template-columns: 1fr; }
+
+    @media (max-width: 1100px) {
+      .stats,
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -224,7 +272,7 @@
           <div class="small">Registered users, recent login events, and contribution submissions</div>
         </div>
         <div class="toolbar">
-          <input id="searchInput" class="search" type="text" placeholder="Search name or email" />
+          <input id="searchInput" class="search" type="text" placeholder="Search users or contributions" />
           <a href="contribute.html" class="action-link primary">+ New Contribution</a>
           <button class="btn-secondary" id="refreshBtn">Refresh</button>
           <button class="btn-secondary" id="exportBtn">Export users CSV</button>
@@ -242,16 +290,20 @@
           <div class="big" id="totalLogins">0</div>
         </div>
         <div class="card">
+          <h3>Total contributions</h3>
+          <div class="big" id="totalContributions">0</div>
+        </div>
+        <div class="card">
+          <h3>Pending contributions</h3>
+          <div class="big" id="pendingContributions">0</div>
+        </div>
+        <div class="card">
           <h3>Latest user</h3>
           <div class="big" id="latestUser">—</div>
         </div>
         <div class="card">
           <h3>Latest login</h3>
           <div class="big" id="latestLogin">—</div>
-        </div>
-        <div class="card">
-          <h3>Pending contributions</h3>
-          <div class="big" id="pendingContributions">0</div>
         </div>
       </div>
 
@@ -342,6 +394,7 @@
 
     const totalUsers = document.getElementById("totalUsers");
     const totalLogins = document.getElementById("totalLogins");
+    const totalContributions = document.getElementById("totalContributions");
     const latestUser = document.getElementById("latestUser");
     const latestLogin = document.getElementById("latestLogin");
     const pendingContributions = document.getElementById("pendingContributions");
@@ -354,6 +407,7 @@
 
     let allUsers = [];
     let allSubmissions = [];
+    let allLogins = [];
 
     function getAdminKey() {
       return localStorage.getItem(ADMIN_STORAGE_KEY) || "";
@@ -383,13 +437,19 @@
 
     async function adminFetch(path, options = {}) {
       const key = getAdminKey();
+
+      const headers = {
+        "x-admin-key": key,
+        ...(options.headers || {})
+      };
+
+      if (options.body) {
+        headers["Content-Type"] = "application/json";
+      }
+
       const res = await fetch(path, {
         ...options,
-        headers: {
-          "x-admin-key": key,
-          "Content-Type": "application/json",
-          ...(options.headers || {})
-        }
+        headers
       });
 
       const data = await res.json().catch(() => ({}));
@@ -490,27 +550,41 @@
         dashboardMessage.textContent = `Contribution ${action}d successfully.`;
         dashboardMessage.classList.add("ok");
         dashboardMessage.classList.remove("warning");
-        await loadDashboard();
+
+        await loadDashboard(false);
       } catch (err) {
         dashboardMessage.textContent = err.message;
         dashboardMessage.classList.remove("ok", "warning");
       }
     }
 
-    function filterUsers() {
+    function applySearchFilter() {
       const q = searchInput.value.trim().toLowerCase();
 
       if (!q) {
         renderUsers(allUsers);
+        renderSubmissions(allSubmissions);
         return;
       }
 
-      const filtered = allUsers.filter(user =>
+      const filteredUsers = allUsers.filter(user =>
         (user.name || "").toLowerCase().includes(q) ||
         (user.email || "").toLowerCase().includes(q)
       );
 
-      renderUsers(filtered);
+      const filteredSubmissions = allSubmissions.filter(item =>
+        (item.title || "").toLowerCase().includes(q) ||
+        (item.description || "").toLowerCase().includes(q) ||
+        (item.type || "").toLowerCase().includes(q) ||
+        (item.collection || "").toLowerCase().includes(q) ||
+        (item.contributorName || "").toLowerCase().includes(q) ||
+        (item.contributorEmail || "").toLowerCase().includes(q) ||
+        (item.status || "").toLowerCase().includes(q) ||
+        (item.tags || []).some(tag => String(tag).toLowerCase().includes(q))
+      );
+
+      renderUsers(filteredUsers);
+      renderSubmissions(filteredSubmissions);
     }
 
     function exportUsersCSV() {
@@ -527,7 +601,7 @@
 
       const csv = rows.map(row =>
         row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(",")
-      ).join("\\n");
+      ).join("\n");
 
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
@@ -540,8 +614,10 @@
       URL.revokeObjectURL(url);
     }
 
-    async function loadDashboard() {
-      dashboardMessage.textContent = "";
+    async function loadDashboard(showLoadedMessage = true) {
+      if (showLoadedMessage) {
+        dashboardMessage.textContent = "";
+      }
 
       try {
         const [stats, users, logins, contributions] = await Promise.all([
@@ -552,21 +628,26 @@
         ]);
 
         allUsers = users;
+        allLogins = logins;
         allSubmissions = contributions;
 
         totalUsers.textContent = stats.totalUsers ?? 0;
         totalLogins.textContent = stats.totalLogins ?? 0;
+        totalContributions.textContent = stats.totalContributions ?? contributions.length ?? 0;
         latestUser.textContent = stats.latestUser ? formatDate(stats.latestUser) : "—";
         latestLogin.textContent = stats.latestLogin ? formatDate(stats.latestLogin) : "—";
         pendingContributions.textContent = stats.pendingContributions ?? 0;
 
         renderUsers(allUsers);
-        renderLogins(logins);
+        renderLogins(allLogins);
         renderSubmissions(allSubmissions);
+        applySearchFilter();
 
-        dashboardMessage.textContent = "Dashboard loaded successfully.";
-        dashboardMessage.classList.add("ok");
-        dashboardMessage.classList.remove("warning");
+        if (showLoadedMessage) {
+          dashboardMessage.textContent = "Dashboard loaded successfully.";
+          dashboardMessage.classList.add("ok");
+          dashboardMessage.classList.remove("warning");
+        }
       } catch (err) {
         dashboardMessage.textContent = err.message;
         dashboardMessage.classList.remove("ok", "warning");
@@ -602,7 +683,7 @@
       }
     });
 
-    refreshBtn.addEventListener("click", loadDashboard);
+    refreshBtn.addEventListener("click", () => loadDashboard());
     exportBtn.addEventListener("click", exportUsersCSV);
 
     logoutBtn.addEventListener("click", () => {
@@ -613,7 +694,7 @@
       gateMessage.textContent = "";
     });
 
-    searchInput.addEventListener("input", filterUsers);
+    searchInput.addEventListener("input", applySearchFilter);
 
     submissionsTableBody.addEventListener("click", (event) => {
       const button = event.target.closest("button[data-action]");
@@ -624,12 +705,6 @@
 
       updateSubmission(id, action);
     });
-
-    if (new URLSearchParams(window.location.search).get("submission") === "success") {
-      dashboardMessage.textContent = "New contribution submitted successfully.";
-      dashboardMessage.classList.add("warning");
-      dashboardMessage.classList.remove("ok");
-    }
 
     if (getAdminKey()) {
       gate.classList.add("hidden");
