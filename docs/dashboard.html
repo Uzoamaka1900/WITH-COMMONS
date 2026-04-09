@@ -328,7 +328,6 @@
   <script>
     const API = "https://with-commons-production.up.railway.app/api";
     const ADMIN_STORAGE_KEY = "with_admin_key";
-    const CONTRIBUTIONS_STORAGE_KEY = "with_contributions";
 
     const gate = document.getElementById("gate");
     const dashboard = document.getElementById("dashboard");
@@ -382,29 +381,24 @@
         .replace(/'/g, "&#39;");
     }
 
-    async function adminFetch(path) {
+    async function adminFetch(path, options = {}) {
       const key = getAdminKey();
       const res = await fetch(path, {
-        headers: { "x-admin-key": key }
+        ...options,
+        headers: {
+          "x-admin-key": key,
+          "Content-Type": "application/json",
+          ...(options.headers || {})
+        }
       });
-      const data = await res.json();
+
+      const data = await res.json().catch(() => ({}));
+
       if (!res.ok) {
         throw new Error(data.message || "Request failed");
       }
+
       return data;
-    }
-
-    function getStoredSubmissions() {
-      try {
-        const raw = localStorage.getItem(CONTRIBUTIONS_STORAGE_KEY);
-        return raw ? JSON.parse(raw) : [];
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function setStoredSubmissions(items) {
-      localStorage.setItem(CONTRIBUTIONS_STORAGE_KEY, JSON.stringify(items));
     }
 
     function renderUsers(users) {
@@ -430,6 +424,7 @@
 
     function renderSubmissions(items) {
       submissionsCountLabel.textContent = `${items.length} submission${items.length === 1 ? "" : "s"}`;
+
       const pending = items.filter(item => (item.status || "Pending") === "Pending").length;
       pendingContributions.textContent = pending;
 
@@ -444,6 +439,7 @@
 
       submissionsTableBody.innerHTML = items.map(item => {
         const tags = (item.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+
         return `
           <tr>
             <td>
@@ -461,9 +457,9 @@
             <td>${escapeHtml(item.status || "Pending")}</td>
             <td>
               <div class="submission-actions">
-                <button class="mini-btn approve" data-id="${escapeHtml(item.id)}" data-action="approve">Approve</button>
-                <button class="mini-btn reject" data-id="${escapeHtml(item.id)}" data-action="reject">Reject</button>
-                <button class="mini-btn delete" data-id="${escapeHtml(item.id)}" data-action="delete">Delete</button>
+                <button class="mini-btn approve" data-id="${escapeHtml(item._id)}" data-action="approve">Approve</button>
+                <button class="mini-btn reject" data-id="${escapeHtml(item._id)}" data-action="reject">Reject</button>
+                <button class="mini-btn delete" data-id="${escapeHtml(item._id)}" data-action="delete">Delete</button>
               </div>
             </td>
           </tr>
@@ -471,40 +467,55 @@
       }).join("");
     }
 
-    function updateSubmission(id, action) {
-      const items = getStoredSubmissions();
-      const updated = items
-        .map(item => {
-          if (item.id !== id) return item;
-          if (action === "approve") return { ...item, status: "Approved" };
-          if (action === "reject") return { ...item, status: "Rejected" };
-          return item;
-        })
-        .filter(item => !(action === "delete" && item.id === id));
+    async function updateSubmission(id, action) {
+      try {
+        if (action === "delete") {
+          await adminFetch(`${API}/contributions/${id}`, {
+            method: "DELETE"
+          });
+        } else {
+          const statusMap = {
+            approve: "Approved",
+            reject: "Rejected"
+          };
 
-      setStoredSubmissions(updated);
-      allSubmissions = updated;
-      renderSubmissions(allSubmissions);
-      dashboardMessage.textContent = `Contribution ${action}d successfully.`;
-      dashboardMessage.classList.add("ok");
-      dashboardMessage.classList.remove("warning");
+          await adminFetch(`${API}/contributions/${id}/status`, {
+            method: "PATCH",
+            body: JSON.stringify({
+              status: statusMap[action]
+            })
+          });
+        }
+
+        dashboardMessage.textContent = `Contribution ${action}d successfully.`;
+        dashboardMessage.classList.add("ok");
+        dashboardMessage.classList.remove("warning");
+        await loadDashboard();
+      } catch (err) {
+        dashboardMessage.textContent = err.message;
+        dashboardMessage.classList.remove("ok", "warning");
+      }
     }
 
     function filterUsers() {
       const q = searchInput.value.trim().toLowerCase();
+
       if (!q) {
         renderUsers(allUsers);
         return;
       }
+
       const filtered = allUsers.filter(user =>
         (user.name || "").toLowerCase().includes(q) ||
         (user.email || "").toLowerCase().includes(q)
       );
+
       renderUsers(filtered);
     }
 
     function exportUsersCSV() {
       if (!allUsers.length) return;
+
       const rows = [
         ["Name", "Email", "Created"],
         ...allUsers.map(user => [
@@ -513,9 +524,11 @@
           formatDate(user.createdAt)
         ])
       ];
+
       const csv = rows.map(row =>
         row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(",")
       ).join("\\n");
+
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -529,20 +542,23 @@
 
     async function loadDashboard() {
       dashboardMessage.textContent = "";
+
       try {
-        const [stats, users, logins] = await Promise.all([
+        const [stats, users, logins, contributions] = await Promise.all([
           adminFetch(`${API}/admin/stats`),
           adminFetch(`${API}/auth/users`),
-          adminFetch(`${API}/auth/logins`)
+          adminFetch(`${API}/auth/logins`),
+          adminFetch(`${API}/contributions`)
         ]);
 
         allUsers = users;
-        allSubmissions = getStoredSubmissions();
+        allSubmissions = contributions;
 
         totalUsers.textContent = stats.totalUsers ?? 0;
         totalLogins.textContent = stats.totalLogins ?? 0;
         latestUser.textContent = stats.latestUser ? formatDate(stats.latestUser) : "—";
         latestLogin.textContent = stats.latestLogin ? formatDate(stats.latestLogin) : "—";
+        pendingContributions.textContent = stats.pendingContributions ?? 0;
 
         renderUsers(allUsers);
         renderLogins(logins);
@@ -554,6 +570,7 @@
       } catch (err) {
         dashboardMessage.textContent = err.message;
         dashboardMessage.classList.remove("ok", "warning");
+
         if (err.message.toLowerCase().includes("forbidden")) {
           clearAdminKey();
           dashboard.classList.add("hidden");
@@ -565,12 +582,15 @@
 
     unlockBtn.addEventListener("click", async () => {
       const key = adminKeyInput.value.trim();
+
       if (!key) {
         gateMessage.textContent = "Enter the admin key.";
         return;
       }
+
       setAdminKey(key);
       gateMessage.textContent = "";
+
       try {
         await adminFetch(`${API}/admin/stats`);
         gate.classList.add("hidden");
@@ -584,6 +604,7 @@
 
     refreshBtn.addEventListener("click", loadDashboard);
     exportBtn.addEventListener("click", exportUsersCSV);
+
     logoutBtn.addEventListener("click", () => {
       clearAdminKey();
       dashboard.classList.add("hidden");
@@ -591,13 +612,16 @@
       adminKeyInput.value = "";
       gateMessage.textContent = "";
     });
+
     searchInput.addEventListener("input", filterUsers);
 
     submissionsTableBody.addEventListener("click", (event) => {
       const button = event.target.closest("button[data-action]");
       if (!button) return;
+
       const { id, action } = button.dataset;
       if (!id || !action) return;
+
       updateSubmission(id, action);
     });
 
