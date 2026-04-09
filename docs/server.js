@@ -9,11 +9,11 @@ const app = express();
 
 app.use(cors({
   origin: ['https://uzoamaka1900.github.io'],
-  methods: ['GET', 'POST', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 const PORT = process.env.PORT || 8080;
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -50,8 +50,38 @@ const loginEventSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const contributionSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true, trim: true },
+    description: { type: String, required: true, trim: true },
+    type: {
+      type: String,
+      required: true,
+      enum: ['Story', 'Media', 'Record']
+    },
+    collection: { type: String, required: true, trim: true },
+    tags: [{ type: String, trim: true }],
+    contributorName: { type: String, required: true, trim: true },
+    contributorEmail: { type: String, required: true, lowercase: true, trim: true },
+    filename: { type: String, default: '', trim: true },
+    status: {
+      type: String,
+      enum: ['Pending', 'Approved', 'Rejected'],
+      default: 'Pending'
+    },
+    submittedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null
+    },
+    adminNotes: { type: String, default: '', trim: true }
+  },
+  { timestamps: true }
+);
+
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 const LoginEvent = mongoose.models.LoginEvent || mongoose.model('LoginEvent', loginEventSchema);
+const Contribution = mongoose.models.Contribution || mongoose.model('Contribution', contributionSchema);
 
 // HELPERS
 function createToken(user) {
@@ -76,6 +106,36 @@ function requireAdmin(req, res, next) {
   next();
 }
 
+function requireAuth(req, res, next) {
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ')
+    ? authHeader.slice(7)
+    : null;
+
+  if (!token) {
+    return res.status(401).json({ message: 'Authentication required.' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = {
+      userId: decoded.userId,
+      email: decoded.email
+    };
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid or expired token.' });
+  }
+}
+
+function ensureDatabaseConnected(res) {
+  if (mongoose.connection.readyState !== 1) {
+    res.status(503).json({ message: 'Database is not connected yet.' });
+    return false;
+  }
+  return true;
+}
+
 // ROUTES
 app.get('/', (req, res) => {
   res.json({ message: 'WITH Commons backend is running' });
@@ -93,9 +153,7 @@ app.get('/db-status', (req, res) => {
 
 app.post('/api/auth/register', async (req, res) => {
   try {
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ message: 'Database is not connected yet.' });
-    }
+    if (!ensureDatabaseConnected(res)) return;
 
     const { name, email, password } = req.body;
 
@@ -146,9 +204,7 @@ app.post('/api/auth/register', async (req, res) => {
 
 app.post('/api/auth/login', async (req, res) => {
   try {
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ message: 'Database is not connected yet.' });
-    }
+    if (!ensureDatabaseConnected(res)) return;
 
     const { email, password } = req.body;
 
@@ -196,9 +252,7 @@ app.post('/api/auth/login', async (req, res) => {
 
 app.get('/api/auth/users', requireAdmin, async (req, res) => {
   try {
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ message: 'Database is not connected yet.' });
-    }
+    if (!ensureDatabaseConnected(res)) return;
 
     const users = await User.find()
       .select('name email createdAt')
@@ -215,9 +269,7 @@ app.get('/api/auth/users', requireAdmin, async (req, res) => {
 
 app.get('/api/auth/logins', requireAdmin, async (req, res) => {
   try {
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ message: 'Database is not connected yet.' });
-    }
+    if (!ensureDatabaseConnected(res)) return;
 
     const logins = await LoginEvent.find()
       .select('email ipAddress userAgent createdAt')
@@ -233,14 +285,151 @@ app.get('/api/auth/logins', requireAdmin, async (req, res) => {
   }
 });
 
+// CONTRIBUTIONS
+app.post('/api/contributions', requireAuth, async (req, res) => {
+  try {
+    if (!ensureDatabaseConnected(res)) return;
+
+    const {
+      title,
+      description,
+      type,
+      collection,
+      tags = [],
+      contributorName,
+      contributorEmail,
+      filename = ''
+    } = req.body;
+
+    if (!title || !description || !type || !collection || !contributorName || !contributorEmail) {
+      return res.status(400).json({
+        message: 'Title, description, type, collection, contributor name, and contributor email are required.'
+      });
+    }
+
+    const contribution = await Contribution.create({
+      title: title.trim(),
+      description: description.trim(),
+      type,
+      collection: collection.trim(),
+      tags: Array.isArray(tags)
+        ? tags.map(tag => String(tag).trim()).filter(Boolean)
+        : [],
+      contributorName: contributorName.trim(),
+      contributorEmail: contributorEmail.toLowerCase().trim(),
+      filename: String(filename || '').trim(),
+      submittedBy: req.user.userId
+    });
+
+    return res.status(201).json({
+      message: 'Contribution submitted successfully.',
+      contribution
+    });
+  } catch (error) {
+    console.error('Create contribution error:', error);
+    return res.status(500).json({
+      message: error.message || 'Could not submit contribution.'
+    });
+  }
+});
+
+app.get('/api/contributions/mine', requireAuth, async (req, res) => {
+  try {
+    if (!ensureDatabaseConnected(res)) return;
+
+    const contributions = await Contribution.find({ submittedBy: req.user.userId })
+      .sort({ createdAt: -1 });
+
+    return res.json(contributions);
+  } catch (error) {
+    console.error('Fetch my contributions error:', error);
+    return res.status(500).json({
+      message: error.message || 'Could not fetch your contributions.'
+    });
+  }
+});
+
+app.get('/api/contributions', requireAdmin, async (req, res) => {
+  try {
+    if (!ensureDatabaseConnected(res)) return;
+
+    const contributions = await Contribution.find()
+      .sort({ createdAt: -1 });
+
+    return res.json(contributions);
+  } catch (error) {
+    console.error('Fetch contributions error:', error);
+    return res.status(500).json({
+      message: error.message || 'Could not fetch contributions.'
+    });
+  }
+});
+
+app.patch('/api/contributions/:id/status', requireAdmin, async (req, res) => {
+  try {
+    if (!ensureDatabaseConnected(res)) return;
+
+    const { id } = req.params;
+    const { status, adminNotes = '' } = req.body;
+
+    if (!['Pending', 'Approved', 'Rejected'].includes(status)) {
+      return res.status(400).json({
+        message: 'Status must be Pending, Approved, or Rejected.'
+      });
+    }
+
+    const updated = await Contribution.findByIdAndUpdate(
+      id,
+      {
+        status,
+        adminNotes: String(adminNotes || '').trim()
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: 'Contribution not found.' });
+    }
+
+    return res.json({
+      message: 'Contribution updated successfully.',
+      contribution: updated
+    });
+  } catch (error) {
+    console.error('Update contribution status error:', error);
+    return res.status(500).json({
+      message: error.message || 'Could not update contribution.'
+    });
+  }
+});
+
+app.delete('/api/contributions/:id', requireAdmin, async (req, res) => {
+  try {
+    if (!ensureDatabaseConnected(res)) return;
+
+    const deleted = await Contribution.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: 'Contribution not found.' });
+    }
+
+    return res.json({ message: 'Contribution deleted successfully.' });
+  } catch (error) {
+    console.error('Delete contribution error:', error);
+    return res.status(500).json({
+      message: error.message || 'Could not delete contribution.'
+    });
+  }
+});
+
 app.get('/api/admin/stats', requireAdmin, async (req, res) => {
   try {
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ message: 'Database is not connected yet.' });
-    }
+    if (!ensureDatabaseConnected(res)) return;
 
     const totalUsers = await User.countDocuments();
     const totalLogins = await LoginEvent.countDocuments();
+    const totalContributions = await Contribution.countDocuments();
+    const pendingContributions = await Contribution.countDocuments({ status: 'Pending' });
 
     const latestUser = await User.findOne()
       .sort({ createdAt: -1 })
@@ -250,11 +439,18 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
       .sort({ createdAt: -1 })
       .select('createdAt');
 
+    const latestContribution = await Contribution.findOne()
+      .sort({ createdAt: -1 })
+      .select('createdAt');
+
     return res.json({
       totalUsers,
       totalLogins,
+      totalContributions,
+      pendingContributions,
       latestUser: latestUser?.createdAt || null,
-      latestLogin: latestLogin?.createdAt || null
+      latestLogin: latestLogin?.createdAt || null,
+      latestContribution: latestContribution?.createdAt || null
     });
   } catch (error) {
     console.error('Stats error:', error);
@@ -266,9 +462,7 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
 
 app.get('/api/admin/charts', requireAdmin, async (req, res) => {
   try {
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ message: 'Database is not connected yet.' });
-    }
+    if (!ensureDatabaseConnected(res)) return;
 
     const registrationsByDay = await User.aggregate([
       {
@@ -294,9 +488,22 @@ app.get('/api/admin/charts', requireAdmin, async (req, res) => {
       { $sort: { _id: 1 } }
     ]);
 
+    const contributionsByDay = await Contribution.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
     return res.json({
       registrationsByDay,
-      loginsByDay
+      loginsByDay,
+      contributionsByDay
     });
   } catch (error) {
     console.error('Charts error:', error);
