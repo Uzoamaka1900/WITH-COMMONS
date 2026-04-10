@@ -20,9 +20,14 @@
       --shadow: 0 18px 42px rgba(19, 28, 32, 0.10);
       --radius: 18px;
       --max: 1100px;
+      --success: #1f6b4f;
+      --danger: #9a2f2f;
+      --warning: #7a5a1b;
     }
 
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -39,7 +44,9 @@
       margin: 0 auto;
     }
 
-    .hidden-until-auth { visibility: hidden; }
+    .hidden-until-auth {
+      visibility: hidden;
+    }
 
     .topbar {
       background: #ebe5dd;
@@ -48,7 +55,8 @@
       font-size: 0.9rem;
     }
 
-    .topbar .inner, .navbar .inner {
+    .topbar .inner,
+    .navbar .inner {
       display: grid;
       align-items: center;
       gap: 1rem;
@@ -73,7 +81,11 @@
       padding: 1rem 0;
     }
 
-    .topbar-links, .topbar-actions, .nav-links, .nav-actions, .hero-actions {
+    .topbar-links,
+    .topbar-actions,
+    .nav-links,
+    .nav-actions,
+    .hero-actions {
       display: flex;
       align-items: center;
       gap: 0.85rem;
@@ -109,6 +121,8 @@
       border: 1px solid var(--line);
       box-shadow: var(--shadow-sm);
       padding: 0.3rem;
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
     .site-logo {
@@ -132,14 +146,18 @@
       font-weight: 600;
     }
 
-    .nav-links { justify-content: center; }
+    .nav-links {
+      justify-content: center;
+    }
 
     .nav-links a {
       color: #4d4d4d;
       font-weight: 700;
     }
 
-    .nav-links a:hover { color: var(--primary-dark); }
+    .nav-links a:hover {
+      color: var(--primary-dark);
+    }
 
     .btn {
       min-height: 46px;
@@ -153,6 +171,17 @@
       align-items: center;
       justify-content: center;
       font-family: inherit;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .btn-primary {
@@ -161,7 +190,9 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
 
     .btn-secondary {
       background: #fff;
@@ -169,9 +200,13 @@
       color: var(--text);
     }
 
-    section { padding: 1.6rem 0; }
+    section {
+      padding: 1.6rem 0;
+    }
 
-    .hero-card, .form-card, .info-card {
+    .hero-card,
+    .form-card,
+    .info-card {
       background: #fff;
       border: 1px solid var(--line);
       border-radius: 22px;
@@ -184,15 +219,26 @@
       box-shadow: var(--shadow);
     }
 
-    .hero-grid, .content-grid {
+    .hero-grid,
+    .content-grid {
       display: grid;
       gap: 1rem;
     }
 
-    .hero-grid { grid-template-columns: 1.05fr 0.95fr; }
-    .content-grid { grid-template-columns: 1.2fr 0.8fr; }
+    .hero-grid {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
 
-    .hero-copy, .hero-side, .form-card, .info-card { padding: 1.5rem; }
+    .content-grid {
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+
+    .hero-copy,
+    .hero-side,
+    .form-card,
+    .info-card {
+      padding: 1.5rem;
+    }
 
     .hero-copy {
       background: linear-gradient(180deg, #fffdfa 0%, #f7f3ed 100%);
@@ -214,7 +260,9 @@
       letter-spacing: 0.04em;
     }
 
-    h1, h2, h3 { margin: 0 0 0.75rem; }
+    h1, h2, h3 {
+      margin: 0 0 0.75rem;
+    }
 
     h1 {
       font-size: clamp(2.2rem, 4vw, 3.7rem);
@@ -222,7 +270,12 @@
       letter-spacing: -0.04em;
     }
 
-    .lede, .info-card p, .info-card li, .helper {
+    .lede,
+    .info-card p,
+    .info-card li,
+    .helper,
+    .hint,
+    .file-meta {
       color: var(--muted);
       font-weight: 500;
     }
@@ -255,9 +308,15 @@
       margin-bottom: 0.35rem;
     }
 
-    .field-wrap { margin-bottom: 1rem; }
+    .field-wrap {
+      margin-bottom: 1rem;
+    }
 
-    input[type="text"], input[type="email"], input[type="file"], select, textarea {
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    select,
+    textarea {
       width: 100%;
       min-height: 52px;
       border-radius: 15px;
@@ -273,22 +332,62 @@
       min-height: 140px;
     }
 
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 2px solid rgba(35, 64, 74, 0.18);
+      border-color: var(--primary);
+    }
+
     .status {
       margin-top: 0.8rem;
       font-weight: 700;
+      min-height: 1.4rem;
     }
 
-    .status.success { color: #1f6b4f; }
-    .status.error { color: #9a2f2f; }
-    .status.loading { color: #7a5a1b; }
+    .status.success { color: var(--success); }
+    .status.error { color: var(--danger); }
+    .status.loading { color: var(--warning); }
+
+    .file-meta {
+      margin-top: 0.45rem;
+      font-size: 0.92rem;
+    }
+
+    .form-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
 
     ul {
       margin: 0.5rem 0 0;
       padding-left: 1rem;
     }
 
+    .note-box {
+      margin-top: 1rem;
+      padding: 0.9rem 1rem;
+      border-radius: 16px;
+      background: #faf7f1;
+      border: 1px solid var(--line);
+    }
+
+    .note-box strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: var(--primary-dark);
+    }
+
     @media (max-width: 1000px) {
-      .hero-grid, .content-grid, .stats { grid-template-columns: 1fr; }
+      .hero-grid,
+      .content-grid,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
       .hero-side {
         border-left: 0;
         border-top: 1px solid var(--line);
@@ -296,8 +395,25 @@
     }
 
     @media (max-width: 720px) {
-      .navbar .inner, .topbar .inner { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
+      .navbar .inner,
+      .topbar .inner {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .container {
+        width: min(var(--max), calc(100% - 1rem));
+      }
+
+      .hero-copy,
+      .hero-side,
+      .form-card,
+      .info-card {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
@@ -353,7 +469,7 @@
               <span class="section-kicker">Contribute</span>
               <h1>Submit a story, media item, or archival record.</h1>
               <p class="lede">
-                Use this page to send contributions to the WITH archive system. Submissions will be stored in MongoDB through the backend and can then appear in the dashboard for review.
+                Use this page to send contributions to the WITH archive system. Submission metadata is saved in MongoDB, while uploaded files are stored in the GitHub repository and reviewed through the dashboard before becoming publicly visible.
               </p>
 
               <div class="hero-actions">
@@ -381,9 +497,15 @@
               <h3>What happens next</h3>
               <ul>
                 <li>Your form is sent to the backend API.</li>
-                <li>The backend stores the metadata in MongoDB.</li>
-                <li>The uploaded file is stored on the server or cloud storage, with its path saved in MongoDB.</li>
+                <li>The contribution metadata is saved in MongoDB.</li>
+                <li>Any uploaded file is stored in the GitHub repository by file type and collection path.</li>
+                <li>The item appears in the dashboard for approval before it is shown on the public site.</li>
               </ul>
+
+              <div class="note-box">
+                <strong>Review flow</strong>
+                Approved items can be displayed in the correct site category such as Story, Media, or Record.
+              </div>
             </aside>
           </div>
         </div>
@@ -396,7 +518,7 @@
           <span class="section-kicker">Submission form</span>
           <h2>Add a contribution</h2>
 
-          <form id="contributeForm" enctype="multipart/form-data">
+          <form id="contributeForm" enctype="multipart/form-data" novalidate>
             <div class="field-wrap">
               <label for="title">Title</label>
               <input id="title" name="title" type="text" placeholder="Contribution title" required />
@@ -433,6 +555,7 @@
             <div class="field-wrap">
               <label for="tags">Tags</label>
               <input id="tags" name="tags" type="text" placeholder="Comma separated tags" />
+              <div class="hint">Example: anniversary, newsletter, oral history</div>
             </div>
 
             <div class="field-wrap">
@@ -448,10 +571,15 @@
             <div class="field-wrap">
               <label for="fileUpload">File upload</label>
               <input id="fileUpload" name="file" type="file" />
+              <div id="fileMeta" class="file-meta">No file selected.</div>
             </div>
 
-            <button class="btn btn-primary" id="submitBtn" type="submit">Submit contribution</button>
-            <div id="formStatus" class="status"></div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="submitBtn" type="submit">Submit contribution</button>
+              <a class="btn btn-secondary" href="dashboard.html">Cancel</a>
+            </div>
+
+            <div id="formStatus" class="status" aria-live="polite"></div>
           </form>
         </article>
 
@@ -459,14 +587,20 @@
           <span class="section-kicker">Notes</span>
           <h3>Submission guidance</h3>
           <p>
-            This version sends the contribution to a backend endpoint so the record can be saved in MongoDB instead of only in the browser.
+            This version sends the contribution to the backend so the record can be stored in MongoDB and the file can be saved in GitHub for site use.
           </p>
           <ul>
             <li>Use clear, descriptive titles.</li>
             <li>Add tags for easier filtering later.</li>
             <li>Choose the closest collection grouping.</li>
-            <li>Files should be handled by the backend and linked to the MongoDB record.</li>
+            <li>Upload a file when the contribution includes a document, image, or scan.</li>
+            <li>Items remain pending until approved in the dashboard.</li>
           </ul>
+
+          <div class="note-box">
+            <strong>Backend reminder</strong>
+            Set the API URL below to your deployed Railway backend, not localhost, when publishing the site on GitHub Pages.
+          </div>
         </aside>
       </div>
     </section>
@@ -475,7 +609,9 @@
   <script>
     const TOKEN_KEY = "with_token";
     const USER_KEY = "with_user";
-    const API_BASE_URL = "http://localhost:5000/api";
+
+    // Replace this with your live Railway backend URL when deployed.
+    const API_BASE_URL = "https://with-commons-production.up.railway.app/api";
 
     function parseJwt(token) {
       try {
@@ -507,6 +643,26 @@
       const status = document.getElementById("formStatus");
       status.textContent = message;
       status.className = `status ${type}`.trim();
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes && bytes !== 0) return "";
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function updateFileMeta() {
+      const fileInput = document.getElementById("fileUpload");
+      const fileMeta = document.getElementById("fileMeta");
+      const file = fileInput.files[0];
+
+      if (!file) {
+        fileMeta.textContent = "No file selected.";
+        return;
+      }
+
+      fileMeta.textContent = `${file.name} • ${formatBytes(file.size)}${file.type ? ` • ${file.type}` : ""}`;
     }
 
     function hydrateUser() {
@@ -546,30 +702,45 @@
       return true;
     }
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      clearSession();
-      window.location.href = "index.html";
-    });
-
-    document.getElementById("contributeForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
+    async function submitContribution(event) {
+      event.preventDefault();
 
       const token = localStorage.getItem(TOKEN_KEY);
+      if (!token || isTokenExpired(token)) {
+        clearSession();
+        redirectToLogin();
+        return;
+      }
+
       const submitBtn = document.getElementById("submitBtn");
+      const form = document.getElementById("contributeForm");
       const fileInput = document.getElementById("fileUpload");
 
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const type = document.getElementById("type").value;
+      const collection = document.getElementById("collection").value;
+      const tags = document.getElementById("tags").value.trim();
+      const contributorName = document.getElementById("contributorName").value.trim();
+      const contributorEmail = document.getElementById("contributorEmail").value.trim();
+
+      if (!title || !description || !type || !collection || !contributorName || !contributorEmail) {
+        setStatus("Please complete all required fields before submitting.", "error");
+        return;
+      }
+
       submitBtn.disabled = true;
-      setStatus("Submitting contribution to MongoDB…", "loading");
+      setStatus("Submitting contribution to MongoDB and GitHub…", "loading");
 
       try {
         const formData = new FormData();
-        formData.append("title", document.getElementById("title").value.trim());
-        formData.append("description", document.getElementById("description").value.trim());
-        formData.append("type", document.getElementById("type").value);
-        formData.append("collection", document.getElementById("collection").value);
-        formData.append("tags", document.getElementById("tags").value);
-        formData.append("contributorName", document.getElementById("contributorName").value.trim());
-        formData.append("contributorEmail", document.getElementById("contributorEmail").value.trim());
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("type", type);
+        formData.append("collection", collection);
+        formData.append("tags", tags);
+        formData.append("contributorName", contributorName);
+        formData.append("contributorEmail", contributorEmail);
 
         if (fileInput.files[0]) {
           formData.append("file", fileInput.files[0]);
@@ -583,14 +754,21 @@
           body: formData
         });
 
+        if (response.status === 401) {
+          clearSession();
+          redirectToLogin();
+          return;
+        }
+
         const result = await response.json();
 
         if (!response.ok) {
           throw new Error(result.message || "Failed to save contribution.");
         }
 
-        setStatus("Contribution saved successfully to MongoDB and sent to the dashboard.", "success");
-        document.getElementById("contributeForm").reset();
+        setStatus("Contribution saved successfully and sent to the review dashboard.", "success");
+        form.reset();
+        updateFileMeta();
 
         setTimeout(() => {
           window.location.href = "dashboard.html?submission=success";
@@ -600,9 +778,18 @@
       } finally {
         submitBtn.disabled = false;
       }
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      clearSession();
+      window.location.href = "index.html";
     });
 
+    document.getElementById("fileUpload").addEventListener("change", updateFileMeta);
+    document.getElementById("contributeForm").addEventListener("submit", submitContribution);
+
     hydrateUser();
+    updateFileMeta();
   </script>
 </body>
 </html>
