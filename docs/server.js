@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const { Octokit } = require('@octokit/rest');
 require('dotenv').config();
 
 const app = express();
@@ -20,6 +22,11 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 const ADMIN_KEY = process.env.ADMIN_KEY;
 
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_OWNER = process.env.GITHUB_OWNER;
+const GITHUB_REPO = process.env.GITHUB_REPO;
+const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
+
 if (!MONGODB_URI) {
   console.error('Missing MONGODB_URI environment variable');
   process.exit(1);
@@ -29,6 +36,20 @@ if (!JWT_SECRET) {
   console.error('Missing JWT_SECRET environment variable');
   process.exit(1);
 }
+
+if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
+  console.error('Missing GitHub environment variables: GITHUB_TOKEN, GITHUB_OWNER, or GITHUB_REPO');
+  process.exit(1);
+}
+
+const octokit = new Octokit({ auth: GITHUB_TOKEN });
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 20 * 1024 * 1024
+  }
+});
 
 // MODELS
 const userSchema = new mongoose.Schema(
@@ -63,17 +84,28 @@ const contributionSchema = new mongoose.Schema(
     tags: [{ type: String, trim: true }],
     contributorName: { type: String, required: true, trim: true },
     contributorEmail: { type: String, required: true, lowercase: true, trim: true },
+
     filename: { type: String, default: '', trim: true },
+    originalFilename: { type: String, default: '', trim: true },
+    mimeType: { type: String, default: '', trim: true },
+    size: { type: Number, default: 0 },
+
+    githubPath: { type: String, default: '', trim: true },
+    githubUrl: { type: String, default: '', trim: true },
+    githubSha: { type: String, default: '', trim: true },
+
     status: {
       type: String,
       enum: ['Pending', 'Approved', 'Rejected'],
       default: 'Pending'
     },
+
     submittedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       default: null
     },
+
     adminNotes: { type: String, default: '', trim: true }
   },
   { timestamps: true }
@@ -134,6 +166,83 @@ function ensureDatabaseConnected(res) {
     return false;
   }
   return true;
+}
+
+function slugify(value = '') {
+  return String(value)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+function sanitizeFilename(value = '') {
+  return String(value)
+    .replace(/[^\w.\-]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+function getTypeFolder(type) {
+  if (type === 'Story') return 'stories';
+  if (type === 'Media') return 'media';
+  return 'records';
+}
+
+function buildGithubPath({ type, collection, originalFilename }) {
+  const folder = getTypeFolder(type);
+  const collectionSlug = slugify(collection || 'general');
+  const timestamp = Date.now();
+  const cleanName = sanitizeFilename(originalFilename || 'upload.bin');
+  return `uploads/${folder}/${collectionSlug}/${timestamp}-${cleanName}`;
+}
+
+async function uploadFileToGitHub({ path, contentBuffer, message }) {
+  const content = contentBuffer.toString('base64');
+
+  const response = await octokit.repos.createOrUpdateFileContents({
+    owner: GITHUB_OWNER,
+    repo: GITHUB_REPO,
+    path,
+    message,
+    content,
+    branch: GITHUB_BRANCH
+  });
+
+  const githubUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}`;
+
+  return {
+    sha: response.data.content.sha,
+    path,
+    githubUrl
+  };
+}
+
+async function deleteFileFromGitHub({ path, sha, message }) {
+  if (!path || !sha) return;
+
+  await octokit.repos.deleteFile({
+    owner: GITHUB_OWNER,
+    repo: GITHUB_REPO,
+    path,
+    message,
+    sha,
+    branch: GITHUB_BRANCH
+  });
+}
+
+function normalizeTags(tags) {
+  if (Array.isArray(tags)) {
+    return tags.map(tag => String(tag).trim()).filter(Boolean);
+  }
+
+  if (typeof tags === 'string') {
+    return tags
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(Boolean);
+  }
+
+  return [];
 }
 
 // ROUTES
@@ -286,7 +395,7 @@ app.get('/api/auth/logins', requireAdmin, async (req, res) => {
 });
 
 // CONTRIBUTIONS
-app.post('/api/contributions', requireAuth, async (req, res) => {
+app.post('/api/contributions', requireAuth, upload.single('file'), async (req, res) => {
   try {
     if (!ensureDatabaseConnected(res)) return;
 
@@ -297,8 +406,7 @@ app.post('/api/contributions', requireAuth, async (req, res) => {
       collection,
       tags = [],
       contributorName,
-      contributorEmail,
-      filename = ''
+      contributorEmail
     } = req.body;
 
     if (!title || !description || !type || !collection || !contributorName || !contributorEmail) {
@@ -307,17 +415,50 @@ app.post('/api/contributions', requireAuth, async (req, res) => {
       });
     }
 
+    if (!['Story', 'Media', 'Record'].includes(type)) {
+      return res.status(400).json({
+        message: 'Type must be Story, Media, or Record.'
+      });
+    }
+
+    let githubUpload = {
+      path: '',
+      sha: '',
+      githubUrl: ''
+    };
+
+    if (req.file) {
+      const githubPath = buildGithubPath({
+        type,
+        collection,
+        originalFilename: req.file.originalname
+      });
+
+      githubUpload = await uploadFileToGitHub({
+        path: githubPath,
+        contentBuffer: req.file.buffer,
+        message: `Add contribution file: ${title.trim()}`
+      });
+    }
+
     const contribution = await Contribution.create({
       title: title.trim(),
       description: description.trim(),
       type,
       collection: collection.trim(),
-      tags: Array.isArray(tags)
-        ? tags.map(tag => String(tag).trim()).filter(Boolean)
-        : [],
+      tags: normalizeTags(tags),
       contributorName: contributorName.trim(),
       contributorEmail: contributorEmail.toLowerCase().trim(),
-      filename: String(filename || '').trim(),
+
+      filename: req.file ? sanitizeFilename(req.file.originalname) : '',
+      originalFilename: req.file ? req.file.originalname : '',
+      mimeType: req.file ? req.file.mimetype : '',
+      size: req.file ? req.file.size : 0,
+
+      githubPath: githubUpload.path,
+      githubUrl: githubUpload.githubUrl,
+      githubSha: githubUpload.sha,
+
       submittedBy: req.user.userId
     });
 
@@ -361,6 +502,39 @@ app.get('/api/contributions', requireAdmin, async (req, res) => {
     console.error('Fetch contributions error:', error);
     return res.status(500).json({
       message: error.message || 'Could not fetch contributions.'
+    });
+  }
+});
+
+// PUBLIC ROUTE FOR SITE DISPLAY
+app.get('/api/public/contributions', async (req, res) => {
+  try {
+    if (!ensureDatabaseConnected(res)) return;
+
+    const { type, collection, limit } = req.query;
+
+    const query = { status: 'Approved' };
+
+    if (type && ['Story', 'Media', 'Record'].includes(type)) {
+      query.type = type;
+    }
+
+    if (collection) {
+      query.collection = String(collection).trim();
+    }
+
+    const safeLimit = Math.min(Number(limit) || 100, 200);
+
+    const contributions = await Contribution.find(query)
+      .select('-githubSha -adminNotes')
+      .sort({ createdAt: -1 })
+      .limit(safeLimit);
+
+    return res.json(contributions);
+  } catch (error) {
+    console.error('Fetch public contributions error:', error);
+    return res.status(500).json({
+      message: error.message || 'Could not fetch public contributions.'
     });
   }
 });
@@ -411,6 +585,18 @@ app.delete('/api/contributions/:id', requireAdmin, async (req, res) => {
 
     if (!deleted) {
       return res.status(404).json({ message: 'Contribution not found.' });
+    }
+
+    try {
+      if (deleted.githubPath && deleted.githubSha) {
+        await deleteFileFromGitHub({
+          path: deleted.githubPath,
+          sha: deleted.githubSha,
+          message: `Delete contribution file: ${deleted.title}`
+        });
+      }
+    } catch (githubError) {
+      console.error('GitHub delete warning:', githubError.message);
     }
 
     return res.json({ message: 'Contribution deleted successfully.' });
