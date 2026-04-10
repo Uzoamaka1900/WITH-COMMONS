@@ -19,6 +19,8 @@
       --accent-strong: #9a6f3d;
       --accent-soft: #efe1d2;
       --line: #d9d3ca;
+      --success: #1f6b4f;
+      --warning: #8a6a1f;
       --shadow-sm: 0 6px 16px rgba(19, 28, 32, 0.08);
       --shadow: 0 18px 42px rgba(19, 28, 32, 0.10);
       --radius-sm: 12px;
@@ -96,7 +98,8 @@
     .hero-actions,
     .filter-row,
     .chip-row,
-    .meta-row {
+    .meta-row,
+    .live-controls {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
@@ -106,7 +109,8 @@
     .pill,
     .count-pill,
     .section-chip,
-    .type-badge {
+    .type-badge,
+    .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
@@ -136,6 +140,14 @@
       background: var(--accent-soft);
       color: #5f4a14;
       border: 1px solid #eadfc3;
+      padding: 0.35rem 0.68rem;
+      font-size: 0.78rem;
+    }
+
+    .status-badge {
+      background: #edf8f1;
+      color: var(--success);
+      border: 1px solid #cfe3d9;
       padding: 0.35rem 0.68rem;
       font-size: 0.78rem;
     }
@@ -243,7 +255,8 @@
     .toolbar-card,
     .collection-card,
     .feature-card,
-    .footer-card {
+    .footer-card,
+    .live-section-card {
       background: #fff;
       border: 1px solid var(--line);
       border-radius: 22px;
@@ -267,7 +280,8 @@
     .hero-side,
     .toolbar-card,
     .collection-card,
-    .feature-card {
+    .feature-card,
+    .live-section-card {
       padding: 1.35rem;
     }
 
@@ -298,7 +312,9 @@
     .hero-copy h1,
     .section-head h2,
     .collection-card h3,
-    .feature-card h3 {
+    .feature-card h3,
+    .live-card h3,
+    .live-section-card h3 {
       font-weight: 900;
       letter-spacing: -0.04em;
     }
@@ -315,7 +331,10 @@
     .collection-card p,
     .feature-card p,
     .sidebar-note,
-    .feature-list li {
+    .feature-list li,
+    .live-card p,
+    .live-note,
+    .live-meta {
       color: var(--muted);
       font-weight: 500;
     }
@@ -328,7 +347,8 @@
 
     .stats-grid,
     .collection-grid,
-    .feature-grid {
+    .feature-grid,
+    .live-grid {
       display: grid;
       gap: 1rem;
     }
@@ -386,6 +406,7 @@
       justify-content: space-between;
       gap: 1rem;
       margin-bottom: 1rem;
+      flex-wrap: wrap;
     }
 
     .search-shell {
@@ -407,16 +428,19 @@
       font-family: inherit;
     }
 
-    .collection-grid {
+    .collection-grid,
+    .live-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .collection-card {
+    .collection-card,
+    .live-card {
       min-height: 100%;
       transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
-    .collection-card:hover {
+    .collection-card:hover,
+    .live-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 14px 30px rgba(0,0,0,0.08);
     }
@@ -462,7 +486,8 @@
       margin-top: 0.9rem;
     }
 
-    .card-link {
+    .card-link,
+    .live-link {
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
@@ -471,7 +496,8 @@
       color: var(--primary);
     }
 
-    .card-link:hover {
+    .card-link:hover,
+    .live-link:hover {
       text-decoration: underline;
     }
 
@@ -495,6 +521,76 @@
       padding-left: 1rem;
     }
 
+    .live-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .live-section-card {
+      padding: 1.25rem;
+    }
+
+    .live-section-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .live-grid {
+      display: grid;
+    }
+
+    .live-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .live-card h3 {
+      margin: 0 0 0.5rem;
+      color: var(--primary-dark);
+      font-size: 1.08rem;
+      line-height: 1.15;
+    }
+
+    .live-meta {
+      font-size: 0.9rem;
+    }
+
+    .live-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .live-file {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    .loading-note,
+    .error-note {
+      padding: 1rem;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+    }
+
+    .error-note {
+      color: #8a1f3d;
+      background: #fdf4f7;
+      border-color: #ecd0d8;
+    }
+
     .footer {
       padding: 2rem 0 3rem;
     }
@@ -516,7 +612,8 @@
     @media (max-width: 1120px) {
       .hero-grid,
       .collection-grid,
-      .feature-grid {
+      .feature-grid,
+      .live-grid {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -551,14 +648,16 @@
       .hero-side,
       .toolbar-card,
       .collection-card,
-      .feature-card {
+      .feature-card,
+      .live-section-card {
         padding: 1rem;
       }
 
       .collection-grid,
       .feature-grid,
       .stats-grid,
-      .footer-grid {
+      .footer-grid,
+      .live-grid {
         grid-template-columns: 1fr;
       }
 
@@ -567,7 +666,8 @@
 
       .section-head,
       .toolbar-top,
-      .topbar .inner {
+      .topbar .inner,
+      .live-section-top {
         flex-direction: column;
         align-items: flex-start;
       }
@@ -592,6 +692,7 @@
         <a href="#overview">Overview</a>
         <a href="#browse">Browse</a>
         <a href="#featured">Featured</a>
+        <a href="#liveCollections">Live archive</a>
         <a href="#pathways">Pathways</a>
       </div>
       <div class="topbar-actions">
@@ -637,26 +738,26 @@
               <span class="section-kicker">Collections</span>
               <h1>Browse the archive by theme, format, and story.</h1>
               <p class="lede">
-                This collections page gives users a clean path into the WITH archive through curated entry points. Start with featured themes, filter by type, then move into specific clusters of images, newsletters, oral histories, conference materials, and anniversary records.
+                This collections page combines curated entry points with approved public contributions from the live archive. Start with featured themes, then move into real Story, Media, and Record items that have been reviewed through the dashboard.
               </p>
 
               <div class="hero-actions">
                 <a class="btn btn-primary" href="#browse">Start browsing</a>
-                <a class="btn btn-secondary" href="discover.html">Return to discover</a>
+                <a class="btn btn-secondary" href="#liveCollections">Open live archive</a>
               </div>
 
               <div class="stats-grid">
                 <div class="stat-card">
-                  <strong>9</strong>
+                  <strong id="curatedCount">9</strong>
                   <span>Curated collection groups</span>
                 </div>
                 <div class="stat-card">
-                  <strong>4</strong>
-                  <span>Primary discovery filters</span>
+                  <strong id="liveApprovedCount">0</strong>
+                  <span>Approved public contributions</span>
                 </div>
                 <div class="stat-card">
-                  <strong>WITH@50</strong>
-                  <span>Anchor theme across anniversary materials</span>
+                  <strong>Story / Media / Record</strong>
+                  <span>Live categories from reviewed submissions</span>
                 </div>
               </div>
             </div>
@@ -665,14 +766,14 @@
               <div class="sidebar-note">
                 <strong>How to use this page</strong>
                 <p class="sidebar-note">
-                  Search by keyword, choose a filter, or sort by title. This page is built to feel navigable first, dense second.
+                  Search by keyword, choose a filter, or sort by title. Then scroll to the live archive to see approved items pulled from the backend.
                 </p>
               </div>
 
               <div class="sidebar-note">
-                <strong>Best entry point</strong>
+                <strong>What appears here</strong>
                 <p class="sidebar-note">
-                  New visitors should start with anniversary materials, newsletters, and institutional histories before moving into deeper archive clusters.
+                  Only approved contributions appear in the live archive section. Files open from their GitHub-backed public links when available.
                 </p>
               </div>
             </aside>
@@ -689,7 +790,7 @@
               <span class="section-kicker">Browse</span>
               <h2 style="margin:0;">Find a collection</h2>
             </div>
-            <span class="count-pill"><span id="visibleCount">9</span> collections visible</span>
+            <span class="count-pill"><span id="visibleCount">9</span> curated collections visible</span>
           </div>
 
           <div class="search-shell">
@@ -726,7 +827,7 @@
             <h2>Curated pathways into the archive</h2>
           </div>
           <p>
-            These cards can later be connected to actual archive routes, category pages, or item lists.
+            These cards provide stable entry points alongside the live archive items below.
           </p>
         </div>
 
@@ -761,7 +862,7 @@
               <span class="section-chip">Print culture</span>
               <span class="section-chip">Member updates</span>
             </div>
-            <a class="card-link" href="#">Open collection →</a>
+            <a class="card-link" href="#liveRecords">Open related items →</a>
           </article>
 
           <article class="collection-card" data-category="records stories" data-title="Leadership and Officers" data-keywords="leadership officers chairs governance administration committee reports">
@@ -777,7 +878,7 @@
               <span class="section-chip">Governance</span>
               <span class="section-chip">Annual reports</span>
             </div>
-            <a class="card-link" href="#">Open collection →</a>
+            <a class="card-link" href="#liveStories">Open related items →</a>
           </article>
 
           <article class="collection-card" data-category="media" data-title="Images and Event Photography" data-keywords="photographs gallery events conferences portraits images visuals">
@@ -794,7 +895,7 @@
               <span class="section-chip">Events</span>
               <span class="section-chip">Portraits</span>
             </div>
-            <a class="card-link" href="#">Open collection →</a>
+            <a class="card-link" href="#liveMedia">Open related items →</a>
           </article>
 
           <article class="collection-card" data-category="stories" data-title="Oral Histories and Reflections" data-keywords="oral history reflection testimony memory voices interview">
@@ -810,7 +911,7 @@
               <span class="section-chip">Voices</span>
               <span class="section-chip">Memory</span>
             </div>
-            <a class="card-link" href="#">Open collection →</a>
+            <a class="card-link" href="#liveStories">Open related items →</a>
           </article>
 
           <article class="collection-card" data-category="records media" data-title="Conference Programs and Sessions" data-keywords="conference programs sessions panels schedules talks abstracts">
@@ -826,7 +927,7 @@
               <span class="section-chip">Programs</span>
               <span class="section-chip">Panels</span>
             </div>
-            <a class="card-link" href="#">Open collection →</a>
+            <a class="card-link" href="#liveRecords">Open related items →</a>
           </article>
 
           <article class="collection-card" data-category="anniversary media" data-title="Posters, Flyers, and Calls" data-keywords="poster flyer call announcement graphic outreach notice">
@@ -842,7 +943,7 @@
               <span class="section-chip">Outreach</span>
               <span class="section-chip">Design</span>
             </div>
-            <a class="card-link" href="#">Open collection →</a>
+            <a class="card-link" href="#liveMedia">Open related items →</a>
           </article>
 
           <article class="collection-card" data-category="records" data-title="Membership and Administrative Files" data-keywords="membership forms files administrative reports forms rosters">
@@ -858,7 +959,7 @@
               <span class="section-chip">Forms</span>
               <span class="section-chip">Rosters</span>
             </div>
-            <a class="card-link" href="#">Open collection →</a>
+            <a class="card-link" href="#liveRecords">Open related items →</a>
           </article>
 
           <article class="collection-card" data-category="stories media" data-title="Exhibits and Public History" data-keywords="exhibit public history showcase digital display curation">
@@ -874,12 +975,67 @@
               <span class="section-chip">Curation</span>
               <span class="section-chip">Public history</span>
             </div>
-            <a class="card-link" href="#">Open collection →</a>
+            <a class="card-link" href="#liveCollections">Open related items →</a>
           </article>
         </div>
 
         <div id="emptyState" class="empty-state">
           No collections match your search and filter. Try a broader keyword or switch back to “All.”
+        </div>
+      </div>
+    </section>
+
+    <section id="liveCollections">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Live archive</span>
+            <h2>Approved public contributions</h2>
+          </div>
+          <p>
+            These items are loaded from the backend and appear here only after approval in the dashboard.
+          </p>
+        </div>
+
+        <div id="liveLoading" class="loading-note">Loading approved archive items…</div>
+        <div id="liveError" class="error-note" style="display:none;"></div>
+
+        <div class="live-stack" id="liveArchiveWrap" style="display:none;">
+          <article class="live-section-card" id="liveStories">
+            <div class="live-section-top">
+              <div>
+                <span class="section-kicker">Stories</span>
+                <h3>Approved story contributions</h3>
+              </div>
+              <span class="count-pill"><span id="storyCount">0</span> visible</span>
+            </div>
+            <div class="live-grid" id="storyGrid"></div>
+            <div class="empty-state" id="storyEmpty" style="display:none;">No approved story contributions yet.</div>
+          </article>
+
+          <article class="live-section-card" id="liveMedia">
+            <div class="live-section-top">
+              <div>
+                <span class="section-kicker">Media</span>
+                <h3>Approved media contributions</h3>
+              </div>
+              <span class="count-pill"><span id="mediaCount">0</span> visible</span>
+            </div>
+            <div class="live-grid" id="mediaGrid"></div>
+            <div class="empty-state" id="mediaEmpty" style="display:none;">No approved media contributions yet.</div>
+          </article>
+
+          <article class="live-section-card" id="liveRecords">
+            <div class="live-section-top">
+              <div>
+                <span class="section-kicker">Records</span>
+                <h3>Approved record contributions</h3>
+              </div>
+              <span class="count-pill"><span id="recordCount">0</span> visible</span>
+            </div>
+            <div class="live-grid" id="recordGrid"></div>
+            <div class="empty-state" id="recordEmpty" style="display:none;">No approved record contributions yet.</div>
+          </article>
         </div>
       </div>
     </section>
@@ -977,6 +1133,7 @@
   <script>
     const TOKEN_KEY = "with_token";
     const USER_KEY = "with_user";
+    const API_BASE_URL = "https://with-commons-production.up.railway.app/api";
 
     function parseJwt(token) {
       try {
@@ -1028,6 +1185,127 @@
 
       document.body.classList.remove("hidden-until-auth");
       return true;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      return new Date(value).toLocaleDateString();
+    }
+
+    function getFileLabel(item) {
+      if (item.originalFilename) return item.originalFilename;
+      if (item.filename) return item.filename;
+      return "Attached file";
+    }
+
+    function createLiveCard(item) {
+      const article = document.createElement("article");
+      article.className = "live-card";
+      article.dataset.title = (item.title || "").toLowerCase();
+      article.dataset.description = (item.description || "").toLowerCase();
+      article.dataset.collection = (item.collection || "").toLowerCase();
+      article.dataset.tags = Array.isArray(item.tags) ? item.tags.join(" ").toLowerCase() : "";
+      article.dataset.type = (item.type || "").toLowerCase();
+
+      const safeTitle = escapeHtml(item.title || "Untitled contribution");
+      const safeDescription = escapeHtml(item.description || "No description available.");
+      const safeCollection = escapeHtml(item.collection || "General collection");
+      const safeContributor = escapeHtml(item.contributorName || "Unknown contributor");
+      const safeDate = formatDate(item.createdAt);
+      const safeFileLabel = escapeHtml(getFileLabel(item));
+      const tagsHtml = Array.isArray(item.tags) && item.tags.length
+        ? item.tags.map(tag => `<span class="section-chip">${escapeHtml(tag)}</span>`).join("")
+        : '<span class="live-meta">No tags</span>';
+
+      article.innerHTML = `
+        <div class="card-top">
+          <h3>${safeTitle}</h3>
+          <span class="status-badge">Approved</span>
+        </div>
+        <p>${safeDescription}</p>
+        <div class="meta-row">
+          <span class="type-badge">${escapeHtml(item.type || "Item")}</span>
+          <span class="section-chip">${safeCollection}</span>
+        </div>
+        <div class="live-meta" style="margin-top:0.8rem;">
+          Contributed by ${safeContributor} · ${safeDate}
+        </div>
+        <div class="meta-row">${tagsHtml}</div>
+        <div class="live-actions">
+          ${item.githubUrl
+            ? `<a class="live-link" href="${escapeHtml(item.githubUrl)}" target="_blank" rel="noopener noreferrer">Open file →</a>`
+            : ""}
+        </div>
+        <div class="live-file">${item.githubUrl ? safeFileLabel : "No public file link available."}</div>
+      `;
+
+      return article;
+    }
+
+    async function loadApprovedContributions() {
+      const loading = document.getElementById("liveLoading");
+      const errorBox = document.getElementById("liveError");
+      const wrap = document.getElementById("liveArchiveWrap");
+
+      try {
+        loading.style.display = "block";
+        errorBox.style.display = "none";
+        wrap.style.display = "none";
+
+        const response = await fetch(`${API_BASE_URL}/public/contributions?limit=200`);
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Could not load approved contributions.");
+        }
+
+        const items = Array.isArray(result) ? result : [];
+
+        const stories = items.filter(item => item.type === "Story");
+        const media = items.filter(item => item.type === "Media");
+        const records = items.filter(item => item.type === "Record");
+
+        renderLiveSection("storyGrid", "storyCount", "storyEmpty", stories);
+        renderLiveSection("mediaGrid", "mediaCount", "mediaEmpty", media);
+        renderLiveSection("recordGrid", "recordCount", "recordEmpty", records);
+
+        document.getElementById("liveApprovedCount").textContent = items.length;
+
+        loading.style.display = "none";
+        wrap.style.display = "grid";
+      } catch (error) {
+        loading.style.display = "none";
+        errorBox.style.display = "block";
+        errorBox.textContent = error.message || "Could not load approved archive items.";
+      }
+    }
+
+    function renderLiveSection(gridId, countId, emptyId, items) {
+      const grid = document.getElementById(gridId);
+      const count = document.getElementById(countId);
+      const empty = document.getElementById(emptyId);
+
+      grid.innerHTML = "";
+      count.textContent = items.length;
+
+      if (!items.length) {
+        empty.style.display = "block";
+        return;
+      }
+
+      empty.style.display = "none";
+      items.forEach(item => {
+        grid.appendChild(createLiveCard(item));
+      });
     }
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -1104,9 +1382,13 @@
     searchInput.addEventListener("input", renderCollections);
     sortSelect.addEventListener("change", renderCollections);
 
-    if (hydrateUser()) {
+    async function initPage() {
+      if (!hydrateUser()) return;
       renderCollections();
+      await loadApprovedContributions();
     }
+
+    initPage();
   </script>
 </body>
 </html>
