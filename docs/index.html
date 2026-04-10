@@ -17,6 +17,9 @@
       --soft: #efe8de;
       --shadow: 0 10px 30px rgba(0,0,0,0.08);
       --radius: 14px;
+      --success: #1f6b4f;
+      --danger: #8a1f3d;
+      --warning: #8a6a1f;
     }
 
     * {
@@ -55,6 +58,7 @@
       font-size: 0.82rem;
       font-weight: 700;
       margin-bottom: 18px;
+      max-width: fit-content;
     }
 
     .intro h1 {
@@ -131,11 +135,14 @@
       font-size: 1.05rem;
     }
 
+    .auth-form {
+      margin: 0;
+    }
+
     input {
       width: 100%;
       padding: 13px 14px;
       margin: 8px 0;
-      box-sizing: border-box;
       border: 1px solid var(--line);
       border-radius: 10px;
       background: white;
@@ -158,23 +165,47 @@
       margin-top: 8px;
       font-weight: 700;
       font-size: 0.96rem;
+      transition: background 0.18s ease, opacity 0.18s ease;
     }
 
     button:hover {
       background: var(--primary-dark);
     }
 
-    #message {
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .status {
       margin-top: 14px;
-      color: var(--primary);
-      font-weight: bold;
+      font-weight: 700;
       min-height: 22px;
+    }
+
+    .status.success {
+      color: var(--success);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .status.loading {
+      color: var(--warning);
     }
 
     .divider {
       height: 1px;
       background: var(--line);
       margin: 22px 0 10px;
+    }
+
+    .small-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
     }
 
     @media (max-width: 920px) {
@@ -202,8 +233,9 @@
       <span class="intro-badge">WITH Commons · Women in Technology Archive</span>
       <h1>Sign in to enter the archive.</h1>
       <p>
-        This login page now leads directly into your styled home page after a successful sign-in.
-        Users move naturally from access to browsing collections, stories, contributions, and the dashboard.
+        This access page leads directly into the archive after successful sign-in.
+        Users move from registration or login into collections, stories, contributions,
+        and dashboard review spaces.
       </p>
 
       <div class="intro-grid">
@@ -227,26 +259,38 @@
         <h2>WITH@50 Commons</h2>
         <p class="subtext">Register or log in to continue to the archive home page.</p>
 
-        <h3 class="section-title">Register</h3>
-        <input id="regName" type="text" placeholder="Name" />
-        <input id="regEmail" type="email" placeholder="Email" />
-        <input id="regPassword" type="password" placeholder="Password" />
-        <button onclick="register()">Register</button>
+        <form id="registerForm" class="auth-form">
+          <h3 class="section-title">Register</h3>
+          <input id="regName" type="text" placeholder="Name" autocomplete="name" />
+          <input id="regEmail" type="email" placeholder="Email" autocomplete="email" />
+          <input id="regPassword" type="password" placeholder="Password" autocomplete="new-password" />
+          <button id="registerBtn" type="submit">Register</button>
+        </form>
 
         <div class="divider"></div>
 
-        <h3 class="section-title">Login</h3>
-        <input id="logEmail" type="email" placeholder="Email" />
-        <input id="logPassword" type="password" placeholder="Password" />
-        <button onclick="login()">Login</button>
+        <form id="loginForm" class="auth-form">
+          <h3 class="section-title">Login</h3>
+          <input id="logEmail" type="email" placeholder="Email" autocomplete="email" />
+          <input id="logPassword" type="password" placeholder="Password" autocomplete="current-password" />
+          <button id="loginBtn" type="submit">Login</button>
+        </form>
 
-        <div id="message"></div>
+        <div id="message" class="status" aria-live="polite"></div>
+        <div class="small-note">
+          Make sure the Railway backend is deployed and reachable before testing login.
+        </div>
       </div>
     </section>
   </div>
 
   <script>
     const API = "https://with-commons-production.up.railway.app/api";
+    const TOKEN_KEY = "with_token";
+    const USER_KEY = "with_user";
+
+    const registerForm = document.getElementById("registerForm");
+    const loginForm = document.getElementById("loginForm");
 
     const regName = document.getElementById("regName");
     const regEmail = document.getElementById("regEmail");
@@ -255,66 +299,147 @@
     const logEmail = document.getElementById("logEmail");
     const logPassword = document.getElementById("logPassword");
 
+    const registerBtn = document.getElementById("registerBtn");
+    const loginBtn = document.getElementById("loginBtn");
     const message = document.getElementById("message");
 
-    async function register() {
-      message.innerText = "Creating account...";
+    function setMessage(text, type = "") {
+      message.textContent = text;
+      message.className = `status ${type}`.trim();
+    }
 
+    function setButtonsDisabled(disabled) {
+      registerBtn.disabled = disabled;
+      loginBtn.disabled = disabled;
+    }
+
+    function storeAuth(data) {
+      localStorage.setItem(TOKEN_KEY, data.token);
+      localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+    }
+
+    function parseJwt(token) {
       try {
-        const res = await fetch(API + "/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: regName.value,
-            email: regEmail.value,
-            password: regPassword.value
-          })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.message || "Registration failed");
-        }
-
-        localStorage.setItem("with_token", data.token);
-        localStorage.setItem("with_user", JSON.stringify(data.user));
-        message.innerText = "Registered successfully!";
-      } catch (err) {
-        message.innerText = err.message;
+        const base64 = token.split(".")[1];
+        const json = atob(base64.replace(/-/g, "+").replace(/_/g, "/"));
+        return JSON.parse(json);
+      } catch (error) {
+        return null;
       }
     }
 
-    async function login() {
-      message.innerText = "Signing in...";
+    function isTokenExpired(token) {
+      const payload = parseJwt(token);
+      if (!payload || !payload.exp) return true;
+      return Date.now() >= payload.exp * 1000;
+    }
+
+    async function apiRequest(path, options = {}) {
+      let response;
 
       try {
-        const res = await fetch(API + "/auth/login", {
+        response = await fetch(`${API}${path}`, {
+          method: options.method || "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+          },
+          body: options.body ? JSON.stringify(options.body) : undefined
+        });
+      } catch (networkError) {
+        throw new Error("Could not reach the backend. Check Railway deployment and CORS settings.");
+      }
+
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (error) {
+        data = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || `Request failed with status ${response.status}`);
+      }
+
+      return data;
+    }
+
+    async function register(event) {
+      event.preventDefault();
+
+      const name = regName.value.trim();
+      const email = regEmail.value.trim();
+      const password = regPassword.value;
+
+      if (!name || !email || !password) {
+        setMessage("Please complete all registration fields.", "error");
+        return;
+      }
+
+      setButtonsDisabled(true);
+      setMessage("Creating account...", "loading");
+
+      try {
+        const data = await apiRequest("/auth/register", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: logEmail.value,
-            password: logPassword.value
-          })
+          body: { name, email, password }
         });
 
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.message || "Login failed");
-        }
-
-        localStorage.setItem("with_token", data.token);
-        localStorage.setItem("with_user", JSON.stringify(data.user));
-        message.innerText = "Login successful! Redirecting...";
+        storeAuth(data);
+        setMessage("Registration successful. Redirecting...", "success");
 
         setTimeout(() => {
           window.location.href = "homepage.html";
         }, 700);
       } catch (err) {
-        message.innerText = err.message;
+        setMessage(err.message || "Registration failed.", "error");
+      } finally {
+        setButtonsDisabled(false);
       }
     }
+
+    async function login(event) {
+      event.preventDefault();
+
+      const email = logEmail.value.trim();
+      const password = logPassword.value;
+
+      if (!email || !password) {
+        setMessage("Please enter your email and password.", "error");
+        return;
+      }
+
+      setButtonsDisabled(true);
+      setMessage("Signing in...", "loading");
+
+      try {
+        const data = await apiRequest("/auth/login", {
+          method: "POST",
+          body: { email, password }
+        });
+
+        storeAuth(data);
+        setMessage("Login successful. Redirecting...", "success");
+
+        setTimeout(() => {
+          window.location.href = "homepage.html";
+        }, 700);
+      } catch (err) {
+        setMessage(err.message || "Login failed.", "error");
+      } finally {
+        setButtonsDisabled(false);
+      }
+    }
+
+    registerForm.addEventListener("submit", register);
+    loginForm.addEventListener("submit", login);
+
+    (function checkExistingSession() {
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (token && !isTokenExpired(token)) {
+        window.location.href = "homepage.html";
+      }
+    })();
   </script>
 </body>
 </html>
