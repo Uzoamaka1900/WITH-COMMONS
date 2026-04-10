@@ -33,7 +33,7 @@
     a { color: inherit; text-decoration: none; }
 
     .wrap {
-      max-width: 1280px;
+      max-width: 1360px;
       margin: 0 auto;
       padding: 32px 20px 60px;
     }
@@ -47,7 +47,7 @@
       flex-wrap: wrap;
     }
 
-    h1, h2 { margin: 0; }
+    h1, h2, h3 { margin: 0; }
     h1 { font-size: 2rem; }
 
     .muted { color: var(--muted); }
@@ -89,6 +89,17 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      transition: background 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    button:hover, .action-link:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .btn-primary {
@@ -118,7 +129,7 @@
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 16px;
       margin-bottom: 24px;
     }
@@ -132,9 +143,11 @@
     }
 
     .big {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 800;
       color: var(--primary);
+      line-height: 1.2;
+      word-break: break-word;
     }
 
     .grid {
@@ -181,12 +194,14 @@
       position: sticky;
       top: 0;
       z-index: 1;
+      white-space: nowrap;
     }
 
     .status {
       margin-top: 12px;
       font-weight: 700;
       color: var(--danger);
+      min-height: 1.2rem;
     }
 
     .ok { color: var(--success); }
@@ -215,6 +230,7 @@
       font-weight: 700;
       border: 1px solid #eadfc3;
       margin: 2px 4px 2px 0;
+      white-space: nowrap;
     }
 
     .submission-actions {
@@ -245,12 +261,121 @@
       background: #fdf4f7;
     }
 
-    .mini-btn.delete { color: var(--muted); }
+    .mini-btn.delete {
+      color: var(--muted);
+    }
 
-    @media (max-width: 1100px) {
-      .stats,
+    .submission-title {
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .submission-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+      max-width: 360px;
+    }
+
+    .file-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .type-badge,
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .type-badge.story {
+      background: #eef4f7;
+      color: #23404a;
+      border-color: #d7e6eb;
+    }
+
+    .type-badge.media {
+      background: #f8f3e6;
+      color: #6a511f;
+      border-color: #eadfc3;
+    }
+
+    .type-badge.record {
+      background: #f3eef8;
+      color: #5b3e73;
+      border-color: #dfd2ea;
+    }
+
+    .status-badge.pending {
+      background: #fff6e8;
+      color: #8a6a1f;
+      border-color: #edd8a7;
+    }
+
+    .status-badge.approved {
+      background: #edf8f1;
+      color: #1f6b4f;
+      border-color: #cfe3d9;
+    }
+
+    .status-badge.rejected {
+      background: #fdf1f4;
+      color: #8a1f3d;
+      border-color: #ecd0d8;
+    }
+
+    .meta-stack {
+      display: grid;
+      gap: 4px;
+    }
+
+    .nowrap {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1200px) {
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .grid {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .wrap {
+        padding: 20px 12px 40px;
+      }
+
+      .topbar {
+        align-items: stretch;
+      }
+
+      .toolbar {
+        width: 100%;
+      }
+
+      .search {
+        max-width: none;
       }
     }
   </style>
@@ -258,9 +383,9 @@
 <body>
   <div id="gate" class="admin-gate">
     <h2>WITH Admin Access</h2>
-    <p class="muted">Enter your admin key to view registered users, login activity, and contribution submissions.</p>
+    <p class="muted">Enter your admin key to view registered users, login activity, GitHub-backed contribution records, and approval status.</p>
     <input id="adminKeyInput" type="password" placeholder="Admin key" />
-    <button class="btn-primary" id="unlockBtn">Unlock dashboard</button>
+    <button class="btn-primary" id="unlockBtn" type="button">Unlock dashboard</button>
     <div id="gateMessage" class="status"></div>
   </div>
 
@@ -269,14 +394,14 @@
       <div class="topbar">
         <div>
           <h1>WITH Commons Dashboard</h1>
-          <div class="small">Registered users, recent login events, and contribution submissions</div>
+          <div class="small">Registered users, recent login events, and contribution submissions stored in MongoDB with GitHub file links.</div>
         </div>
         <div class="toolbar">
           <input id="searchInput" class="search" type="text" placeholder="Search users or contributions" />
           <a href="contribute.html" class="action-link primary">+ New Contribution</a>
-          <button class="btn-secondary" id="refreshBtn">Refresh</button>
-          <button class="btn-secondary" id="exportBtn">Export users CSV</button>
-          <button class="btn-primary" id="logoutBtn">Lock</button>
+          <button class="btn-secondary" id="refreshBtn" type="button">Refresh</button>
+          <button class="btn-secondary" id="exportBtn" type="button">Export users CSV</button>
+          <button class="btn-primary" id="logoutBtn" type="button">Lock</button>
         </div>
       </div>
 
@@ -304,6 +429,10 @@
         <div class="card">
           <h3>Latest login</h3>
           <div class="big" id="latestLogin">—</div>
+        </div>
+        <div class="card">
+          <h3>Latest contribution</h3>
+          <div class="big" id="latestContribution">—</div>
         </div>
       </div>
 
@@ -357,7 +486,7 @@
             <table id="submissionsTable">
               <thead>
                 <tr>
-                  <th>Title</th>
+                  <th>Title / File</th>
                   <th>Type</th>
                   <th>Collection</th>
                   <th>Contributor</th>
@@ -373,7 +502,7 @@
         </div>
       </div>
 
-      <div id="dashboardMessage" class="status"></div>
+      <div id="dashboardMessage" class="status" aria-live="polite"></div>
     </div>
   </div>
 
@@ -397,6 +526,7 @@
     const totalContributions = document.getElementById("totalContributions");
     const latestUser = document.getElementById("latestUser");
     const latestLogin = document.getElementById("latestLogin");
+    const latestContribution = document.getElementById("latestContribution");
     const pendingContributions = document.getElementById("pendingContributions");
     const usersCountLabel = document.getElementById("usersCountLabel");
     const submissionsCountLabel = document.getElementById("submissionsCountLabel");
@@ -424,6 +554,15 @@
     function formatDate(value) {
       if (!value) return "—";
       return new Date(value).toLocaleString();
+    }
+
+    function formatCompactDate(value) {
+      if (!value) return "—";
+      const date = new Date(value);
+      return date.toLocaleDateString() + " " + date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
     function escapeHtml(value) {
@@ -461,23 +600,56 @@
       return data;
     }
 
+    function getTypeClass(type) {
+      const value = String(type || "").toLowerCase();
+      if (value === "story") return "story";
+      if (value === "media") return "media";
+      return "record";
+    }
+
+    function getStatusClass(status) {
+      const value = String(status || "pending").toLowerCase();
+      if (value === "approved") return "approved";
+      if (value === "rejected") return "rejected";
+      return "pending";
+    }
+
     function renderUsers(users) {
       usersCountLabel.textContent = `${users.length} user${users.length === 1 ? "" : "s"}`;
+
+      if (!users.length) {
+        usersTableBody.innerHTML = `
+          <tr>
+            <td colspan="3" class="muted">No registered users found.</td>
+          </tr>
+        `;
+        return;
+      }
+
       usersTableBody.innerHTML = users.map(user => `
         <tr>
           <td>${escapeHtml(user.name || "—")}</td>
           <td>${escapeHtml(user.email || "—")}</td>
-          <td>${formatDate(user.createdAt)}</td>
+          <td class="nowrap">${formatDate(user.createdAt)}</td>
         </tr>
       `).join("");
     }
 
     function renderLogins(logins) {
+      if (!logins.length) {
+        loginsTableBody.innerHTML = `
+          <tr>
+            <td colspan="3" class="muted">No login activity found.</td>
+          </tr>
+        `;
+        return;
+      }
+
       loginsTableBody.innerHTML = logins.map(item => `
         <tr>
           <td>${escapeHtml(item.email || "—")}</td>
           <td>${escapeHtml(item.ipAddress || "—")}</td>
-          <td>${formatDate(item.createdAt)}</td>
+          <td class="nowrap">${formatDate(item.createdAt)}</td>
         </tr>
       `).join("");
     }
@@ -499,27 +671,49 @@
 
       submissionsTableBody.innerHTML = items.map(item => {
         const tags = (item.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+        const typeClass = getTypeClass(item.type);
+        const statusClass = getStatusClass(item.status);
+
+        const fileBlock = item.githubUrl
+          ? `<a class="file-link" href="${escapeHtml(item.githubUrl)}" target="_blank" rel="noopener noreferrer">Open file</a>`
+          : item.filename
+            ? `<div class="small">File: ${escapeHtml(item.filename)}</div>`
+            : `<div class="small">No file uploaded</div>`;
+
+        const fileMeta = [
+          item.originalFilename ? `Original: ${escapeHtml(item.originalFilename)}` : "",
+          item.mimeType ? `Type: ${escapeHtml(item.mimeType)}` : "",
+          item.size ? `Size: ${escapeHtml(item.size)} bytes` : ""
+        ].filter(Boolean).join(" • ");
 
         return `
           <tr>
             <td>
-              <strong>${escapeHtml(item.title || "Untitled submission")}</strong><br />
-              <span class="small">${escapeHtml(item.description || "No description")}</span>
+              <div class="submission-title">${escapeHtml(item.title || "Untitled submission")}</div>
+              <div class="submission-desc">${escapeHtml(item.description || "No description")}</div>
+              ${fileBlock}
+              ${fileMeta ? `<div class="small" style="margin-top:6px;">${fileMeta}</div>` : ""}
             </td>
-            <td>${escapeHtml(item.type || "—")}</td>
+            <td>
+              <span class="type-badge ${typeClass}">${escapeHtml(item.type || "—")}</span>
+            </td>
             <td>${escapeHtml(item.collection || "—")}</td>
             <td>
-              ${escapeHtml(item.contributorName || "—")}<br />
-              <span class="small">${escapeHtml(item.contributorEmail || "—")}</span>
+              <div class="meta-stack">
+                <strong>${escapeHtml(item.contributorName || "—")}</strong>
+                <span class="small">${escapeHtml(item.contributorEmail || "—")}</span>
+              </div>
             </td>
             <td>${tags || "—"}</td>
-            <td>${formatDate(item.createdAt)}</td>
-            <td>${escapeHtml(item.status || "Pending")}</td>
+            <td class="nowrap">${formatCompactDate(item.createdAt)}</td>
+            <td>
+              <span class="status-badge ${statusClass}">${escapeHtml(item.status || "Pending")}</span>
+            </td>
             <td>
               <div class="submission-actions">
-                <button class="mini-btn approve" data-id="${escapeHtml(item._id)}" data-action="approve">Approve</button>
-                <button class="mini-btn reject" data-id="${escapeHtml(item._id)}" data-action="reject">Reject</button>
-                <button class="mini-btn delete" data-id="${escapeHtml(item._id)}" data-action="delete">Delete</button>
+                <button class="mini-btn approve" data-id="${escapeHtml(item._id)}" data-action="approve" type="button">Approve</button>
+                <button class="mini-btn reject" data-id="${escapeHtml(item._id)}" data-action="reject" type="button">Reject</button>
+                <button class="mini-btn delete" data-id="${escapeHtml(item._id)}" data-action="delete" type="button">Delete</button>
               </div>
             </td>
           </tr>
@@ -528,7 +722,16 @@
     }
 
     async function updateSubmission(id, action) {
+      const messageMap = {
+        approve: "approved",
+        reject: "rejected",
+        delete: "deleted"
+      };
+
       try {
+        dashboardMessage.textContent = `Processing contribution…`;
+        dashboardMessage.classList.remove("ok", "warning");
+
         if (action === "delete") {
           await adminFetch(`${API}/contributions/${id}`, {
             method: "DELETE"
@@ -547,14 +750,15 @@
           });
         }
 
-        dashboardMessage.textContent = `Contribution ${action}d successfully.`;
+        dashboardMessage.textContent = `Contribution ${messageMap[action]} successfully.`;
         dashboardMessage.classList.add("ok");
         dashboardMessage.classList.remove("warning");
 
         await loadDashboard(false);
       } catch (err) {
         dashboardMessage.textContent = err.message;
-        dashboardMessage.classList.remove("ok", "warning");
+        dashboardMessage.classList.remove("ok");
+        dashboardMessage.classList.remove("warning");
       }
     }
 
@@ -563,6 +767,7 @@
 
       if (!q) {
         renderUsers(allUsers);
+        renderLogins(allLogins);
         renderSubmissions(allSubmissions);
         return;
       }
@@ -570,6 +775,11 @@
       const filteredUsers = allUsers.filter(user =>
         (user.name || "").toLowerCase().includes(q) ||
         (user.email || "").toLowerCase().includes(q)
+      );
+
+      const filteredLogins = allLogins.filter(item =>
+        (item.email || "").toLowerCase().includes(q) ||
+        (item.ipAddress || "").toLowerCase().includes(q)
       );
 
       const filteredSubmissions = allSubmissions.filter(item =>
@@ -580,15 +790,25 @@
         (item.contributorName || "").toLowerCase().includes(q) ||
         (item.contributorEmail || "").toLowerCase().includes(q) ||
         (item.status || "").toLowerCase().includes(q) ||
+        (item.filename || "").toLowerCase().includes(q) ||
+        (item.originalFilename || "").toLowerCase().includes(q) ||
+        (item.mimeType || "").toLowerCase().includes(q) ||
+        (item.githubPath || "").toLowerCase().includes(q) ||
         (item.tags || []).some(tag => String(tag).toLowerCase().includes(q))
       );
 
       renderUsers(filteredUsers);
+      renderLogins(filteredLogins);
       renderSubmissions(filteredSubmissions);
     }
 
     function exportUsersCSV() {
-      if (!allUsers.length) return;
+      if (!allUsers.length) {
+        dashboardMessage.textContent = "There are no users to export.";
+        dashboardMessage.classList.remove("ok");
+        dashboardMessage.classList.add("warning");
+        return;
+      }
 
       const rows = [
         ["Name", "Email", "Created"],
@@ -612,11 +832,16 @@
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
+
+      dashboardMessage.textContent = "Users CSV exported successfully.";
+      dashboardMessage.classList.add("ok");
+      dashboardMessage.classList.remove("warning");
     }
 
     async function loadDashboard(showLoadedMessage = true) {
       if (showLoadedMessage) {
         dashboardMessage.textContent = "";
+        dashboardMessage.classList.remove("ok", "warning");
       }
 
       try {
@@ -627,16 +852,17 @@
           adminFetch(`${API}/contributions`)
         ]);
 
-        allUsers = users;
-        allLogins = logins;
-        allSubmissions = contributions;
+        allUsers = Array.isArray(users) ? users : [];
+        allLogins = Array.isArray(logins) ? logins : [];
+        allSubmissions = Array.isArray(contributions) ? contributions : [];
 
         totalUsers.textContent = stats.totalUsers ?? 0;
         totalLogins.textContent = stats.totalLogins ?? 0;
-        totalContributions.textContent = stats.totalContributions ?? contributions.length ?? 0;
-        latestUser.textContent = stats.latestUser ? formatDate(stats.latestUser) : "—";
-        latestLogin.textContent = stats.latestLogin ? formatDate(stats.latestLogin) : "—";
+        totalContributions.textContent = stats.totalContributions ?? allSubmissions.length ?? 0;
         pendingContributions.textContent = stats.pendingContributions ?? 0;
+        latestUser.textContent = stats.latestUser ? formatCompactDate(stats.latestUser) : "—";
+        latestLogin.textContent = stats.latestLogin ? formatCompactDate(stats.latestLogin) : "—";
+        latestContribution.textContent = stats.latestContribution ? formatCompactDate(stats.latestContribution) : "—";
 
         renderUsers(allUsers);
         renderLogins(allLogins);
@@ -650,7 +876,8 @@
         }
       } catch (err) {
         dashboardMessage.textContent = err.message;
-        dashboardMessage.classList.remove("ok", "warning");
+        dashboardMessage.classList.remove("ok");
+        dashboardMessage.classList.remove("warning");
 
         if (err.message.toLowerCase().includes("forbidden")) {
           clearAdminKey();
@@ -683,6 +910,12 @@
       }
     });
 
+    adminKeyInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        unlockBtn.click();
+      }
+    });
+
     refreshBtn.addEventListener("click", () => loadDashboard());
     exportBtn.addEventListener("click", exportUsersCSV);
 
@@ -692,6 +925,8 @@
       gate.classList.remove("hidden");
       adminKeyInput.value = "";
       gateMessage.textContent = "";
+      dashboardMessage.textContent = "";
+      dashboardMessage.classList.remove("ok", "warning");
     });
 
     searchInput.addEventListener("input", applySearchFilter);
