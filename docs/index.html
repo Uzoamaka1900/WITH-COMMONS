@@ -3,40 +3,314 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Media Mining Memory Login</title>
+  <title>WITH Commons</title>
+
+  <style>
+    :root {
+      --bg: #f5f2ec;
+      --card: #ffffff;
+      --text: #1f1f1f;
+      --muted: #6b6b6b;
+      --line: #ddd6cc;
+      --primary: #6f1d3a;
+      --primary-dark: #59152e;
+      --soft: #efe8de;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --radius: 14px;
+      --success: #1f6b4f;
+      --danger: #8a1f3d;
+      --warning: #8a6a1f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .intro {
+      background: linear-gradient(180deg, #7b2343 0%, #59152e 100%);
+      color: white;
+      padding: 56px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .intro-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      max-width: fit-content;
+    }
+
+    .intro h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.02;
+    }
+
+    .intro p {
+      margin: 0 0 22px;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.7;
+      max-width: 52ch;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .intro-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .intro-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .intro-card span {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .auth-panel {
+      padding: 40px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card);
+      padding: 30px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    .subtext {
+      margin: 0 0 22px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .section-title {
+      margin: 22px 0 10px;
+      color: var(--primary);
+      font-size: 1.05rem;
+    }
+
+    .auth-form {
+      margin: 0;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      margin: 8px 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: 2px solid rgba(111, 29, 58, 0.16);
+      border-color: var(--primary);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 8px;
+      font-weight: 700;
+      font-size: 0.96rem;
+      transition: background 0.18s ease, opacity 0.18s ease;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 14px;
+      font-weight: 700;
+      min-height: 22px;
+    }
+
+    .status.success {
+      color: var(--success);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .status.loading {
+      color: var(--warning);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 22px 0 10px;
+    }
+
+    .small-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 920px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .intro {
+        padding: 34px 24px;
+      }
+
+      .auth-panel {
+        padding: 24px 16px 40px;
+      }
+
+      .intro-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
-  <h1>Media Mining Memory</h1>
+  <div class="page">
+    <section class="intro">
+      <span class="intro-badge">WITH Commons · Women in Technology Archive</span>
+      <h1>Sign in to enter the archive.</h1>
+      <p>
+        This access page leads directly into the archive after successful sign-in.
+        Users move from registration or login into collections, stories, contributions,
+        and dashboard review spaces.
+      </p>
 
-  <h2>Register</h2>
-  <form id="registerForm">
-    <input id="regName" type="text" placeholder="Name" required />
-    <input id="regEmail" type="email" placeholder="Email" required />
-    <input id="regPassword" type="password" placeholder="Password" required />
-    <button id="registerBtn" type="submit">Register</button>
-  </form>
+      <div class="intro-grid">
+        <div class="intro-card">
+          <strong>Browse</strong>
+          <span>Move into collections, archive pathways, and featured materials.</span>
+        </div>
+        <div class="intro-card">
+          <strong>Read</strong>
+          <span>Explore stories, oral histories, and institutional memory.</span>
+        </div>
+        <div class="intro-card">
+          <strong>Contribute</strong>
+          <span>Share documents, images, and community knowledge.</span>
+        </div>
+      </div>
+    </section>
 
-  <h2>Login</h2>
-  <form id="loginForm">
-    <input id="logEmail" type="email" placeholder="Email" required />
-    <input id="logPassword" type="password" placeholder="Password" required />
-    <button id="loginBtn" type="submit">Login</button>
-  </form>
+    <section class="auth-panel">
+      <div class="container">
+        <h2>WITH@50 Commons</h2>
+        <p class="subtext">Register or log in to continue to the archive home page.</p>
 
-  <p id="message"></p>
+        <form id="registerForm" class="auth-form">
+          <h3 class="section-title">Register</h3>
+          <input id="regName" type="text" placeholder="Name" autocomplete="name" />
+          <input id="regEmail" type="email" placeholder="Email" autocomplete="email" />
+          <input id="regPassword" type="password" placeholder="Password" autocomplete="new-password" />
+          <button id="registerBtn" type="submit">Register</button>
+        </form>
+
+        <div class="divider"></div>
+
+        <form id="loginForm" class="auth-form">
+          <h3 class="section-title">Login</h3>
+          <input id="logEmail" type="email" placeholder="Email" autocomplete="email" />
+          <input id="logPassword" type="password" placeholder="Password" autocomplete="current-password" />
+          <button id="loginBtn" type="submit">Login</button>
+        </form>
+
+        <div id="message" class="status" aria-live="polite"></div>
+        <div class="small-note">
+          Make sure the Railway backend is deployed and reachable before testing login.
+        </div>
+      </div>
+    </section>
+  </div>
 
   <script>
-    const API = "https://reports-on-mining-in-nigeria-production.up.railway.app/api";
-    const TOKEN_KEY = "mmm_token";
-    const USER_KEY = "mmm_user";
+    const API = "https://with-commons-production.up.railway.app/api";
+    const TOKEN_KEY = "with_token";
+    const USER_KEY = "with_user";
 
     const registerForm = document.getElementById("registerForm");
     const loginForm = document.getElementById("loginForm");
+
+    const regName = document.getElementById("regName");
+    const regEmail = document.getElementById("regEmail");
+    const regPassword = document.getElementById("regPassword");
+
+    const logEmail = document.getElementById("logEmail");
+    const logPassword = document.getElementById("logPassword");
+
+    const registerBtn = document.getElementById("registerBtn");
+    const loginBtn = document.getElementById("loginBtn");
     const message = document.getElementById("message");
 
-    function setMessage(text) {
+    function setMessage(text, type = "") {
       message.textContent = text;
+      message.className = `status ${type}`.trim();
+    }
+
+    function setButtonsDisabled(disabled) {
+      registerBtn.disabled = disabled;
+      loginBtn.disabled = disabled;
     }
 
     function storeAuth(data) {
@@ -44,59 +318,128 @@
       localStorage.setItem(USER_KEY, JSON.stringify(data.user));
     }
 
-    async function apiRequest(path, body) {
-      const response = await fetch(`${API}${path}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
+    function parseJwt(token) {
+      try {
+        const base64 = token.split(".")[1];
+        const json = atob(base64.replace(/-/g, "+").replace(/_/g, "/"));
+        return JSON.parse(json);
+      } catch (error) {
+        return null;
+      }
+    }
 
-      const data = await response.json();
+    function isTokenExpired(token) {
+      const payload = parseJwt(token);
+      if (!payload || !payload.exp) return true;
+      return Date.now() >= payload.exp * 1000;
+    }
+
+    async function apiRequest(path, options = {}) {
+      let response;
+
+      try {
+        response = await fetch(`${API}${path}`, {
+          method: options.method || "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+          },
+          body: options.body ? JSON.stringify(options.body) : undefined
+        });
+      } catch (networkError) {
+        throw new Error("Could not reach the backend. Check Railway deployment and CORS settings.");
+      }
+
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (error) {
+        data = {};
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || "Request failed.");
+        throw new Error(data.message || `Request failed with status ${response.status}`);
       }
 
       return data;
     }
 
-    registerForm.addEventListener("submit", async function (event) {
+    async function register(event) {
       event.preventDefault();
 
-      const name = document.getElementById("regName").value.trim();
-      const email = document.getElementById("regEmail").value.trim();
-      const password = document.getElementById("regPassword").value;
+      const name = regName.value.trim();
+      const email = regEmail.value.trim();
+      const password = regPassword.value;
+
+      if (!name || !email || !password) {
+        setMessage("Please complete all registration fields.", "error");
+        return;
+      }
+
+      setButtonsDisabled(true);
+      setMessage("Creating account...", "loading");
 
       try {
-        setMessage("Creating account...");
-        const data = await apiRequest("/auth/register", { name, email, password });
-        storeAuth(data);
-        setMessage("Registration successful. Redirecting...");
-        window.location.href = "homepage.html";
-      } catch (error) {
-        setMessage(error.message);
-      }
-    });
+        const data = await apiRequest("/auth/register", {
+          method: "POST",
+          body: { name, email, password }
+        });
 
-    loginForm.addEventListener("submit", async function (event) {
+        storeAuth(data);
+        setMessage("Registration successful. Redirecting...", "success");
+
+        setTimeout(() => {
+          window.location.href = "homepage.html";
+        }, 700);
+      } catch (err) {
+        setMessage(err.message || "Registration failed.", "error");
+      } finally {
+        setButtonsDisabled(false);
+      }
+    }
+
+    async function login(event) {
       event.preventDefault();
 
-      const email = document.getElementById("logEmail").value.trim();
-      const password = document.getElementById("logPassword").value;
+      const email = logEmail.value.trim();
+      const password = logPassword.value;
+
+      if (!email || !password) {
+        setMessage("Please enter your email and password.", "error");
+        return;
+      }
+
+      setButtonsDisabled(true);
+      setMessage("Signing in...", "loading");
 
       try {
-        setMessage("Signing in...");
-        const data = await apiRequest("/auth/login", { email, password });
+        const data = await apiRequest("/auth/login", {
+          method: "POST",
+          body: { email, password }
+        });
+
         storeAuth(data);
-        setMessage("Login successful. Redirecting...");
-        window.location.href = "homepage.html";
-      } catch (error) {
-        setMessage(error.message);
+        setMessage("Login successful. Redirecting...", "success");
+
+        setTimeout(() => {
+          window.location.href = "homepage.html";
+        }, 700);
+      } catch (err) {
+        setMessage(err.message || "Login failed.", "error");
+      } finally {
+        setButtonsDisabled(false);
       }
-    });
+    }
+
+    registerForm.addEventListener("submit", register);
+    loginForm.addEventListener("submit", login);
+
+    (function checkExistingSession() {
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (token && !isTokenExpired(token)) {
+        window.location.href = "homepage.html";
+      }
+    })();
   </script>
 </body>
 </html>
